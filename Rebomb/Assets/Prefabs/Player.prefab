@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 6695550974951079930}
   - component: {fileID: 4174622298455368625}
   - component: {fileID: 4987430584004057986}
+  - component: {fileID: -732491542152524588}
+  - component: {fileID: 969898921367271931}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -30,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 8465260562886059072}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0.5, z: 3}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -155,3 +157,32 @@ MonoBehaviour:
   breakableWallsParent: {fileID: 0}
   unbreakableWallsParent: {fileID: 0}
   bombsParent: {fileID: 0}
+--- !u!114 &-732491542152524588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465260562886059072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1cc16553a3a3524e98ba87c01dd4407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombPrefab: {fileID: 2802641519651476425, guid: 0745ce38fa4dbfe4caccbdd4a216044c, type: 3}
+  bombsParent: {fileID: 0}
+  gridHeight: 0.5
+--- !u!114 &969898921367271931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465260562886059072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7550381cae65ad34588550798a13dd26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayersParentObject: {fileID: 0}
+  PlayerPrefab: {fileID: 8465260562886059072}

@@ -13,6 +13,7 @@ public class CharacterPlaceBomb : MonoBehaviour
     {
         // Initialize the current grid position
         currentGridPosition = new Vector3(Mathf.Round(transform.position.x), gridHeight, Mathf.Round(transform.position.z));
+        bombsParent = GameObject.Find("Bombs").transform;
     }
 
     void Update()

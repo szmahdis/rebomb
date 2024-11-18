@@ -16,6 +16,9 @@ public class CharacterGridMovement : MonoBehaviour
         // Initialize the character's position to the nearest grid point
         targetPosition = new Vector3(Mathf.Round(transform.position.x), gridHeight, Mathf.Round(transform.position.z));
         transform.position = targetPosition;
+        breakableWallsParent = GameObject.Find("BreakableWall").transform;
+        unbreakableWallsParent = GameObject.Find("UnbreakableWall").transform;
+        bombsParent = GameObject.Find("Bombs").transform;
     }
 
     void Update()

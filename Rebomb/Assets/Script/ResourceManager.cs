@@ -2,23 +2,11 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager Instance { get; private set; }
-
     [SerializeField] private int Steps;
     [SerializeField] private int Bombs;
     
     // TODO: record total coins with later weapon system.
     // public int Coins { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
 
     public void OnRoundStart()
     {

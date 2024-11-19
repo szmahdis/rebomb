@@ -4,10 +4,9 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject PlayerPrefab;
-    // [SerializeField] private GameObject PlayersParent; 
+    [SerializeField] private GameObject PlayerParent; 
     public static GameManager Instance { get; private set; }
     public List<Player> Players;
-    public List<GameObject> PlayerObjects;
 
     private void Awake()
     {
@@ -18,10 +17,6 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        
-        // PlayersParent = GameObject.Find("Players");
-        // PlayersParent.SetActive(true);
-        // DontDestroyOnLoad(PlayersParent);
     }
 
     private void Start()
@@ -67,18 +62,11 @@ public class GameManager : MonoBehaviour
         Players.Clear();
         for (int i = 0; i < playerCount; i++)
         {
-            GameObject playerObject = GameObject.Find($"Player {i + 1}");
-            if (playerObject == null)
-            {
-                Debug.Log($"We have no Player {i + 1}.");
-            }   
-            // TODO: bugfix
-            // Now we could only instantiate the first player's GameObject
-            // but have all players' Player script.
+            GameObject playerObject = Instantiate(PlayerPrefab);
             Player player = playerObject.GetComponent<Player>();
-            
+            playerObject.transform.SetParent(PlayerParent.transform, false);
             player.Initialize(i, playerObject);
-
+            playerObject.name = player.Name;
             Vector3 position;
             switch (i) {
                 case 0:
@@ -92,34 +80,23 @@ public class GameManager : MonoBehaviour
                     break;
             }
             player.SetInitialPosition(position);
+            MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                renderer.enabled = true;
+            }
+            Collider collider = playerObject.GetComponent<Collider>();
+            if (collider != null)
+            {
+                collider.enabled = true;
+            }
+            foreach (MonoBehaviour script in playerObject.GetComponents<MonoBehaviour>())
+            {
+                script.enabled = true;
+            }
+            playerObject.SetActive(true);
             Players.Add(player);
-            PlayerObjects.Add(playerObject);
-            print("Now we have " + Players.Count + " players.");
-            Debug.Log($"Player {i + 1}, place: {playerObject.transform.position}");
 
-            // Following commented code is for creating new player objects from prefab.
-            // Which get the same problem on instantiation right now.
-            // GameObject playerObject = Instantiate(PlayerPrefab);
-            // Player player = playerObject.GetComponent<Player>();
-            // player.Initialize(i, playerObject);
-            // playerObject.transform.SetParent(PlayersParentObject.transform, false);
-            // playerObject.name = player.Name;
-            // player.SetInitialPosition(new Vector3(0, 0, 0));
-            // MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
-            // if (renderer != null)
-            // {
-            //     renderer.enabled = true;
-            // }
-            // Collider collider = playerObject.GetComponent<Collider>();
-            // if (collider != null)
-            // {
-            //     collider.enabled = true;
-            // }
-            // foreach (MonoBehaviour script in playerObject.GetComponents<MonoBehaviour>())
-            // {
-            //     script.enabled = true;
-            // }
-            // playerObject.SetActive(true);
         }
     }
 }

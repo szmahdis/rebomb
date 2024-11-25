@@ -9,6 +9,11 @@ public class Snapshot {
     // player states
     List<Player> players = new List<Player>();
 
+    // Breakable walls in list of (x, z) format coordinates 
+    public List<Vector2> breakableWalls;
+    // Unbreakable walls in list of (x, z) format coordinates 
+    public List<Vector2> unbreakableWalls;
+
     // TODO: map state
 
     public Snapshot(int turnIndex, List<int> previousSurvivalPlayers) {
@@ -17,6 +22,8 @@ public class Snapshot {
         players = GameManager.Instance.GetPlayers();
         // TODO: store map state (discussion: shall we decouple a map manager?)
         // map = TurnManager.Instance.GetMap();
+        breakableWalls = MapManager.Instance.GetBreakableWalls();
+        unbreakableWalls = MapManager.Instance.GetUnbreakableWalls();
     }
 
 }

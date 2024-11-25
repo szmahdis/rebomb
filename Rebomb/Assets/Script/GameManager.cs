@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject PlayerPrefab;
     [SerializeField] private GameObject PlayerParent; 
+    [SerializeField] private GameObject Map; 
     public static GameManager Instance { get; private set; }
     public List<Player> Players;
 

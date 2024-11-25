@@ -121,6 +121,7 @@ public class TurnManager : MonoBehaviour
             if (GameManager.Instance.Players[i].Alive)
             {
                 survivalPlayerNum++;
+                CurrentSurvivalPlayers.Add(i);
             }
         }
 

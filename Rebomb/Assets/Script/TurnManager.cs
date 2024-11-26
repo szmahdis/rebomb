@@ -13,6 +13,9 @@ public class TurnManager : MonoBehaviour
     private Dictionary<int, bool> playerReady = new Dictionary<int, bool>();
     List<int> PreviousSurvivalPlayers = new List<int>();
 
+    // event
+    public event System.Action<int> OnTurnChanged;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -100,6 +103,7 @@ public class TurnManager : MonoBehaviour
         CheckRoundEnd();
         UpdateSnapshots();
         CurrentTurn++;
+        OnTurnChanged?.Invoke(CurrentTurn);
         StartTurn();
     }
 

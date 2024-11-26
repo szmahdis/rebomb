@@ -1,32 +1,39 @@
+using System;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    [SerializeField] private int Coins;
     [SerializeField] private int Steps;
-    [SerializeField] private int Bombs;
-    
-    // TODO: record total coins with later weapon system.
-    // public int Coins { get; private set; }
+
+    public event Action<string, int> OnResourceUpdated;
+    // string: "coin"/"step";
+    // int: updated resource value
 
     public void OnRoundStart()
     {
-        // Bombs = 0;
         // Steps = 0;
+        // Coins = 0;
+        // OnResourceUpdated?.Invoke("step", Steps);
+        // OnResourceUpdated?.Invoke("coin", Coins);
     }
 
     public void OnTurnStart()
     {
         Steps = 3;
-        Bombs = 1;
+        Coins = 1;
+        OnResourceUpdated?.Invoke("step", Steps);
+        OnResourceUpdated?.Invoke("coin", Coins);
     }
 
     public bool OnBombPlaced(BombType type){
         // TODO: integrate with CharacterPlaceBomb.cs
         if (type == BombType.Active || type == BombType.Passive)
         {
-            if (Bombs > 0)
+            if (Coins > 0)
             {
-                Bombs--;
+                Coins--;
+                OnResourceUpdated?.Invoke("coin", Coins);
                 return true;
             } else {
                 return false;
@@ -40,6 +47,7 @@ public class ResourceManager : MonoBehaviour
         if (Steps > 0)
         {
             Steps--;
+            OnResourceUpdated?.Invoke("step", Steps);
             return true;
         } else {
             return false;

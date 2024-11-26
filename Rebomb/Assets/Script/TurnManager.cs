@@ -10,7 +10,6 @@ public class TurnManager : MonoBehaviour
     private Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
     private bool TimeTravelTriggered { get; set; }
 
-    private Dictionary<int, bool> playerReady = new Dictionary<int, bool>();
     List<int> PreviousSurvivalPlayers = new List<int>();
 
     // event
@@ -30,19 +29,17 @@ public class TurnManager : MonoBehaviour
     {
         CurrentTurn = 1;
         TimeTravelTriggered = false;
-        playerReady.Clear();
         snapshots.Clear();
 
         // TODO: Initialize map and player's start positions.
-        
+
         // Initialize player states(alive/ready), resources, positions.
         for (int i = 0; i < GameManager.Instance.Players.Count; i++)
         {
-            playerReady.Add(i, false);
-            Debug.Log($"Player {i + 1}, ready: {playerReady[i]}.");
             GameManager.Instance.Players[i].Alive = true;
+            GameManager.Instance.Players[i].Ready = false;
             GameManager.Instance.Players[i].ResourceManager.OnRoundStart();
-            
+
             // TODO: load candidate initial position from map.
             // Vector3 position = new Vector3(0, 0, 0);
             // GameManager.Instance.Players[i].SetInitialPosition(position);
@@ -51,15 +48,9 @@ public class TurnManager : MonoBehaviour
 
     public void StartTurn()
     {
-        for (int i = 0; i < GameManager.Instance.Players.Count; i++)
+        foreach( Player player in GameManager.Instance.Players)
         {
-            if (GameManager.Instance.Players[i].Alive == false) continue;
-
-            // states updated
-            playerReady[i] = false;
-
-            // resource updated
-            GameManager.Instance.Players[i].ResourceManager.OnTurnStart();
+            player.OnTurnStart();
         }
         Debug.Log($"Turn {CurrentTurn} Started.");
     }
@@ -71,29 +62,26 @@ public class TurnManager : MonoBehaviour
             Debug.LogError($"Invalid player {playerIndex} marked ready, ignored.");
             return;
         }
-        if (playerReady[playerIndex] == true) return;
 
-        Debug.Log($"Player {playerIndex + 1} is ready now.");
-        playerReady[playerIndex] = true;
-        if (CheckAllPlayersReady()) {
-            EndTurn();
-        }
+        GameManager.Instance.Players[playerIndex].OnPlayerReady();
+
+        if (CheckAllPlayersReady()) EndTurn();
     }
 
     private bool CheckAllPlayersReady()
     {
-        foreach (bool isReady in playerReady.Values)
+        foreach (Player player in GameManager.Instance.Players)
         {
-            if (!isReady) return false;
-            // note: for players who are not alive, they are always ready.
-            // refer to StartTurn() for details.
+            Debug.Log($"Player {player.Index + 1} ready: {player.Ready}, alive: {player.Alive}");
+            if (player.Alive && player.Ready == false) return false;
         }
         return true;
     }
 
     private void EndTurn()
     {
-        if (TimeTravelTriggered && CurrentTurn > 1 && REWIND_TURNS > 0) {
+        if (TimeTravelTriggered && CurrentTurn > 1 && REWIND_TURNS > 0)
+        {
             TimeTravelTriggered = false;
             // Time travel here.
             // Rewind(min(REWIND_TURNS, CurrentTurn - 1));
@@ -133,9 +121,11 @@ public class TurnManager : MonoBehaviour
         {
             RoundManager.Instance.EndRound(PreviousSurvivalPlayers);
         }
-        else if (survivalPlayerNum == 1) {
+        else if (survivalPlayerNum == 1)
+        {
             RoundManager.Instance.EndRound(CurrentSurvivalPlayers);
-        } else
+        }
+        else
         {
             // survivalPlayerNum > 1, start next turn.
             PreviousSurvivalPlayers = CurrentSurvivalPlayers;

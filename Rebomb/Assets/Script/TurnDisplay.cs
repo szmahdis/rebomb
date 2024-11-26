@@ -7,11 +7,8 @@ public class TurnDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        // Subscribe to the TurnManager's turn changed event
-        Debug.Log("Subscribing to TurnManager's OnTurnChanged event [0].");
         if (TurnManager.Instance != null)
         {
-            Debug.Log("Subscribing to TurnManager's OnTurnChanged event [1].");
             TurnManager.Instance.OnTurnChanged += UpdateTurnText;
         }
     }
@@ -26,7 +23,6 @@ public class TurnDisplay : MonoBehaviour
 
     private void UpdateTurnText(int TurnNumber)
     {
-        Debug.Log($"TurnDisplay received event: Turn is now {TurnNumber}");
         turnText.text = $"Turn {TurnNumber}";
     }
 }

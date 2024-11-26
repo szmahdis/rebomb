@@ -16,7 +16,7 @@ public class ConfigPanel : MonoBehaviour
 
     public void CloseConfigPanel()
     {
-        Debug.Log("[Button] Open config panel.");
+        Debug.Log("[Button] Close config panel.");
         configPanel.SetActive(false);
         foreach (GameObject element in otherGameObjects) {
             element.SetActive(true);

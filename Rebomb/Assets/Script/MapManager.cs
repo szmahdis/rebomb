@@ -21,7 +21,7 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in BreakableWall.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
-            Debug.Log($"Breakable wall at {position}.");
+            // Debug.Log($"Breakable wall at {position}.");
             breakableWalls.Add(position);
         }
         return breakableWalls;
@@ -35,7 +35,7 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in UnbreakableWall.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
-            Debug.Log($"Unbreakable wall at {position}.");
+            // Debug.Log($"Unbreakable wall at {position}.");
             unbreakableWalls.Add(position);
         }
         return unbreakableWalls;

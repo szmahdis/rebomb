@@ -7190,12 +7190,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'WASD for movement
+  m_text: 'WASD/ IJKL for movement
 
-    Space for placing bombs
+    C&V / N&M for placing active&passive bombs
 
-    (temporal showcase)
-    C&V / N&M for player 1/2 place bomb and move'
+    F
+    / H for ready, also ready button for ready'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9026,8 +9026,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Map: {fileID: 754954598}
-  Players: []
   playerCount: 2
+  Players: []
   PlayerPrefab: {fileID: 8465260562886059072, guid: 61cc2c9ad74d9cd46a7aa38597627cd1, type: 3}
   PlayerParent: {fileID: 444254894}
   PlayerPanelPrefab: {fileID: 488234538768622541, guid: e797c2e9bd3e57e45905309a361b4bfb, type: 3}

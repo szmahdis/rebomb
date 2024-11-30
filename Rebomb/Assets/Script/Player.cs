@@ -1,14 +1,43 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static System.Math;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private GameObject playerObject;
+    private GameObject playerObject;
+    public ResourceManager ResourceManager { get; private set; }
 
+    [Header("Player States")]
     public int Index { get; private set; }
     public string Name { get; private set; }
     public bool Alive { get; set; }
     public bool Ready { get; set; }
-    public ResourceManager ResourceManager { get; private set; }
+    public Vector3 currentPosition;
+
+    [Header("Map Members")]
+    public float gridHeight = 0.5f; // Fixed Y-axis position
+    public int gridSize = 8; // Defines the grid range
+    public Transform breakableWallsParent;
+    public Transform unbreakableWallsParent;
+
+    [Header("Movement")]
+    public float speed = 5.0f; // Controls the movement speed
+    public bool isMoving = false;
+    public Vector2 moveInput;
+    public Vector3 targetPosition; // The position to move towards
+
+
+    [Header("Bomb Placement")]
+    public GameObject bombPrefab; // Prefab for the bomb
+    public Transform bombsParent; // Parent object to hold all placed bombs
+
+
+    void Start()
+    {
+        breakableWallsParent = GameObject.Find("BreakableWall").transform;
+        unbreakableWallsParent = GameObject.Find("UnbreakableWall").transform;
+        bombsParent = GameObject.Find("Bombs").transform;
+    }
 
     public void Initialize(int i, GameObject thisPlayerObject)
     {
@@ -20,63 +49,126 @@ public class Player : MonoBehaviour
         return;
     }
 
-    public void SetInitialPosition(Vector3 initialPosition) {
-        Debug.Log($"{Name}'s initial position is {playerObject.transform.position}.");
-        // TODO: integrate with CharacterMovement.cs
-        // maybe calling CharacterGridMovement.MoveToPosition(targetPosition)?
-        playerObject.transform.position = initialPosition;
+    public void SetInitialPosition(Vector3 initialPosition)
+    {
+        currentPosition = new Vector3(Mathf.Round(initialPosition.x), gridHeight, Mathf.Round(initialPosition.z));
+        playerObject.transform.position = currentPosition;
     }
 
-    public void OnPlayerReady() {
+    public void OnPlayerReady()
+    {
         if (Alive == false) return;
         if (Ready == true) return;
-        
+
         // state update
         Debug.Log($"{Name} is ready now.");
         Ready = true;
-
-        // disable movement and bomb placement.
-        playerObject.GetComponent<CharacterGridMovement>().enabled = false;
-        playerObject.GetComponent<CharacterPlaceBomb>().enabled = false;
+        TurnManager.Instance.MarkPlayerReady(Index);
     }
 
-    public void OnTurnStart() {
+    public void OnTurnStart()
+    {
         if (Alive == false) return;
 
         // state & resource update
         Ready = false;
         ResourceManager.OnTurnStart();
-
-        // enable player movement
-        playerObject.GetComponent<CharacterGridMovement>().enabled = true;
-        playerObject.GetComponent<CharacterPlaceBomb>().enabled = true; 
     }
 
-    void Update() {
+    public void OnReady(InputAction.CallbackContext context)
+    {
+        if (context.performed) { OnPlayerReady(); }
+    }
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+        if (moveInput == Vector2.zero) return;
         if (Alive == false || (Alive == true && Ready == true)) return;
-        // Only response to player input when alive and not ready.
+        if (isMoving) return;
 
-        // following operation showcase how to trigger resource update.
-        // TODO: Replace them by calling OnBombPlaced and OnStepTaken in CharacterPlaceBomb and CharacterGridMovement.
-        // maybe: WASD for movement and C for place bomb and V for ready of player 1
-        // maybe: IJKL for movement and N for place bomb and M for ready of player 2
-        if (Input.GetKeyDown(KeyCode.C) && Index == 0)
+        Vector3 proposedPosition = currentPosition + new Vector3((int)moveInput.x, 0, (int)moveInput.y);
+
+        // TODO: refactoring, move validation check and map member to map manager.
+        // map.getComponent<MapManager>().IsValidPosition(position);
+        if (IsValidPosition(proposedPosition) == false) return;
+
+        int step_num = Abs((int)moveInput.x) + Abs((int)moveInput.y);
+        if (ResourceManager.OnStepTaken(step_num) == false) return;
+
+        targetPosition = proposedPosition;
+        isMoving = true;
+    }
+
+    public void OnActiveBomb(InputAction.CallbackContext context)
+    {
+        if (context.performed) { PlaceBomb(BombType.Active); }
+    }
+    public void OnPassiveBomb(InputAction.CallbackContext context)
+    {
+        if (context.performed) { PlaceBomb(BombType.Passive); }
+    }
+
+    private void PlaceBomb(BombType bombType)
+    {
+        if (Alive == false) return;
+        if (Alive == true && Ready == true) return;
+        if (isMoving) return;
+
+        if (IsObstacleAtPosition(currentPosition, bombsParent))
         {
-            ResourceManager.OnBombPlaced(BombType.Active);
+            Debug.Log($"A bomb is already at {currentPosition}!");
+            return;
         }
-        if (Input.GetKeyDown(KeyCode.V) && Index == 0)
+        if (ResourceManager.OnBombPlaced(bombType) == false)
         {
-            ResourceManager.OnStepTaken();
+            Debug.Log($"Not enough coin for {bombType} bomb.");
+            return;
+        }
+        GameObject newBomb = Instantiate(bombPrefab, currentPosition, Quaternion.identity);
+        newBomb.transform.parent = bombsParent;
+        Debug.Log("Bomb placed at: " + currentPosition);
+    }
+
+    void Update()
+    {
+        if (Alive == false || (Alive == true && Ready == true)) return;
+
+        if (isMoving)
+        {
+            playerObject.transform.position = Vector3.MoveTowards(playerObject.transform.position, targetPosition, speed * Time.deltaTime);
+            if (playerObject.transform.position == targetPosition)
+            {
+                isMoving = false;
+                currentPosition = targetPosition;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.N) && Index == 1)
-        {
-            ResourceManager.OnBombPlaced(BombType.Active);
-        }
-        if (Input.GetKeyDown(KeyCode.M) && Index == 1)
-        {
-            ResourceManager.OnStepTaken();
-        }
 
     }
+    private bool IsValidPosition(Vector3 position)
+    {
+        // TODO: move to map manager.
+        if (position.x < 0 || position.x >= gridSize || position.z < 0 || position.z >= gridSize) return false;
+
+        // Check if there is an obstacle at the current position by iterating through child objects
+        if (IsObstacleAtPosition(position, breakableWallsParent) || IsObstacleAtPosition(position, unbreakableWallsParent) || IsObstacleAtPosition(position, bombsParent))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private bool IsObstacleAtPosition(Vector3 position, Transform parent)
+    {
+        // TODO: move to map manager.
+        foreach (Transform child in parent)
+        {
+            if (Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

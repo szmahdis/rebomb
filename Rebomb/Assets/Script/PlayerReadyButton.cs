@@ -57,9 +57,7 @@ public class PlayerReadyButton : MonoBehaviour
 
         isReady = true;
         SetButtonState(true);
-
-        TurnManager.Instance.MarkPlayerReady(playerIndex);
-
+        GameManager.Instance.Players[playerIndex].OnPlayerReady();
     }
 
     private void SetButtonState(bool ready)

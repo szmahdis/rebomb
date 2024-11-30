@@ -62,9 +62,6 @@ public class TurnManager : MonoBehaviour
             Debug.LogError($"Invalid player {playerIndex} marked ready, ignored.");
             return;
         }
-
-        GameManager.Instance.Players[playerIndex].OnPlayerReady();
-
         if (CheckAllPlayersReady()) EndTurn();
     }
 
@@ -72,7 +69,7 @@ public class TurnManager : MonoBehaviour
     {
         foreach (Player player in GameManager.Instance.Players)
         {
-            Debug.Log($"Player {player.Index + 1} ready: {player.Ready}, alive: {player.Alive}");
+            // Debug.Log($"Player {player.Index + 1} ready: {player.Ready}, alive: {player.Alive}");
             if (player.Alive && player.Ready == false) return false;
         }
         return true;

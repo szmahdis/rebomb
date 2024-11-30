@@ -1,22 +1,26 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     [SerializeField] private GameObject Map;
-    
-    public List<Player> Players;
+
     [Header("Game Config")]
     // TODO: decide playerCount in MainMenu.
     [SerializeField] public int playerCount = 2;
 
+    [Header("Players")]
+    [SerializeField] public List<Player> Players;
+
     [Header("Prefabs and References")]
     [SerializeField] private GameObject PlayerPrefab;
-    [SerializeField] private GameObject PlayerParent; 
-
+    [SerializeField] private GameObject PlayerParent;
     [SerializeField] private GameObject PlayerPanelPrefab;
     [SerializeField] private Transform PlayerPanelParent;
+    private Vector3[] playerPositions;
 
     private void Awake()
     {
@@ -31,17 +35,33 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartGame(playerCount);
-        RoundManager.Instance.StartRound();
+        Players = new List<Player>();
+        playerPositions = new Vector3[4] {
+            new Vector3(1.0f, 0.5f, 1.0f), new Vector3(6.0f, 0.5f, 1.0f),
+            new Vector3(1.0f, 0.5f, 6.0f), new Vector3(6.0f, 0.5f, 6.0f)
+        };
 
+        // for local multiplayer
+        string[] controlSchemes = new string[2] { "KeyboardLeft", "KeyboardRight" };
+        for (int i = 0; i < playerCount; i++)
+        {
+            PlayerInput playerInput = PlayerInput.Instantiate(
+                PlayerPrefab,
+                playerIndex: i,
+                controlScheme: controlSchemes[i],
+                pairWithDevice: InputSystem.GetDevice<Keyboard>()
+            );
+            InitializePlayer(playerInput, playerInput.gameObject);
+        }
+
+        StartGame();
     }
 
-    public void StartGame(int playerCount)
+    public void StartGame()
     {
-
-        InitializePlayers(playerCount);
+        Debug.Log("After all players joined, start game.");
         InitializePlayerPanels(playerCount);
-        Debug.Log("Game Started!");
+        RoundManager.Instance.StartRound();
     }
 
     public void EndGame(List<int> winners)
@@ -64,42 +84,44 @@ public class GameManager : MonoBehaviour
         }
         return playerList;
     }
-    private void InitializePlayers(int playerCount)
+
+    private void InitializePlayer(PlayerInput playerInput, GameObject playerObject)
     {
-        Debug.Log($"Initializing {playerCount} Players...");
-        Players = new List<Player>();
-        Vector3[] playerPositions = new Vector3[4] {
-            new Vector3(1.0f, 0.5f, 1.0f), new Vector3(1.0f, 0.5f, 6.0f),
-            new Vector3(6.0f, 0.5f, 1.0f), new Vector3(6.0f, 0.5f, 6.0f)
-        };
-        for (int i = 0; i < playerCount; i++)
+        int i = playerInput.playerIndex;
+
+        // player object
+        playerObject.name = $"Player {i + 1}";
+        playerObject.transform.SetParent(PlayerParent.transform, false);
+
+        // player script
+        Player player = playerObject.GetComponent<Player>();
+        player.Initialize(i, playerObject);
+        player.SetInitialPosition(playerPositions[i]);
+        Players.Add(player);
+
+        // callbacks
+        playerInput.actions["Move"].performed += context => player.OnMove(context);
+        playerInput.actions["ActiveBomb"].performed += context => player.OnActiveBomb(context);
+        playerInput.actions["PassiveBomb"].performed += context => player.OnPassiveBomb(context);
+        playerInput.actions["Ready"].performed += context => player.OnReady(context);
+
+        // other components
+        MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
+        if (renderer != null)
         {
-            GameObject playerObject = Instantiate(PlayerPrefab);
-            Player player = playerObject.GetComponent<Player>();
-            playerObject.transform.SetParent(PlayerParent.transform, false);
-            player.Initialize(i, playerObject);
-            playerObject.name = player.Name;
-            player.SetInitialPosition(playerPositions[i]);
-            MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
-            if (renderer != null)
-            {
-                renderer.enabled = true;
-            }
-            Collider collider = playerObject.GetComponent<Collider>();
-            if (collider != null)
-            {
-                collider.enabled = true;
-            }
-            foreach (MonoBehaviour script in playerObject.GetComponents<MonoBehaviour>())
-            {
-                script.enabled = true;
-            }
-            playerObject.SetActive(true);
-            Players.Add(player);
+            renderer.enabled = true;
         }
+        Collider collider = playerObject.GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = true;
+        }
+
+        playerObject.SetActive(true);
     }
 
-    private void InitializePlayerPanels(int playerCount) {
+    private void InitializePlayerPanels(int playerCount)
+    {
         // positioning -> corners of parent panel
         RectTransform parentRectTransform = PlayerPanelParent.GetComponent<RectTransform>();
         if (parentRectTransform == null)
@@ -109,14 +131,14 @@ public class GameManager : MonoBehaviour
         }
         Vector3[] corners = new Vector3[4];
         parentRectTransform.GetWorldCorners(corners);
-        Vector3[] panelCorners = new Vector3[4]{ corners[0], corners[3], corners[1], corners[2] };
-        Vector2[] panelPivots = new Vector2[4]{ new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1) };        
-        
+        Vector3[] panelCorners = new Vector3[4] { corners[0], corners[3], corners[1], corners[2] };
+        Vector2[] panelPivots = new Vector2[4] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1) };
+
         // instantiate panels
         for (int i = 0; i < playerCount; i++)
         {
             GameObject panel = Instantiate(PlayerPanelPrefab, PlayerPanelParent);
-            panel.name = $"PlayerPanel{i+1}";
+            panel.name = $"PlayerPanel{i + 1}";
 
             RectTransform panel_position = panel.GetComponent<RectTransform>();
             panel_position.position = panelCorners[i];
@@ -133,4 +155,5 @@ public class GameManager : MonoBehaviour
             panel.SetActive(true);
         }
     }
+
 }

@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 4845013073711443911}
   - component: {fileID: 6695550974951079930}
   - component: {fileID: 4174622298455368625}
-  - component: {fileID: 4987430584004057986}
-  - component: {fileID: -732491542152524588}
   - component: {fileID: 969898921367271931}
+  - component: {fileID: 8438348427041979679}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -139,39 +138,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4987430584004057986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465260562886059072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1006c272ab6b63a4e9f69833438d259b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  gridHeight: 0.5
-  gridSize: 8
-  breakableWallsParent: {fileID: 0}
-  unbreakableWallsParent: {fileID: 0}
-  bombsParent: {fileID: 0}
---- !u!114 &-732491542152524588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465260562886059072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1cc16553a3a3524e98ba87c01dd4407, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombPrefab: {fileID: 2802641519651476425, guid: 0745ce38fa4dbfe4caccbdd4a216044c, type: 3}
-  bombsParent: {fileID: 0}
-  gridHeight: 0.5
 --- !u!114 &969898921367271931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,5 +150,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7550381cae65ad34588550798a13dd26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayersParentObject: {fileID: 0}
-  PlayerPrefab: {fileID: 8465260562886059072}
+  currentPosition: {x: 0, y: 0, z: 0}
+  gridHeight: 0.5
+  gridSize: 8
+  breakableWallsParent: {fileID: 0}
+  unbreakableWallsParent: {fileID: 0}
+  speed: 5
+  bombPrefab: {fileID: 2802641519651476425, guid: 0745ce38fa4dbfe4caccbdd4a216044c, type: 3}
+  bombsParent: {fileID: 0}
+--- !u!114 &8438348427041979679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8465260562886059072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 7c71ced62ef9ac14db3f7b3b618b097a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fc39e46a-7c06-4a5f-99a0-3bcf423f060e
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 56672657-1e55-44d6-8e8d-ad3f49b341b0
+    m_ActionName: 'UI/Point[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 74926ae5-92d9-4ad9-8991-53f53a910c86
+    m_ActionName: 'UI/Click[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c471a4b9-0300-4739-82e1-2fa848dd6cf4
+    m_ActionName: 'Player1/PassiveBomb[/Keyboard/v]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ca3cefd7-6021-4c4c-bc45-a9f951d07a6f
+    m_ActionName: 'Player 1/Ready[/Player 6/f]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 44d196b9-edf4-48bf-84a8-c7be7f9aa4bd
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: KeyboardLeft
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

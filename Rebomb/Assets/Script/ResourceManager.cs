@@ -26,8 +26,8 @@ public class ResourceManager : MonoBehaviour
         OnResourceUpdated?.Invoke("coin", Coins);
     }
 
-    public bool OnBombPlaced(BombType type){
-        // TODO: integrate with CharacterPlaceBomb.cs
+    public bool OnBombPlaced(BombType type)
+    {
         if (type == BombType.Active || type == BombType.Passive)
         {
             if (Coins > 0)
@@ -35,21 +35,25 @@ public class ResourceManager : MonoBehaviour
                 Coins--;
                 OnResourceUpdated?.Invoke("coin", Coins);
                 return true;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
         return false;
     }
 
-    public bool OnStepTaken(){
-        // TODO: integrate with CharacterMovement.cs
+    public bool OnStepTaken(int step_num = 1)
+    {
         if (Steps > 0)
         {
             Steps--;
             OnResourceUpdated?.Invoke("step", Steps);
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }

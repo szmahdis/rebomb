@@ -28,12 +28,10 @@ public class ResourceManager : MonoBehaviour
         if (item.IsStackable()) {
             bool itemAlreadyInInventory = false;
             foreach (Item inventoryItem in itemList) {
-                Debug.Log("Items in inventoryItem.itemType are: " + inventoryItem.itemType);
-                Debug.Log("Items in item.itemType are: " + item.itemType);
+                Debug.Log("Item type in inventory is: " + inventoryItem.itemType);
+                Debug.Log("Pickup up in item type is: " + item.itemType);
                 if (inventoryItem.itemType == item.itemType) {
-                    Debug.Log("Item type " + inventoryItem.itemType);
                     inventoryItem.amount += item.amount;
-                    Debug.Log("Item amount " + inventoryItem.amount);
                     itemAlreadyInInventory = true;
                 }
             }

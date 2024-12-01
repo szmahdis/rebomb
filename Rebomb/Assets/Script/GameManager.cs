@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     {
         Players = new List<Player>();
         playerPositions = new Vector3[4] {
-            new Vector3(1.0f, 0.5f, 1.0f), new Vector3(6.0f, 0.5f, 1.0f),
+            new Vector3(1.0f, 0.5f, 6.0f), new Vector3(6.0f, 0.5f, 1.0f),
             new Vector3(1.0f, 0.5f, 6.0f), new Vector3(6.0f, 0.5f, 6.0f)
         };
 

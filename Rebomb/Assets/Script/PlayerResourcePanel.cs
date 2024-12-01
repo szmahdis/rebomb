@@ -16,6 +16,7 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         // Assuming child objects have the TextMeshPro components for coins and steps
         coinText = transform.Find("CoinText").GetComponent<TextMeshProUGUI>();
+        // TODO get itemGetSprite based on item, change text to image
         stepText = transform.Find("StepText").GetComponent<TextMeshProUGUI>();
         playerNameText = transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         readyButton = transform.Find("ReadyButton").GetComponent<Button>();
@@ -51,6 +52,8 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         if (resourceType == "coin")
         {
+            Debug.Log("new value for coin " + newValue);
+
             UpdateText(coinText, newValue, "Coins: ");
         }
         else if (resourceType == "step")

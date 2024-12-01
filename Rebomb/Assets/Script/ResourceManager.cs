@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
@@ -6,9 +8,57 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private int Coins;
     [SerializeField] private int Steps;
 
+    private List<Item> itemList;
+
     public event Action<string, int> OnResourceUpdated;
     // string: "coin"/"step";
     // int: updated resource value
+
+
+    public ResourceManager()
+    {
+        // Initialize the list in the constructor
+        itemList = new List<Item>();
+        AddInventoryItem(new Item { itemType = Item.ItemType.Coin, amount = 5});
+        Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
+    }
+
+    public void AddInventoryItem(Item item)
+    {
+        if (item.IsStackable()) {
+            bool itemAlreadyInInventory = false;
+            foreach (Item inventoryItem in itemList) {
+                Debug.Log("Items in inventoryItem.itemType are: " + inventoryItem.itemType);
+                Debug.Log("Items in item.itemType are: " + item.itemType);
+                if (inventoryItem.itemType == item.itemType) {
+                    Debug.Log("Item type " + inventoryItem.itemType);
+                    inventoryItem.amount += item.amount;
+                    Debug.Log("Item amount " + inventoryItem.amount);
+                    itemAlreadyInInventory = true;
+                }
+            }
+            if (!itemAlreadyInInventory) {
+                itemList.Add(item);
+            }
+        } else {
+            itemList.Add(item);
+        }
+        OnResourceUpdated?.Invoke("coin", GetTotalCoins());
+        Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
+    }
+
+    public List<Item> GetInventoryItemList()
+    {
+        return itemList;
+    }
+
+    private int GetTotalCoins()
+    {
+        // Calculate the total number of coins in the inventory
+        return itemList
+            .Where(item => item.itemType == Item.ItemType.Coin)
+            .Sum(item => item.amount);
+    }
 
     public void OnRoundStart()
     {
@@ -21,7 +71,7 @@ public class ResourceManager : MonoBehaviour
     public void OnTurnStart()
     {
         Steps = 3;
-        Coins = 1;
+        Coins = GetTotalCoins();
         OnResourceUpdated?.Invoke("step", Steps);
         OnResourceUpdated?.Invoke("coin", Coins);
     }

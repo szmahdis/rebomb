@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
         bombsParent = GameObject.Find("Bombs").transform;
     }
 
+
     public void Initialize(int i, GameObject thisPlayerObject)
     {
         Index = i;
@@ -169,6 +170,18 @@ public class Player : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+        if (itemWorld != null)
+        {
+            //Touching item
+            ResourceManager.AddInventoryItem(itemWorld.GetItem());
+            itemWorld.DestroySelf();
+
+        }
     }
 
 }

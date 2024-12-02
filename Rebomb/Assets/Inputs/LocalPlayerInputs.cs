@@ -62,6 +62,15 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TimeTravel"",
+                    ""type"": ""Button"",
+                    ""id"": ""36593108-a15d-4e5d-9abf-3899e0fa7dde"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -240,6 +249,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Ready"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f47dda87-7e50-4132-abbb-263dd1dc2935"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardLeft"",
+                    ""action"": ""TimeTravel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -405,6 +425,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         m_Player_ActiveBomb = m_Player.FindAction("ActiveBomb", throwIfNotFound: true);
         m_Player_PassiveBomb = m_Player.FindAction("PassiveBomb", throwIfNotFound: true);
         m_Player_Ready = m_Player.FindAction("Ready", throwIfNotFound: true);
+        m_Player_TimeTravel = m_Player.FindAction("TimeTravel", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -480,6 +501,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ActiveBomb;
     private readonly InputAction m_Player_PassiveBomb;
     private readonly InputAction m_Player_Ready;
+    private readonly InputAction m_Player_TimeTravel;
     public struct PlayerActions
     {
         private @LocalPlayerInputs m_Wrapper;
@@ -488,6 +510,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @ActiveBomb => m_Wrapper.m_Player_ActiveBomb;
         public InputAction @PassiveBomb => m_Wrapper.m_Player_PassiveBomb;
         public InputAction @Ready => m_Wrapper.m_Player_Ready;
+        public InputAction @TimeTravel => m_Wrapper.m_Player_TimeTravel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -509,6 +532,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @Ready.started += instance.OnReady;
             @Ready.performed += instance.OnReady;
             @Ready.canceled += instance.OnReady;
+            @TimeTravel.started += instance.OnTimeTravel;
+            @TimeTravel.performed += instance.OnTimeTravel;
+            @TimeTravel.canceled += instance.OnTimeTravel;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -525,6 +551,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @Ready.started -= instance.OnReady;
             @Ready.performed -= instance.OnReady;
             @Ready.canceled -= instance.OnReady;
+            @TimeTravel.started -= instance.OnTimeTravel;
+            @TimeTravel.performed -= instance.OnTimeTravel;
+            @TimeTravel.canceled -= instance.OnTimeTravel;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -665,6 +694,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         void OnActiveBomb(InputAction.CallbackContext context);
         void OnPassiveBomb(InputAction.CallbackContext context);
         void OnReady(InputAction.CallbackContext context);
+        void OnTimeTravel(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

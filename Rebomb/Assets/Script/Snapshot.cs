@@ -7,7 +7,7 @@ public class Snapshot {
     public List<int> PreviousSurvivalPlayers = new List<int>();
 
     // player states
-    List<Player> players = new List<Player>();
+    public List<Player> players = new List<Player>();
 
     // Breakable walls in list of (x, z) format coordinates 
     public List<Vector2> breakableWalls;
@@ -15,11 +15,15 @@ public class Snapshot {
     public List<Vector2> unbreakableWalls;
 
     // TODO: map state
-
     public Snapshot(int turnIndex, List<int> previousSurvivalPlayers) {
         TurnIndex = turnIndex;
         PreviousSurvivalPlayers = previousSurvivalPlayers;
-        players = GameManager.Instance.GetPlayers();
+        // save a copy of player states, not changed by reference
+        players = new List<Player>();
+        foreach (var player in GameManager.Instance.GetPlayers()) {
+            players.Add(new Player(player)); // Using the copy constructor
+        }
+        // players = GameManager.Instance.GetPlayers();
         // TODO: store map state (discussion: shall we decouple a map manager?)
         // map = TurnManager.Instance.GetMap();
         breakableWalls = MapManager.Instance.GetBreakableWalls();

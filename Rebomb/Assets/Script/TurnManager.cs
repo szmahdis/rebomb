@@ -77,16 +77,22 @@ public class TurnManager : MonoBehaviour
 
     private void EndTurn()
     {
+        bool timeTraveled = false;
+
+        CalculateExplosions();
+        // test rewind
+        if (CurrentTurn == 4) TimeTravelTriggered = true;
+
         if (TimeTravelTriggered && CurrentTurn > 1 && REWIND_TURNS > 0)
         {
             TimeTravelTriggered = false;
             // Time travel here.
-            // Rewind(min(REWIND_TURNS, CurrentTurn - 1));
+            Rewind(Mathf.Min(REWIND_TURNS, CurrentTurn - 1));
+            timeTraveled = true;
         }
-
-        CalculateExplosions();
         CheckRoundEnd();
-        UpdateSnapshots();
+        if (!timeTraveled)
+            UpdateSnapshots();
         CurrentTurn++;
         OnTurnChanged?.Invoke(CurrentTurn);
         StartTurn();
@@ -141,5 +147,46 @@ public class TurnManager : MonoBehaviour
     {
         Snapshot snapshot = new Snapshot(CurrentTurn, PreviousSurvivalPlayers);
         snapshots.Add(CurrentTurn, snapshot);
+    }
+
+    private void Rewind(int turnIndex)
+    {
+        int turn_num = CurrentTurn;
+        if (snapshots.ContainsKey(turnIndex))
+        {
+            Snapshot snapshot = snapshots[turnIndex];
+            CurrentTurn = snapshot.TurnIndex;
+            PreviousSurvivalPlayers = snapshot.PreviousSurvivalPlayers;
+            List<Vector2> breakableWalls = snapshot.breakableWalls;
+            List<Vector2> unbreakableWalls = snapshot.unbreakableWalls;
+            MapManager.Instance.ClearWalls();
+            MapManager.Instance.SetWalls(breakableWalls, unbreakableWalls);
+            Debug.Log($"Rewind to turn {turnIndex}.");
+            foreach( Player player in GameManager.Instance.Players)
+            {
+                foreach (Player snapshotPlayer in snapshot.players)
+                {
+                    if (player.Index == snapshotPlayer.Index)
+                    {
+                        player.currentPosition = snapshotPlayer.currentPosition;
+                        player.targetPosition = snapshotPlayer.targetPosition;
+                        player.Alive = snapshotPlayer.Alive;
+                        player.Ready = snapshotPlayer.Ready;
+                        // player.ResourceManager = snapshotPlayer.ResourceManager;
+                        player.ResourceManager.GetInventoryItemList();
+                        player.gameObject.transform.position = player.currentPosition;
+                    }
+                }
+            }
+            // delete snapshots after rewinding
+            for (int i = turnIndex + 1; i <= turn_num; i++)
+            {
+                snapshots.Remove(i);
+            }
+        }
+        else
+        {
+            Debug.LogError($"No snapshot found for turn {turnIndex}, cannot rewind.");
+        }
     }
 }

@@ -5,6 +5,8 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance { get; set; }
     [SerializeField] private GameObject Map;
+    [SerializeField] private GameObject BreakableWallPrefab;
+    [SerializeField] private GameObject UnbreakableWallPrefab;
     [SerializeField] private GameObject Bombs;
 
     void Awake() {
@@ -40,6 +42,34 @@ public class MapManager : MonoBehaviour
             unbreakableWalls.Add(position);
         }
         return unbreakableWalls;
+    }
+
+    public void ClearWalls()
+    {
+        Transform BreakableWall = Map.transform.Find("BreakableWall");
+        foreach (Transform child in BreakableWall.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        Transform UnbreakableWall = Map.transform.Find("UnbreakableWall");
+        foreach (Transform child in UnbreakableWall.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void SetWalls(List<Vector2> breakableWalls, List<Vector2> unbreakableWalls)
+    {
+        foreach (Vector2 position in breakableWalls)
+        {
+            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            wall.transform.parent = Map.transform.Find("BreakableWall");
+        }
+        foreach (Vector2 position in unbreakableWalls)
+        {
+            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            wall.transform.parent = Map.transform.Find("UnbreakableWall");
+        }
     }
 
     public List<Transform> GetActiveBombs()

@@ -11889,6 +11889,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Map: {fileID: 754954598}
+  BreakableWallPrefab: {fileID: 3439595127804175609, guid: e17b51a0a6aab4847a8132464f1ec7a2, type: 3}
+  UnbreakableWallPrefab: {fileID: 7113431740352570460, guid: b680b5fe3d3edeb4e8155fb4dd3506be, type: 3}
   Bombs: {fileID: 155460225}
 --- !u!1 &1982394783
 GameObject:

@@ -5,7 +5,7 @@ using static System.Math;
 public class Player : MonoBehaviour
 {
     private GameObject playerObject;
-    public ResourceManager ResourceManager { get; private set; }
+    public ResourceManager ResourceManager { get; set; }
     public GameManager GameManager;
 
     [Header("Player States")]
@@ -45,6 +45,16 @@ public class Player : MonoBehaviour
         bombsParent = GameObject.Find("Bombs").transform;
     }
 
+    // Copy Constructor
+    public Player(Player player)
+    {
+        Index = player.Index;
+        Name = player.Name;
+        Alive = player.Alive;
+        Ready = player.Ready;
+        currentPosition = player.currentPosition;
+        ResourceManager = new ResourceManager(player.ResourceManager);
+    }
 
     public void Initialize(int i, GameObject thisPlayerObject)
     {

@@ -7,6 +7,7 @@ public enum BombType
 
 public class Bomb : MonoBehaviour
 {
+    [SerializeField] GameObject VFXExplosionPrefab;
     public BombType bombType;
     private int turnsToExplosion = 3; // Time until explosion in turns
     float maxExplosionDistance = 2f;  // Explosion range
@@ -42,14 +43,14 @@ public class Bomb : MonoBehaviour
     {
         if (bombExploded) return; // Avoid infinite loops
         bombExploded = true;
-        float rayDuration = 20f; // Debug ray duration
+        float rayDuration = 2f;   // Debug ray duration
         Debug.Log("Bomb exploded!");
-        // Play explosion animation
-        // Destroy the bomb itself after exploding
-        Destroy(gameObject);
+        // Play explosion animation at the bomb tile
+        PlayVFX(VFXExplosionPrefab, transform.position);
         // Check explosion in all directions
         foreach (Vector3 direction in explosionDirections)
         {
+            float explosionDrawDistance = 0f;
             // Cast a ray from the bomb's position in the specified direction
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, maxExplosionDistance))
             {
@@ -59,27 +60,55 @@ public class Bomb : MonoBehaviour
                 if (hit.collider.CompareTag("Player")) {
                     Player player = hit.collider.GetComponent<Player>();
                     Debug.Log("Player hit by bomb.");
+                    explosionDrawDistance = hit.distance;
                     player.Die();
-                    continue;   // Stop after hitting the first object
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {
                     Bomb bomb = hit.collider.GetComponent<Bomb>();
                     Debug.Log("Bomb hit by bomb.");
+                    explosionDrawDistance = hit.distance;
                     bomb.Explode();
-                    continue;   // Stop after hitting the first object
                 }
                 else if (hit.collider.CompareTag("BreakableWall"))
                 {
                     Destroy(hit.collider.gameObject);
-                    continue;   // Stop after hitting the first object
+                    explosionDrawDistance = hit.distance;
+                } else {
+                    // Ray hit a non-destructible object
+                    explosionDrawDistance = hit.distance - 1.0f;
                 }
             }
             else
             {
                 // Draw debug ray showing no hits
                 Debug.DrawLine(transform.position, transform.position + direction * maxExplosionDistance, Color.blue, rayDuration); // Debug ray (optional)
+                explosionDrawDistance = maxExplosionDistance;
+            }
+
+            // Play bomb animation at every free tile along the ray
+            Debug.Log($"Explosion distance: {hit.distance}");
+            for (int i = 1; i <= explosionDrawDistance; i++)
+            {
+                Vector3 tilePosition = transform.position + direction * i;
+                PlayVFX(VFXExplosionPrefab, tilePosition);
             }
         }
+        // Destroy the bomb itself after exploding
+        Destroy(gameObject);
+    }
+
+    private void PlayVFX(GameObject vfxPrefab, Vector3 position)
+    {
+        GameObject instantiatedVFX = Instantiate(vfxPrefab, position, Quaternion.identity);
+        float timeToDestroy = 5f;
+        foreach (Transform particleEffect in instantiatedVFX.transform)
+        {
+            Debug.Log("Playing VFX.");
+            particleEffect.GetComponent<ParticleSystem>().Play();
+            timeToDestroy = Mathf.Max(timeToDestroy, particleEffect.GetComponent<ParticleSystem>().main.duration);
+        }
+        // Delete the object after x time to keep Scene clean
+        Destroy(instantiatedVFX, timeToDestroy + 1f);
     }
 }

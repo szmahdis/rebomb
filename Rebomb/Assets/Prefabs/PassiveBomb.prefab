@@ -121,4 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8a4d134d60775c45b4753f3af0523b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VFXExplosionPrefab: {fileID: 2508566036696959919, guid: 8931d8af9bee243ef90b6a56f6adc94f, type: 3}
   bombType: 1

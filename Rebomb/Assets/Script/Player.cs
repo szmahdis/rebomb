@@ -18,8 +18,10 @@ public class Player : MonoBehaviour
     [Header("Map Members")]
     public float gridHeight = 0.5f; // Fixed Y-axis position
     public int gridSize = 8; // Defines the grid range
+    public Transform floorParent;
     public Transform breakableWallsParent;
     public Transform unbreakableWallsParent;
+    public Transform playersParent;
 
     [Header("Movement")]
     public float speed = 5.0f; // Controls the movement speed
@@ -36,8 +38,10 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        floorParent = GameObject.Find("Floor").transform;
         breakableWallsParent = GameObject.Find("BreakableWall").transform;
         unbreakableWallsParent = GameObject.Find("UnbreakableWall").transform;
+        playersParent = GameObject.Find("Players").transform;
         bombsParent = GameObject.Find("Bombs").transform;
     }
 
@@ -127,19 +131,15 @@ public class Player : MonoBehaviour
             return;
         }
         GameObject bombPrefab = null;
-        // string bombName = "";
         if (bombType == BombType.Active)
         {
             bombPrefab = activeBombPrefab;
-            // bombName = "ActiveBomb";
         }
         else
         {
             bombPrefab = passiveBombPrefab;
-            // bombName = "PassiveBomb";
         }
         GameObject newBomb = Instantiate(bombPrefab, currentPosition, Quaternion.identity);
-        // newBomb.name = bombName;    // Set the name to override the default clone name
         newBomb.transform.parent = bombsParent;
         Debug.Log("Bomb placed at: " + currentPosition);
     }
@@ -170,10 +170,12 @@ public class Player : MonoBehaviour
     private bool IsValidPosition(Vector3 position)
     {
         // TODO: move to map manager.
-        if (position.x < 0 || position.x >= gridSize || position.z < 0 || position.z >= gridSize) return false;
+        // Check if the position is within the floor grid
+        if (!IsObstacleAtPosition(position - Vector3.down, floorParent)) return false;
 
         // Check if there is an obstacle at the current position by iterating through child objects
-        if (IsObstacleAtPosition(position, breakableWallsParent) || IsObstacleAtPosition(position, unbreakableWallsParent) || IsObstacleAtPosition(position, bombsParent))
+        if (IsObstacleAtPosition(position, breakableWallsParent) || IsObstacleAtPosition(position, unbreakableWallsParent) || IsObstacleAtPosition(position, bombsParent)
+            || IsObstacleAtPosition(position, playersParent))
         {
             return false;
         }
@@ -185,7 +187,7 @@ public class Player : MonoBehaviour
         // TODO: move to map manager.
         foreach (Transform child in parent)
         {
-            if (Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
+            if (child != this &&Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
             {
                 return true;
             }

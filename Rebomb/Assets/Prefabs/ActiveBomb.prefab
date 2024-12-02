@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1348640575829460209}
   - component: {fileID: 5687035423699117988}
   - component: {fileID: 437627584388974087}
+  - component: {fileID: 8601471251131999319}
   m_Layer: 0
-  m_Name: Bomb
-  m_TagString: Untagged
+  m_Name: ActiveBomb
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,3 +109,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8601471251131999319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802641519651476425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8a4d134d60775c45b4753f3af0523b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombType: 0

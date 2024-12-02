@@ -75,6 +75,22 @@ public class GameManager : MonoBehaviour
         // TODO: show checkout scene.
     }
 
+    public void PlayerDied(Player deadPlayer)
+    {
+        Debug.Log($"{deadPlayer.Name} died.");
+        Players.Remove(deadPlayer);
+        // Check if endgame
+        if (Players.Count == 1)
+        {
+            List<int> winners = new List<int>();
+            winners.Add(0);
+            EndGame(winners);
+        } else if (Players.Count == 0)
+        {
+            EndGame(new List<int>());
+        }
+    }
+
     public List<Player> GetPlayers()
     {
         List<Player> playerList = new List<Player>();
@@ -96,6 +112,7 @@ public class GameManager : MonoBehaviour
         // player script
         Player player = playerObject.GetComponent<Player>();
         player.Initialize(i, playerObject);
+        player.GameManager = this;
         player.SetInitialPosition(playerPositions[i]);
         Players.Add(player);
 

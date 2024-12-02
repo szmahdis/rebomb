@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private GameObject playerObject;
     public ResourceManager ResourceManager { get; private set; }
+    public GameManager GameManager;
 
     [Header("Player States")]
     public int Index { get; private set; }
@@ -28,7 +29,8 @@ public class Player : MonoBehaviour
 
 
     [Header("Bomb Placement")]
-    public GameObject bombPrefab; // Prefab for the bomb
+    public GameObject activeBombPrefab;  // Prefab for the active bomb
+    public GameObject passiveBombPrefab; // Prefab for the passive bomb
     public Transform bombsParent; // Parent object to hold all placed bombs
 
 
@@ -75,7 +77,6 @@ public class Player : MonoBehaviour
         Ready = false;
         ResourceManager.OnTurnStart();
     }
-
     public void OnReady(InputAction.CallbackContext context)
     {
         if (context.performed) { OnPlayerReady(); }
@@ -125,9 +126,29 @@ public class Player : MonoBehaviour
             Debug.Log($"Not enough coin for {bombType} bomb.");
             return;
         }
+        GameObject bombPrefab = null;
+        // string bombName = "";
+        if (bombType == BombType.Active)
+        {
+            bombPrefab = activeBombPrefab;
+            // bombName = "ActiveBomb";
+        }
+        else
+        {
+            bombPrefab = passiveBombPrefab;
+            // bombName = "PassiveBomb";
+        }
         GameObject newBomb = Instantiate(bombPrefab, currentPosition, Quaternion.identity);
+        // newBomb.name = bombName;    // Set the name to override the default clone name
         newBomb.transform.parent = bombsParent;
         Debug.Log("Bomb placed at: " + currentPosition);
+    }
+    public void Die() {
+        // Play death animation
+        // Notify the game manager
+        GameManager.Instance.PlayerDied(this);
+        // Destroy the player object
+        Destroy(playerObject);
     }
 
     void Update()

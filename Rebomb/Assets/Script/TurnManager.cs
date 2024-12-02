@@ -95,6 +95,14 @@ public class TurnManager : MonoBehaviour
     private void CalculateExplosions()
     {
         // TODO: for each bomb, update state of this turn.
+        List<Transform>  activeBombs = MapManager.Instance.GetActiveBombs();
+        Debug.Log("Active Bombs succesully loaded.");
+        Debug.Log($"Active Bombs count: {activeBombs.Count}");
+        foreach (Transform activeBomb in activeBombs)
+        {
+            Debug.Log("Calling method of active bomb.");
+            activeBomb.GetComponent<Bomb>().BombCountdown();
+        }
         // TODO: find the final explosion range.
         // TODO: for each player, check if they are in explosion range and update Alive.
         // TODO: for each player, check if they get new hourglass and update resources.

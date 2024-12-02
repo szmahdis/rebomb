@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8438348427041979679}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,7 +156,11 @@ MonoBehaviour:
   breakableWallsParent: {fileID: 0}
   unbreakableWallsParent: {fileID: 0}
   speed: 5
-  bombPrefab: {fileID: 2802641519651476425, guid: 0745ce38fa4dbfe4caccbdd4a216044c, type: 3}
+  isMoving: 0
+  moveInput: {x: 0, y: 0}
+  targetPosition: {x: 0, y: 0, z: 0}
+  activeBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  passiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
   bombsParent: {fileID: 0}
 --- !u!114 &8438348427041979679
 MonoBehaviour:

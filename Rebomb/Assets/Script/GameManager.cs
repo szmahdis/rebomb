@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -68,28 +72,13 @@ public class GameManager : MonoBehaviour
     public void EndGame(List<int> winners)
     {
         Debug.Log("Game Over!");
-        Debug.Log("Winners: ");
         foreach (int winner in winners)
         {
-            Debug.Log($"\t{Players[winner].Name}");
+            Debug.Log($"\tWinner: {Players[winner].Name}");
         }
         // TODO: show checkout scene.
-    }
 
-    public void PlayerDied(Player deadPlayer)
-    {
-        Debug.Log($"{deadPlayer.Name} died.");
-        Players.Remove(deadPlayer);
-        // Check if endgame
-        if (Players.Count == 1)
-        {
-            List<int> winners = new List<int>();
-            winners.Add(0);
-            EndGame(winners);
-        } else if (Players.Count == 0)
-        {
-            EndGame(new List<int>());
-        }
+        Quit();
     }
 
     public List<Player> GetPlayers()
@@ -174,4 +163,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Quit()
+    {
+        // Cleanup Input System
+        UnityEngine.InputSystem.InputSystem.ResetHaptics(); // Optional
+        UnityEngine.InputSystem.InputSystem.DisableAllEnabledActions();
+
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }

@@ -98,6 +98,8 @@ public class Player : MonoBehaviour
     }
     public void OnReady(InputAction.CallbackContext context)
     {
+        if (Alive == false) return;
+
         // event pass, keyboard input -> button click
         if (context.performed) {
             readyButton.OnReadyButtonClicked();
@@ -161,12 +163,16 @@ public class Player : MonoBehaviour
         newBomb.transform.parent = bombsParent;
         Debug.Log("Bomb placed at: " + currentPosition);
     }
-    public void Die() {
-        // Play death animation
-        // Notify the game manager
-        GameManager.Instance.PlayerDied(this);
-        // Destroy the player object
-        Destroy(playerObject);
+
+    public void OnKilled() {
+        if (Alive == false) return;
+        
+        // TODO: Play death animation
+
+        playerObject.GetComponent<MeshRenderer>().enabled = false;
+        playerObject.GetComponent<Collider>().enabled = false;
+        playerObject.SetActive(false);
+        Alive = false;
     }
 
     void Update()

@@ -48,7 +48,7 @@ public class TurnManager : MonoBehaviour
 
     public void StartTurn()
     {
-        foreach( Player player in GameManager.Instance.Players)
+        foreach (Player player in GameManager.Instance.Players)
         {
             player.OnTurnStart();
         }
@@ -77,23 +77,24 @@ public class TurnManager : MonoBehaviour
 
     private void EndTurn()
     {
-        bool timeTraveled = false;
-
-        CalculateExplosions();
         // test rewind
-        if (CurrentTurn == 4) TimeTravelTriggered = true;
+        // if (CurrentTurn == 5) TimeTravelTriggered = true;
 
-        if (TimeTravelTriggered && CurrentTurn > 1 && REWIND_TURNS > 0)
+        if (TimeTravelTriggered && CurrentTurn > 1)
         {
             TimeTravelTriggered = false;
+            int rewind_turn_number = Mathf.Min(REWIND_TURNS, CurrentTurn - 1);
             // Time travel here.
-            Rewind(Mathf.Min(REWIND_TURNS, CurrentTurn - 1));
-            timeTraveled = true;
+            Rewind(CurrentTurn - rewind_turn_number);
         }
-        CheckRoundEnd();
-        if (!timeTraveled)
+        else
+        {
+            CalculateExplosions();
+            CheckRoundEnd();
             UpdateSnapshots();
-        CurrentTurn++;
+            // next turn here
+            CurrentTurn++;
+        }
         OnTurnChanged?.Invoke(CurrentTurn);
         StartTurn();
     }
@@ -101,7 +102,7 @@ public class TurnManager : MonoBehaviour
     private void CalculateExplosions()
     {
         // TODO: for each bomb, update state of this turn.
-        List<Transform>  activeBombs = MapManager.Instance.GetActiveBombs();
+        List<Transform> activeBombs = MapManager.Instance.GetActiveBombs();
         Debug.Log("Active Bombs succesully loaded.");
         Debug.Log($"Active Bombs count: {activeBombs.Count}");
         foreach (Transform activeBomb in activeBombs)
@@ -162,7 +163,7 @@ public class TurnManager : MonoBehaviour
             MapManager.Instance.ClearWalls();
             MapManager.Instance.SetWalls(breakableWalls, unbreakableWalls);
             Debug.Log($"Rewind to turn {turnIndex}.");
-            foreach( Player player in GameManager.Instance.Players)
+            foreach (Player player in GameManager.Instance.Players)
             {
                 foreach (Player snapshotPlayer in snapshot.players)
                 {
@@ -179,7 +180,7 @@ public class TurnManager : MonoBehaviour
                 }
             }
             // delete snapshots after rewinding
-            for (int i = turnIndex + 1; i <= turn_num; i++)
+            for (int i = turnIndex; i <= turn_num; i++)
             {
                 snapshots.Remove(i);
             }

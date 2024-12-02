@@ -52,8 +52,6 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         if (resourceType == "coin")
         {
-            Debug.Log("new value for coin " + newValue);
-
             UpdateText(coinText, newValue, "Coins: ");
         }
         else if (resourceType == "step")

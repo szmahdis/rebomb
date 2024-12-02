@@ -61,7 +61,7 @@ public class Bomb : MonoBehaviour
                     Player player = hit.collider.GetComponent<Player>();
                     Debug.Log("Player hit by bomb.");
                     explosionDrawDistance = hit.distance;
-                    player.Die();
+                    player.OnKilled();
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {
@@ -104,7 +104,7 @@ public class Bomb : MonoBehaviour
         float timeToDestroy = 5f;
         foreach (Transform particleEffect in instantiatedVFX.transform)
         {
-            Debug.Log("Playing VFX.");
+            // Debug.Log("Playing VFX.");
             particleEffect.GetComponent<ParticleSystem>().Play();
             timeToDestroy = Mathf.Max(timeToDestroy, particleEffect.GetComponent<ParticleSystem>().main.duration);
         }

@@ -5,8 +5,10 @@ using static System.Math;
 public class Player : MonoBehaviour
 {
     private GameObject playerObject;
+
+    [Header("Game Objects")]
     public ResourceManager ResourceManager { get; set; }
-    public GameManager GameManager;
+    public PlayerReadyButton readyButton;
 
     [Header("Player States")]
     public int Index { get; private set; }
@@ -54,6 +56,7 @@ public class Player : MonoBehaviour
         Ready = player.Ready;
         currentPosition = player.currentPosition;
         ResourceManager = new ResourceManager(player.ResourceManager);
+        readyButton = player.readyButton;
     }
 
     public void Initialize(int i, GameObject thisPlayerObject)
@@ -74,6 +77,8 @@ public class Player : MonoBehaviour
 
     public void OnPlayerReady()
     {
+        // called only by the player ready button.
+        
         if (Alive == false) return;
         if (Ready == true) return;
 
@@ -93,7 +98,10 @@ public class Player : MonoBehaviour
     }
     public void OnReady(InputAction.CallbackContext context)
     {
-        if (context.performed) { OnPlayerReady(); }
+        // event pass, keyboard input -> button click
+        if (context.performed) {
+            readyButton.OnReadyButtonClicked();
+        }
     }
     public void OnMove(InputAction.CallbackContext context)
     {

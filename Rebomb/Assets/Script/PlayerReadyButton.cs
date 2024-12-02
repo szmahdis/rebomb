@@ -51,7 +51,7 @@ public class PlayerReadyButton : MonoBehaviour
         }
     }
 
-    private void OnReadyButtonClicked()
+    public void OnReadyButtonClicked()
     {
         if (isReady) return;
 

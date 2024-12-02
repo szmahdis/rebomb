@@ -113,7 +113,6 @@ public class GameManager : MonoBehaviour
         // player script
         Player player = playerObject.GetComponent<Player>();
         player.Initialize(i, playerObject);
-        player.GameManager = this;
         player.SetInitialPosition(playerPositions[i]);
         Players.Add(player);
 
@@ -169,6 +168,7 @@ public class GameManager : MonoBehaviour
                 panel_script.playerIndex = i;
                 panel_script.enabled = true;
             }
+            Players[i].readyButton = panel.GetComponentInChildren<PlayerReadyButton>();
             // Note: set active explicitly here, to call OnEnable() to subscribe event. 
             panel.SetActive(true);
         }

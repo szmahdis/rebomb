@@ -9,12 +9,6 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadSceneAsync("SampleScene");
     }
 
-    public void OpenOptionsMenu()
-    {
-        Debug.Log("Switching to options menu!");
-        SceneManager.LoadSceneAsync("OptionsMenu");
-    }
-
     public void QuitGame()
     {
         Debug.Log("Quitting the game!");

@@ -9,6 +9,7 @@ using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
+    public EndgamePanel EndgamePanel;
     public static GameManager Instance { get; private set; }
     [SerializeField] private GameObject Map;
 
@@ -74,11 +75,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over!");
         foreach (int winner in winners)
         {
-            Debug.Log($"\tWinner: {Players[winner].Name}");
+            EndgamePanel.ShowEndGameResult(Players[winner].Name);
+            Debug.Log($"Winner: {Players[winner].Name}");
         }
-        // TODO: show checkout scene.
-
-        Quit();
     }
 
     public List<Player> GetPlayers()

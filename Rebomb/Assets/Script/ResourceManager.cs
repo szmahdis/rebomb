@@ -7,6 +7,7 @@ public class ResourceManager : MonoBehaviour
 {
     [SerializeField] private int Coins;
     [SerializeField] private int Steps;
+    [SerializeField] private int Hourglass;
 
     private List<Item> itemList;
 
@@ -19,7 +20,7 @@ public class ResourceManager : MonoBehaviour
     {
         // Initialize the list in the constructor
         itemList = new List<Item>();
-        AddInventoryItem(new Item { itemType = Item.ItemType.Coin, amount = 5});
+        AddInventoryItem(new Item { itemType = Item.ItemType.Coin, amount = 5 });
         Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
     }
 
@@ -41,8 +42,15 @@ public class ResourceManager : MonoBehaviour
         } else {
             itemList.Add(item);
         }
-        OnResourceUpdated?.Invoke("coin", GetTotalCoins());
+
+        RefreshInventory();
         Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
+
+        //OnResourceUpdated?.Invoke("coin", GetTotalCoins());
+
+        //Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
+        //OnResourceUpdated?.Invoke("hourglass", Hourglass);
+
     }
 
     public List<Item> GetInventoryItemList()
@@ -74,6 +82,22 @@ public class ResourceManager : MonoBehaviour
             .Sum(item => item.amount);
     }
 
+    private bool ContainsHourGlass(List<Item> itemList)
+    {
+        return itemList.Any(item => item.itemType == Item.ItemType.Hourglass);
+    }
+
+    private void RefreshInventory()
+    {
+        Coins = GetTotalCoins();
+        OnResourceUpdated?.Invoke("coin", Coins);
+
+        Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
+        OnResourceUpdated?.Invoke("hourglass", Hourglass);
+
+    }
+
+
     public void OnRoundStart()
     {
         // Steps = 0;
@@ -85,9 +109,14 @@ public class ResourceManager : MonoBehaviour
     public void OnTurnStart()
     {
         Steps = 3;
-        Coins = GetTotalCoins();
         OnResourceUpdated?.Invoke("step", Steps);
-        OnResourceUpdated?.Invoke("coin", Coins);
+
+        //Coins = GetTotalCoins();
+        //OnResourceUpdated?.Invoke("coin", Coins);
+        //Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
+        //OnResourceUpdated?.Invoke("hourglass", Hourglass);
+        RefreshInventory();
+
     }
 
     public bool OnBombPlaced(BombType type)

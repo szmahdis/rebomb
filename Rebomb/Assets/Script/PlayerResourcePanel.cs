@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,19 +11,20 @@ public class PlayerResourcePanel : MonoBehaviour
     private TextMeshProUGUI playerNameText;
     private TextMeshProUGUI coinText;
     private TextMeshProUGUI stepText;
+    private TextMeshProUGUI hourglassText;
     private Button readyButton;
 
     private void Awake()
     {
         // Assuming child objects have the TextMeshPro components for coins and steps
         coinText = transform.Find("CoinText").GetComponent<TextMeshProUGUI>();
-        // TODO get itemGetSprite based on item, change text to image
         stepText = transform.Find("StepText").GetComponent<TextMeshProUGUI>();
+        hourglassText = transform.Find("HourglassText").GetComponent<TextMeshProUGUI>();
         playerNameText = transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         readyButton = transform.Find("ReadyButton").GetComponent<Button>();
-        if (coinText == null || stepText == null || playerNameText == null || readyButton == null)
+        if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassText == null)
         {
-            Debug.LogError("CoinText or StepText or PlayerNameText or ReadyButton not found in PlayerResourcePanel!");
+            Debug.LogError("CoinText or StepText or PlayerNameText or ReadyButton or HourglassText not found in PlayerResourcePanel!");
         }
     }
 
@@ -50,13 +52,20 @@ public class PlayerResourcePanel : MonoBehaviour
 
     private void HandleResourceUpdated(string resourceType, int newValue)
     {
-        if (resourceType == "coin")
+        var resourceMappings = new Dictionary<string, (TextMeshProUGUI uiText, string prefix)>
+    {
+        { "coin", (coinText, "Coins: ") },
+        { "step", (stepText, "Steps: ") },
+        { "hourglass", (hourglassText, "Hourglass: ") }
+    };
+
+        if (resourceMappings.TryGetValue(resourceType, out var mapping))
         {
-            UpdateText(coinText, newValue, "Coins: ");
+            UpdateText(mapping.uiText, newValue, mapping.prefix);
         }
-        else if (resourceType == "step")
+        else
         {
-            UpdateText(stepText, newValue, "Steps: ");
+            Debug.LogWarning($"Unhandled resource type: {resourceType}");
         }
     }
 

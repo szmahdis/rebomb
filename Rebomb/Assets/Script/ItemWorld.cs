@@ -30,5 +30,10 @@ public class ItemWorld : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void DisableSelf()
+    {
+        gameObject.SetActive(false);
+    }
+
 
 }

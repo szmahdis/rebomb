@@ -10,6 +10,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject ActiveBombPrefab;
     [SerializeField] private GameObject PassiveBombPrefab;
     [SerializeField] private GameObject Bombs;
+    [SerializeField] private GameObject Items;
 
     void Awake() {
     if (Instance == null) {
@@ -180,6 +181,37 @@ public class MapManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
             
+        }
+    }
+
+    public List<GameObject> GetItems()
+    {
+        // Items are a child of Items
+        List<GameObject> items = new List<GameObject>();
+        foreach (Transform child in Items.transform)
+        {
+            Vector2 position = new Vector2(child.position.x, child.position.z);
+            Debug.Log($"Item at {position}.");
+            if (child.gameObject.activeSelf)
+                items.Add(child.gameObject);
+        }
+        return items;
+    }
+
+    public void SetItems(List<GameObject> items)
+    {
+        foreach (GameObject item in items)
+        {
+            item.SetActive(true);
+        }
+    }
+
+    public void ClearItems()
+    {
+        foreach (Transform child in Items.transform)
+        {
+            // Destroy(child.gameObject);
+            child.gameObject.SetActive(false);
         }
     }
 

@@ -229,7 +229,8 @@ public class Player : MonoBehaviour
         {
             //Touching item
             ResourceManager.AddInventoryItem(itemWorld.GetItem());
-            itemWorld.DestroySelf();
+            // itemWorld.DestroySelf();
+            itemWorld.DisableSelf();
 
         }
     }
@@ -243,7 +244,7 @@ public class PlayerData
     public string Name;
     public bool Alive;
     public Vector3 currentPosition;
-    public ResourceManager ResourceManager;
+    public ResourceInfo ResourceInfo;
     public Bomb LastBomb;
 
     
@@ -254,7 +255,7 @@ public class PlayerData
         Name = player.Name;
         Alive = player.Alive;
         currentPosition = player.currentPosition;
-        ResourceManager = player.ResourceManager;
+        ResourceInfo = new ResourceInfo(player.ResourceManager);
         LastBomb = player.LastBomb;
     }
 }

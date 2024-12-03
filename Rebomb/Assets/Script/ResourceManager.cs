@@ -23,14 +23,6 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
     }
 
-    // Copy constructor
-    public ResourceManager(ResourceManager other)
-    {
-        Coins = other.Coins;
-        Steps = other.Steps;
-        itemList = new List<Item>(other.itemList);
-    }
-
     public void AddInventoryItem(Item item)
     {
         if (item.IsStackable()) {
@@ -128,5 +120,15 @@ public class ResourceManager : MonoBehaviour
         {
             return false;
         }
+    }
+}
+
+public class ResourceInfo
+{
+    public List<Item> Inventory;
+    public ResourceInfo(ResourceManager resourceManager)
+    {
+        Inventory = new List<Item>();
+        Inventory.Add(new Item { itemType = Item.ItemType.Coin, amount = resourceManager.GetCoins() });
     }
 }

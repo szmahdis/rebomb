@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Search;
 
 public class Snapshot {
     // turn state
@@ -14,6 +15,7 @@ public class Snapshot {
     // Unbreakable walls in list of (x, z) format coordinates 
     public List<Vector2> unbreakableWalls;
     public List<BombData> bombs;
+    public List<GameObject> items;
 
     // TODO: map state
     public Snapshot(int turnIndex, List<int> previousSurvivalPlayers) {
@@ -30,6 +32,7 @@ public class Snapshot {
         // map = TurnManager.Instance.GetMap();
         breakableWalls = MapManager.Instance.GetBreakableWalls();
         unbreakableWalls = MapManager.Instance.GetUnbreakableWalls();
+        items = MapManager.Instance.GetItems();
 
         // save a copy of bomb states, not changed by reference
         foreach (var bomb in MapManager.Instance.GetBombs()) {

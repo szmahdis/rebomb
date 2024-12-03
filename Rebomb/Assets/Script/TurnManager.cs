@@ -164,6 +164,8 @@ public class TurnManager : MonoBehaviour
             MapManager.Instance.SetWalls(breakableWalls, unbreakableWalls);
             MapManager.Instance.ClearBombs();
             MapManager.Instance.SetBombs(snapshot.bombs);
+            MapManager.Instance.ClearItems();
+            MapManager.Instance.SetItems(snapshot.items);
 
             Debug.Log($"Rewind to turn {turnIndex}.");
             foreach (Player player in GameManager.Instance.Players)
@@ -175,8 +177,8 @@ public class TurnManager : MonoBehaviour
                         player.currentPosition = snapshotPlayer.currentPosition;
                         player.Alive = snapshotPlayer.Alive;
                         // player.ResourceManager = snapshotPlayer.ResourceManager;
-                        player.ResourceManager.SetInventoryItemList(snapshotPlayer.ResourceManager.GetInventoryItemList());
-                        player.ResourceManager.SetCoins(snapshotPlayer.ResourceManager.GetCoins());
+                        player.ResourceManager.SetInventoryItemList(snapshotPlayer.ResourceInfo.Inventory);
+                        // player.ResourceManager.SetCoins(snapshotPlayer.ResourceManager.GetCoins());
                         player.gameObject.transform.position = player.currentPosition;
                         player.LastBomb = snapshotPlayer.LastBomb;
                     }

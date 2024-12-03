@@ -27,9 +27,9 @@ public class TurnManager : MonoBehaviour
 
     public void Initialize()
     {
-        CurrentTurn = 1;
-        TimeTravelTriggered = false;
-        snapshots.Clear();
+        
+        
+        
 
         // TODO: Initialize map and player's start positions.
 
@@ -44,6 +44,11 @@ public class TurnManager : MonoBehaviour
             // Vector3 position = new Vector3(0, 0, 0);
             // GameManager.Instance.Players[i].SetInitialPosition(position);
         }
+        snapshots.Clear();
+        CurrentTurn = 0;
+        UpdateSnapshots();
+        CurrentTurn = 1;
+        TimeTravelTriggered = false;
     }
 
     public void StartTurn()
@@ -78,12 +83,12 @@ public class TurnManager : MonoBehaviour
     private void EndTurn()
     {
         // test rewind
-        if (CurrentTurn == 5) TimeTravelTriggered = true;
+        // if (CurrentTurn == 5) TimeTravelTriggered = true;
 
         if (TimeTravelTriggered && CurrentTurn > 1)
         {
             TimeTravelTriggered = false;
-            int rewind_turn_number = Mathf.Min(REWIND_TURNS, CurrentTurn - 1);
+            int rewind_turn_number = Mathf.Min(REWIND_TURNS, CurrentTurn);
             // Time travel here.
             Rewind(CurrentTurn - rewind_turn_number);
         }
@@ -156,7 +161,7 @@ public class TurnManager : MonoBehaviour
         if (snapshots.ContainsKey(turnIndex))
         {
             Snapshot snapshot = snapshots[turnIndex];
-            CurrentTurn = snapshot.TurnIndex;
+            CurrentTurn = snapshot.TurnIndex+1;
             PreviousSurvivalPlayers = snapshot.PreviousSurvivalPlayers;
             List<Vector2> breakableWalls = snapshot.breakableWalls;
             List<Vector2> unbreakableWalls = snapshot.unbreakableWalls;

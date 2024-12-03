@@ -202,7 +202,13 @@ public class MapManager : MonoBehaviour
     {
         foreach (GameObject item in items)
         {
-            item.SetActive(true);
+            
+            // if have "HourGlass" in name
+            if (item.name.Contains("HourGlass"))
+            {
+                continue;
+            }
+            else item.SetActive(true);
         }
     }
 

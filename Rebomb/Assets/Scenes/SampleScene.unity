@@ -11842,7 +11842,7 @@ MonoBehaviour:
   ActiveBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
   PassiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
   Bombs: {fileID: 155460225}
-  Items: {fileID: 0}
+  Items: {fileID: 1447506154}
 --- !u!1001 &1979605721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11854,10 +11854,6 @@ PrefabInstance:
     - target: {fileID: 2596978550305456111, guid: d882931c2b54de140b06b9829bd52c95, type: 3}
       propertyPath: m_Name
       value: pfItemWorld_HourGlass
-      objectReference: {fileID: 0}
-    - target: {fileID: 2596978550305456111, guid: d882931c2b54de140b06b9829bd52c95, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4861078804283108002, guid: d882931c2b54de140b06b9829bd52c95, type: 3}
       propertyPath: m_LocalPosition.x

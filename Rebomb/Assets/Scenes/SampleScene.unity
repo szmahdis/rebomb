@@ -11855,6 +11855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pfItemWorld_HourGlass
       objectReference: {fileID: 0}
+    - target: {fileID: 2596978550305456111, guid: d882931c2b54de140b06b9829bd52c95, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4861078804283108002, guid: d882931c2b54de140b06b9829bd52c95, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.03

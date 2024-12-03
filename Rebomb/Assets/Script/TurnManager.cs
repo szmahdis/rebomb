@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
     private static int REWIND_TURNS = 3;
     public int CurrentTurn { get; private set; }
     private Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
-    private bool TimeTravelTriggered { get; set; }
+    public bool TimeTravelTriggered { get; set; }
 
     List<int> PreviousSurvivalPlayers = new List<int>();
 

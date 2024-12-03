@@ -7,11 +7,13 @@ public class PlayerResourcePanel : MonoBehaviour
 {
     public ResourceManager ResourceManager;
 
+
     public int playerIndex;
     private TextMeshProUGUI playerNameText;
     private TextMeshProUGUI coinText;
     private TextMeshProUGUI stepText;
     private TextMeshProUGUI hourglassText;
+    private Button hourglassButton;
     private Button readyButton;
 
     private void Awake()
@@ -22,7 +24,8 @@ public class PlayerResourcePanel : MonoBehaviour
         hourglassText = transform.Find("HourglassText").GetComponent<TextMeshProUGUI>();
         playerNameText = transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         readyButton = transform.Find("ReadyButton").GetComponent<Button>();
-        if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassText == null)
+        hourglassButton = transform.Find("HourglassButton").GetComponent<Button>();
+        if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassText == null || hourglassButton == null)
         {
             Debug.LogError("CoinText or StepText or PlayerNameText or ReadyButton or HourglassText not found in PlayerResourcePanel!");
         }
@@ -32,6 +35,34 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         UpdateText(playerNameText, playerIndex+1, "Player ");
         readyButton.GetComponent<PlayerReadyButton>().playerIndex = playerIndex;
+
+        //Ensure hourglass button is disabled initially
+        if(hourglassButton != null)
+        {
+            hourglassButton.interactable = false;
+
+            // Assign the OnHourglassButtonClicked method to the onClick event
+            hourglassButton.onClick.RemoveAllListeners();
+            hourglassButton.onClick.AddListener(OnHourglassButtonClicked);
+        }
+
+    }
+
+    // Function called when hourglassButton is clicked
+    public void OnHourglassButtonClicked()
+    {
+        if (TurnManager.Instance != null)
+        {
+            TurnManager.Instance.TimeTravelTriggered = true;
+            Debug.Log("Time travel triggered through TurnManager!");
+            HandleResourceUpdated("hourglass", 0);
+            ResourceManager.GetInventoryItemList();
+
+        }
+        else
+        {
+            Debug.LogWarning("TurnManager reference is not assigned!");
+        }
     }
 
     private void OnEnable()
@@ -62,6 +93,19 @@ public class PlayerResourcePanel : MonoBehaviour
         if (resourceMappings.TryGetValue(resourceType, out var mapping))
         {
             UpdateText(mapping.uiText, newValue, mapping.prefix);
+
+            // Check for hourglass and activate the button if condition is met
+            if (resourceType == "hourglass" && newValue > 0)
+            {
+                ActivateHourglassButton();
+                Debug.Log("Hourglass button activated.");
+            }
+            if (resourceType == "hourglass" && newValue == 0)
+            {
+                DeactivateHourglassButton();
+                Debug.Log("Hourglass button deactivated.");
+            }
+
         }
         else
         {
@@ -74,6 +118,31 @@ public class PlayerResourcePanel : MonoBehaviour
         if (textElement != null)
         {
             textElement.text = $"{prefix}{newValue}";
+        }
+    }
+
+    // Function to enable the hourglassButton
+    private void ActivateHourglassButton()
+    {
+        if (hourglassButton != null) // Ensure the button is assigned
+        {
+            hourglassButton.interactable = true;
+        }
+        else
+        {
+            Debug.LogWarning("Hourglass button is not assigned!");
+        }
+    }
+
+    private void DeactivateHourglassButton()
+    {
+        if (hourglassButton != null) // Ensure the button is assigned
+        {
+            hourglassButton.interactable = false;
+        }
+        else
+        {
+            Debug.LogWarning("Hourglass button is not assigned!");
         }
     }
 }

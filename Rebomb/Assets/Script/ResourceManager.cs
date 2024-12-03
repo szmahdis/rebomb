@@ -45,12 +45,6 @@ public class ResourceManager : MonoBehaviour
 
         RefreshInventory();
         Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
-
-        //OnResourceUpdated?.Invoke("coin", GetTotalCoins());
-
-        //Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
-        //OnResourceUpdated?.Invoke("hourglass", Hourglass);
-
     }
 
     public List<Item> GetInventoryItemList()
@@ -93,6 +87,7 @@ public class ResourceManager : MonoBehaviour
         OnResourceUpdated?.Invoke("coin", Coins);
 
         Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
+        Debug.Log("Has hourglass? " + ContainsHourGlass(itemList));
         OnResourceUpdated?.Invoke("hourglass", Hourglass);
 
     }
@@ -110,11 +105,6 @@ public class ResourceManager : MonoBehaviour
     {
         Steps = 3;
         OnResourceUpdated?.Invoke("step", Steps);
-
-        //Coins = GetTotalCoins();
-        //OnResourceUpdated?.Invoke("coin", Coins);
-        //Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
-        //OnResourceUpdated?.Invoke("hourglass", Hourglass);
         RefreshInventory();
 
     }

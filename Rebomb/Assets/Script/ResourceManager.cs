@@ -58,6 +58,22 @@ public class ResourceManager : MonoBehaviour
         return itemList;
     }
 
+    public List<Item> SetInventoryItemList(List<Item> items)
+    {
+        itemList = items;
+        return itemList;
+    }
+
+    public void SetCoins(int coins)
+    {
+        Coins = coins;
+    }
+
+    public int GetCoins()
+    {
+        return Coins;
+    }
+
     private int GetTotalCoins()
     {
         // Calculate the total number of coins in the inventory

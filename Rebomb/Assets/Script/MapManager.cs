@@ -7,6 +7,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject Map;
     [SerializeField] private GameObject BreakableWallPrefab;
     [SerializeField] private GameObject UnbreakableWallPrefab;
+    [SerializeField] private GameObject ActiveBombPrefab;
+    [SerializeField] private GameObject PassiveBombPrefab;
     [SerializeField] private GameObject Bombs;
 
     void Awake() {
@@ -42,6 +44,59 @@ public class MapManager : MonoBehaviour
             unbreakableWalls.Add(position);
         }
         return unbreakableWalls;
+    }
+
+    public List<Bomb> GetBombs()
+    {
+        // Bombs are a child of Bombs
+        Transform ActiveBomb = Bombs.transform;
+        List<Bomb> bombs = new List<Bomb>();
+        foreach (Transform child in ActiveBomb.transform)
+        {
+            Vector2 position = new Vector2(child.position.x, child.position.z);
+            Debug.Log($"Active bomb at {position}.");
+            bombs.Add(child.GetComponent<Bomb>());
+        }
+        return bombs;
+    }
+
+    public void SetBombs(List<BombData> bombs)
+    {
+        // Add Lastbombs of each player to the list
+        // foreach (Player player in GameManager.Instance.Players)
+        // {
+        //     if (player.LastBomb != null)
+        //     {
+        //         BombData lastBomb = new BombData(player.LastBomb);
+        //         bombs.Add(lastBomb);
+        //     }
+        // }
+        foreach (BombData bomb in bombs)
+        {
+            switch (bomb.bombType)
+            {
+                case BombType.Active:
+                    GameObject activeBomb = Instantiate(ActiveBombPrefab, bomb.position, Quaternion.identity);
+                    activeBomb.transform.parent = Bombs.transform;
+                    activeBomb.GetComponent<Bomb>().turnsToExplosion = bomb.turnsToExplosion;
+                    activeBomb.GetComponent<Bomb>().bombType = bomb.bombType;
+                    activeBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
+                    activeBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
+                    activeBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
+
+
+                    break;
+                case BombType.Passive:
+                    GameObject passiveBomb = Instantiate(PassiveBombPrefab, bomb.position, Quaternion.identity);
+                    passiveBomb.transform.parent = Bombs.transform;
+                    passiveBomb.GetComponent<Bomb>().turnsToExplosion = bomb.turnsToExplosion;
+                    passiveBomb.GetComponent<Bomb>().bombType = bomb.bombType;
+                    passiveBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
+                    passiveBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
+                    passiveBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
+                    break;
+            }
+        }
     }
 
     public void ClearWalls()
@@ -104,6 +159,28 @@ public class MapManager : MonoBehaviour
             }
         }
         return passiveBombs;
+    }
+
+    public void ClearBombs()
+    {
+        Transform ActiveBomb = Bombs.transform;
+        foreach (Transform child in ActiveBomb.transform)
+        {
+            bool skip = false;
+            // Don't remove last bombs of each player
+            foreach (Player player in GameManager.Instance.Players)
+            {
+                if (player.LastBomb && child == player.LastBomb.gameObject.transform)
+                {
+                    skip = true;
+                }
+            }
+            if (!skip)
+            {
+                Destroy(child.gameObject);
+            }
+            
+        }
     }
 
     // Update is called once per frame

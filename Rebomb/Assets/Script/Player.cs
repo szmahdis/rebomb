@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     public GameObject activeBombPrefab;  // Prefab for the active bomb
     public GameObject passiveBombPrefab; // Prefab for the passive bomb
     public Transform bombsParent; // Parent object to hold all placed bombs
+    public Bomb LastBomb { get; set; }
 
 
     void Start()
@@ -48,16 +49,17 @@ public class Player : MonoBehaviour
     }
 
     // Copy Constructor
-    public Player(Player player)
-    {
-        Index = player.Index;
-        Name = player.Name;
-        Alive = player.Alive;
-        Ready = player.Ready;
-        currentPosition = player.currentPosition;
-        ResourceManager = new ResourceManager(player.ResourceManager);
-        readyButton = player.readyButton;
-    }
+    // public Player(Player player)
+    // {
+    //     Index = player.Index;
+    //     Name = player.Name;
+    //     Alive = player.Alive;
+    //     Ready = player.Ready;
+    //     currentPosition = player.currentPosition;
+    //     ResourceManager = new ResourceManager(player.ResourceManager);
+    //     LastBomb = player.LastBomb;
+    //     readyButton = player.readyButton;
+    // }
 
     public void Initialize(int i, GameObject thisPlayerObject)
     {
@@ -161,6 +163,7 @@ public class Player : MonoBehaviour
         }
         GameObject newBomb = Instantiate(bombPrefab, currentPosition, Quaternion.identity);
         newBomb.transform.parent = bombsParent;
+        LastBomb = newBomb.GetComponent<Bomb>();
         Debug.Log("Bomb placed at: " + currentPosition);
     }
 
@@ -231,4 +234,27 @@ public class Player : MonoBehaviour
         }
     }
 
+}
+
+[System.Serializable]
+public class PlayerData
+{
+    public int Index;
+    public string Name;
+    public bool Alive;
+    public Vector3 currentPosition;
+    public ResourceManager ResourceManager;
+    public Bomb LastBomb;
+
+    
+    // Add other necessary fields
+    public PlayerData(Player player)
+    {
+        Index = player.Index;
+        Name = player.Name;
+        Alive = player.Alive;
+        currentPosition = player.currentPosition;
+        ResourceManager = player.ResourceManager;
+        LastBomb = player.LastBomb;
+    }
 }

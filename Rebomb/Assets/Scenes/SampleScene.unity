@@ -11833,6 +11833,8 @@ MonoBehaviour:
   Map: {fileID: 754954598}
   BreakableWallPrefab: {fileID: 3439595127804175609, guid: e17b51a0a6aab4847a8132464f1ec7a2, type: 3}
   UnbreakableWallPrefab: {fileID: 7113431740352570460, guid: b680b5fe3d3edeb4e8155fb4dd3506be, type: 3}
+  ActiveBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  PassiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
   Bombs: {fileID: 155460225}
 --- !u!1 &1982394783
 GameObject:

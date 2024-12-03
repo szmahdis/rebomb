@@ -78,7 +78,7 @@ public class TurnManager : MonoBehaviour
     private void EndTurn()
     {
         // test rewind
-        // if (CurrentTurn == 5) TimeTravelTriggered = true;
+        if (CurrentTurn == 5) TimeTravelTriggered = true;
 
         if (TimeTravelTriggered && CurrentTurn > 1)
         {
@@ -162,20 +162,23 @@ public class TurnManager : MonoBehaviour
             List<Vector2> unbreakableWalls = snapshot.unbreakableWalls;
             MapManager.Instance.ClearWalls();
             MapManager.Instance.SetWalls(breakableWalls, unbreakableWalls);
+            MapManager.Instance.ClearBombs();
+            MapManager.Instance.SetBombs(snapshot.bombs);
+
             Debug.Log($"Rewind to turn {turnIndex}.");
             foreach (Player player in GameManager.Instance.Players)
             {
-                foreach (Player snapshotPlayer in snapshot.players)
+                foreach (PlayerData snapshotPlayer in snapshot.players)
                 {
                     if (player.Index == snapshotPlayer.Index)
                     {
                         player.currentPosition = snapshotPlayer.currentPosition;
-                        player.targetPosition = snapshotPlayer.targetPosition;
                         player.Alive = snapshotPlayer.Alive;
-                        player.Ready = snapshotPlayer.Ready;
                         // player.ResourceManager = snapshotPlayer.ResourceManager;
-                        player.ResourceManager.GetInventoryItemList();
+                        player.ResourceManager.SetInventoryItemList(snapshotPlayer.ResourceManager.GetInventoryItemList());
+                        player.ResourceManager.SetCoins(snapshotPlayer.ResourceManager.GetCoins());
                         player.gameObject.transform.position = player.currentPosition;
+                        player.LastBomb = snapshotPlayer.LastBomb;
                     }
                 }
             }

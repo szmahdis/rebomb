@@ -9,10 +9,10 @@ public class Bomb : MonoBehaviour
 {
     [SerializeField] GameObject VFXExplosionPrefab;
     public BombType bombType;
-    private int turnsToExplosion = 3; // Time until explosion in turns
-    float maxExplosionDistance = 2f;  // Explosion range
-    bool bombExploded = false;        // Flag to avoid infinite loops
-    private Vector3[] explosionDirections = new Vector3[]
+    public int turnsToExplosion = 3; // Time until explosion in turns
+    public float maxExplosionDistance = 2f;  // Explosion range
+    public bool bombExploded = false;        // Flag to avoid infinite loops
+    public Vector3[] explosionDirections = new Vector3[]
     {
         Vector3.forward,  // Up
         Vector3.back,     // Down
@@ -24,6 +24,7 @@ public class Bomb : MonoBehaviour
     {
     }
 
+    
 
     public void BombCountdown()
     {
@@ -38,6 +39,8 @@ public class Bomb : MonoBehaviour
             }
         }
     }
+
+    
 
     void Explode()
     {
@@ -110,5 +113,29 @@ public class Bomb : MonoBehaviour
         }
         // Delete the object after x time to keep Scene clean
         Destroy(instantiatedVFX, timeToDestroy + 1f);
+    }
+}
+
+[System.Serializable]
+public class BombData
+{
+    public BombType bombType;
+    public int turnsToExplosion;
+    public bool bombExploded;
+    public Vector3[] explosionDirections;
+    public float maxExplosionDistance = 2f;
+
+    // Position
+    public Vector3 position;
+
+    // Constructor to copy data from a Bomb MonoBehaviour
+    public BombData(Bomb bomb)
+    {
+        bombType = bomb.bombType;
+        turnsToExplosion = bomb.turnsToExplosion;
+        bombExploded = bomb.bombExploded;
+        explosionDirections = bomb.explosionDirections;
+        maxExplosionDistance = bomb.maxExplosionDistance;
+        position = bomb.transform.position;
     }
 }

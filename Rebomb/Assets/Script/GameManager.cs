@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
         Players = new List<Player>();
         // Hardcoded player positions
         playerPositions = new Vector3[4] {
-            new Vector3(2.0f, 0.5f, 7.0f), new Vector3(7.0f, 0.5f, 2.0f),
-            new Vector3(1.0f, 0.5f, 6.0f), new Vector3(6.0f, 0.5f, 6.0f)
+            new Vector3(0.0f, 1.0f, 0.0f), new Vector3(7.0f, 1.0f, 7.0f),
+            new Vector3(0.0f, 1.0f, 7.0f), new Vector3(7.0f, 1.0f, 0.0f)
         };
 
         // for local multiplayer

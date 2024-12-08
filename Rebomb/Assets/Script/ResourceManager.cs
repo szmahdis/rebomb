@@ -103,7 +103,7 @@ public class ResourceManager : MonoBehaviour
 
     public void OnTurnStart()
     {
-        Steps = 3;
+        Steps = 20;
         OnResourceUpdated?.Invoke("step", Steps);
         RefreshInventory();
 

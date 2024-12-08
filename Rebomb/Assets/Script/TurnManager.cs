@@ -27,10 +27,7 @@ public class TurnManager : MonoBehaviour
 
     public void Initialize()
     {
-        
-        
-        
-
+    
         // TODO: Initialize map and player's start positions.
 
         // Initialize player states(alive/ready), resources, positions.

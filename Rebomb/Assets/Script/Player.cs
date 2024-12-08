@@ -18,8 +18,8 @@ public class Player : MonoBehaviour
     public Vector3 currentPosition;
 
     [Header("Map Members")]
-    public float gridHeight = 0.5f; // Fixed Y-axis position
-    public int gridSize = 8; // Defines the grid range
+    public float gridHeight = 1.5f; // Fixed Y-axis position
+    //public int gridSize = 8; // Defines the grid range
     public Transform floorParent;
     public Transform breakableWallsParent;
     public Transform unbreakableWallsParent;
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
 
     public void SetInitialPosition(Vector3 initialPosition)
     {
-        currentPosition = new Vector3(Mathf.Round(initialPosition.x), gridHeight, Mathf.Round(initialPosition.z));
+        currentPosition = new Vector3(Mathf.Round(initialPosition.x), 1.0f, Mathf.Round(initialPosition.z));
         playerObject.transform.position = currentPosition;
     }
 
@@ -116,9 +116,7 @@ public class Player : MonoBehaviour
 
         Vector3 proposedPosition = currentPosition + new Vector3((int)moveInput.x, 0, (int)moveInput.y);
 
-        // TODO: refactoring, move validation check and map member to map manager.
-        // map.getComponent<MapManager>().IsValidPosition(position);
-        if (IsValidPosition(proposedPosition) == false) return;
+        if (MapManager.Instance.IsValidPosition(proposedPosition) == false) return;
 
         int step_num = Abs((int)moveInput.x) + Abs((int)moveInput.y);
         if (ResourceManager.OnStepTaken(step_num) == false) return;
@@ -142,7 +140,7 @@ public class Player : MonoBehaviour
         if (Alive == true && Ready == true) return;
         if (isMoving) return;
 
-        if (IsObstacleAtPosition(currentPosition, bombsParent))
+        if (MapManager.Instance.IsObstacleAtPosition(currentPosition, bombsParent))
         {
             Debug.Log($"A bomb is already at {currentPosition}!");
             return;
@@ -194,34 +192,7 @@ public class Player : MonoBehaviour
 
 
     }
-    private bool IsValidPosition(Vector3 position)
-    {
-        // TODO: move to map manager.
-        // Check if the position is within the floor grid
-        if (!IsObstacleAtPosition(position - Vector3.down, floorParent)) return false;
-
-        // Check if there is an obstacle at the current position by iterating through child objects
-        if (IsObstacleAtPosition(position, breakableWallsParent) || IsObstacleAtPosition(position, unbreakableWallsParent) || IsObstacleAtPosition(position, bombsParent)
-            || IsObstacleAtPosition(position, playersParent))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private bool IsObstacleAtPosition(Vector3 position, Transform parent)
-    {
-        // TODO: move to map manager.
-        foreach (Transform child in parent)
-        {
-            if (child != this &&Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
+   
     private void OnTriggerEnter(Collider collider)
     {
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();

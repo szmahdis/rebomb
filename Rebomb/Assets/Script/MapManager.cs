@@ -12,13 +12,19 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject Bombs;
     [SerializeField] private GameObject Items;
 
+    public Transform floorParent;
+    public Transform breakableWallsParent;
+    public Transform unbreakableWallsParent;
+    public Transform playersParent;
+    public Transform bombsParent;
+
     void Awake() {
     if (Instance == null) {
         Instance = this;
     } else {
         Destroy(gameObject);
     }
-}
+   }
     public List<Vector2> GetBreakableWalls()
     {
         // Breakable is child of Map
@@ -118,12 +124,12 @@ public class MapManager : MonoBehaviour
     {
         foreach (Vector2 position in breakableWalls)
         {
-            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 1.0f, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("BreakableWall");
         }
         foreach (Vector2 position in unbreakableWalls)
         {
-            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 1.0f, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("UnbreakableWall");
         }
     }
@@ -221,6 +227,34 @@ public class MapManager : MonoBehaviour
         }
     }
 
+
+    public bool IsValidPosition(Vector3 position)
+    {
+       
+        // Check if the position is within the floor grid
+        if (!IsObstacleAtPosition(position - Vector3.down, floorParent)) return false;
+
+        // Check if there is an obstacle at the current position by iterating through child objects
+        if (IsObstacleAtPosition(position, breakableWallsParent) || IsObstacleAtPosition(position, unbreakableWallsParent) || IsObstacleAtPosition(position, bombsParent)
+            || IsObstacleAtPosition(position, playersParent))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public bool IsObstacleAtPosition(Vector3 position, Transform parent)
+    {
+       
+        foreach (Transform child in parent)
+        {
+            if (child != this && Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     // Update is called once per frame
     void Update()
     {

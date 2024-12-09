@@ -14,4 +14,5 @@ public class ItemAssets : MonoBehaviour
     public Sprite coinSprite;
     public Sprite hourGlassSprite;
     public Sprite fireBombSprite;
+    public Sprite bootSprite;
 }

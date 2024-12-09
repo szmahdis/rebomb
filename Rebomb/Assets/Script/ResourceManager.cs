@@ -76,6 +76,14 @@ public class ResourceManager : MonoBehaviour
             .Sum(item => item.amount);
     }
 
+    private int GetTotalBoots()
+    {
+        // Calculate the total number of coins in the inventory
+        return itemList
+            .Where(item => item.itemType == Item.ItemType.Boot)
+            .Sum(item => item.amount);
+    }
+
     private bool ContainsHourGlass(List<Item> itemList)
     {
         return itemList.Any(item => item.itemType == Item.ItemType.Hourglass);
@@ -83,8 +91,11 @@ public class ResourceManager : MonoBehaviour
 
     private void RefreshInventory()
     {
+        
         Coins = GetTotalCoins();
+        
         OnResourceUpdated?.Invoke("coin", Coins);
+        OnResourceUpdated?.Invoke("step", Steps);
 
         Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
         Debug.Log("Has hourglass? " + ContainsHourGlass(itemList));
@@ -104,6 +115,7 @@ public class ResourceManager : MonoBehaviour
     public void OnTurnStart()
     {
         Steps = 20;
+        Steps += GetTotalBoots();
         OnResourceUpdated?.Invoke("step", Steps);
         RefreshInventory();
 

@@ -9,6 +9,8 @@ public class Item
         FireBomb,
         Hourglass,
         Coin,
+        // step per turn +1
+        Boot,
     }
 
     public ItemType itemType;
@@ -23,7 +25,7 @@ public class Item
             case ItemType.FireBomb: return ItemAssets.Instance.fireBombSprite;
             case ItemType.Hourglass: return ItemAssets.Instance.hourGlassSprite;
             case ItemType.Coin: return ItemAssets.Instance.coinSprite;
-
+            case ItemType.Boot: return ItemAssets.Instance.bootSprite;
         }
     }
 
@@ -34,6 +36,7 @@ public class Item
             default:
             case ItemType.Coin:
             case ItemType.FireBomb:
+            case ItemType.Boot:
                 return true;
             case ItemType.Hourglass:
                 return false;

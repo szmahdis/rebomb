@@ -76,7 +76,7 @@ public class ResourceManager : MonoBehaviour
             .Sum(item => item.amount);
     }
 
-    private int GetTotalBoots()
+    public int GetTotalBoots()
     {
         // Calculate the total number of coins in the inventory
         return itemList
@@ -187,5 +187,6 @@ public class ResourceInfo
     {
         Inventory = new List<Item>();
         Inventory.Add(new Item { itemType = Item.ItemType.Coin, amount = resourceManager.GetCoins() });
+        Inventory.Add(new Item { itemType = Item.ItemType.Boot, amount = resourceManager.GetTotalBoots() });
     }
 }

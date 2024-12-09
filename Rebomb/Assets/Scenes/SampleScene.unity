@@ -9651,9 +9651,9 @@ MonoBehaviour:
   m_text: 'WASD/ IJKL for movement
 
     C&V / N&M for placing active&passive bombs
+    X&, for placing chain bombs
 
-    F
-    / H for ready, also ready button for ready'
+    F / H for ready, also ready button for ready'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12009,6 +12009,11 @@ MonoBehaviour:
   PassiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
   Bombs: {fileID: 155460225}
   Items: {fileID: 1447506154}
+  floorParent: {fileID: 2037100093}
+  breakableWallsParent: {fileID: 1215625063}
+  unbreakableWallsParent: {fileID: 2062266915}
+  playersParent: {fileID: 444254895}
+  bombsParent: {fileID: 155460226}
 --- !u!1001 &1979605721
 PrefabInstance:
   m_ObjectHideFlags: 0

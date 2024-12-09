@@ -5,13 +5,25 @@ public enum BombType
     Active, Passive
 }
 
+public enum BombLevel
+{
+    // 1 coin, 3 turns(Active), normal active or passive bomb
+    NormalBomb,
+    // 2 coins, 3 turns, bombs triggered by this bomb will have explosion range +1
+    ChainBomb,
+    // 2 coins, 3 turns, a safe bomb that doesn't hurt players but can trigger other bombs or destroy walls
+    SafeBomb
+}
+
 public class Bomb : MonoBehaviour
 {
     [SerializeField] GameObject VFXExplosionPrefab;
     public BombType bombType;
+    public BombLevel bombLevel;
     public int turnsToExplosion = 3; // Time until explosion in turns
     public float maxExplosionDistance = 2f;  // Explosion range
     public bool bombExploded = false;        // Flag to avoid infinite loops
+
     public Vector3[] explosionDirections = new Vector3[]
     {
         Vector3.forward,  // Up
@@ -64,13 +76,22 @@ public class Bomb : MonoBehaviour
                     Player player = hit.collider.GetComponent<Player>();
                     Debug.Log("Player hit by bomb.");
                     explosionDrawDistance = hit.distance;
-                    player.OnKilled();
+                    // Safe bombs don't hurt players
+                    if (this.bombLevel != BombLevel.SafeBomb)
+                    {
+                        player.OnKilled();
+                    }
+                    
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {
                     Bomb bomb = hit.collider.GetComponent<Bomb>();
                     Debug.Log("Bomb hit by bomb.");
                     explosionDrawDistance = hit.distance;
+                    if (this.bombLevel == BombLevel.ChainBomb)
+                    {
+                        bomb.maxExplosionDistance += 1;
+                    }
                     bomb.Explode();
                 }
                 else if (hit.collider.CompareTag("BreakableWall"))
@@ -120,6 +141,7 @@ public class Bomb : MonoBehaviour
 public class BombData
 {
     public BombType bombType;
+    public BombLevel bombLevel;
     public int turnsToExplosion;
     public bool bombExploded;
     public Vector3[] explosionDirections;
@@ -132,6 +154,7 @@ public class BombData
     public BombData(Bomb bomb)
     {
         bombType = bomb.bombType;
+        bombLevel = bomb.bombLevel;
         turnsToExplosion = bomb.turnsToExplosion;
         bombExploded = bomb.bombExploded;
         explosionDirections = bomb.explosionDirections;

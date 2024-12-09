@@ -109,13 +109,39 @@ public class ResourceManager : MonoBehaviour
 
     }
 
-    public bool OnBombPlaced(BombType type)
+    public bool OnBombPlaced(BombLevel bombLevel)
     {
-        if (type == BombType.Active || type == BombType.Passive)
+        if (bombLevel == BombLevel.NormalBomb)
         {
             if (Coins > 0)
             {
                 Coins--;
+                OnResourceUpdated?.Invoke("coin", Coins);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (bombLevel == BombLevel.ChainBomb)
+        {
+            if (Coins > 1)
+            {
+                Coins -= 2;
+                OnResourceUpdated?.Invoke("coin", Coins);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (bombLevel == BombLevel.SafeBomb)
+        {
+            if (Coins > 1)
+            {
+                Coins -= 2;
                 OnResourceUpdated?.Invoke("coin", Coins);
                 return true;
             }

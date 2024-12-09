@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
         playerInput.actions["Move"].performed += context => player.OnMove(context);
         playerInput.actions["ActiveBomb"].performed += context => player.OnActiveBomb(context);
         playerInput.actions["PassiveBomb"].performed += context => player.OnPassiveBomb(context);
+        playerInput.actions["ChainBomb"].performed += context => player.OnChainBomb(context);
         playerInput.actions["Ready"].performed += context => player.OnReady(context);
 
         // other components

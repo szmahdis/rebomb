@@ -90,6 +90,7 @@ public class MapManager : MonoBehaviour
                     activeBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
                     activeBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
                     activeBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
+                    activeBomb.GetComponent<Bomb>().bombLevel = bomb.bombLevel;
 
 
                     break;
@@ -101,6 +102,7 @@ public class MapManager : MonoBehaviour
                     passiveBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
                     passiveBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
                     passiveBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
+                    passiveBomb.GetComponent<Bomb>().bombLevel = bomb.bombLevel;
                     break;
             }
         }

@@ -71,6 +71,15 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChainBomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb0b34e9-fb18-404b-8288-d0a6624948e1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -260,6 +269,28 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""TimeTravel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db758430-abc6-41ec-a357-1833871f530c"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardLeft"",
+                    ""action"": ""ChainBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f107cd5-c376-45b8-af75-40f84680d184"",
+                    ""path"": ""<Keyboard>/comma"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardLeft"",
+                    ""action"": ""ChainBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -426,6 +457,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         m_Player_PassiveBomb = m_Player.FindAction("PassiveBomb", throwIfNotFound: true);
         m_Player_Ready = m_Player.FindAction("Ready", throwIfNotFound: true);
         m_Player_TimeTravel = m_Player.FindAction("TimeTravel", throwIfNotFound: true);
+        m_Player_ChainBomb = m_Player.FindAction("ChainBomb", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -502,6 +534,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_PassiveBomb;
     private readonly InputAction m_Player_Ready;
     private readonly InputAction m_Player_TimeTravel;
+    private readonly InputAction m_Player_ChainBomb;
     public struct PlayerActions
     {
         private @LocalPlayerInputs m_Wrapper;
@@ -511,6 +544,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @PassiveBomb => m_Wrapper.m_Player_PassiveBomb;
         public InputAction @Ready => m_Wrapper.m_Player_Ready;
         public InputAction @TimeTravel => m_Wrapper.m_Player_TimeTravel;
+        public InputAction @ChainBomb => m_Wrapper.m_Player_ChainBomb;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -535,6 +569,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @TimeTravel.started += instance.OnTimeTravel;
             @TimeTravel.performed += instance.OnTimeTravel;
             @TimeTravel.canceled += instance.OnTimeTravel;
+            @ChainBomb.started += instance.OnChainBomb;
+            @ChainBomb.performed += instance.OnChainBomb;
+            @ChainBomb.canceled += instance.OnChainBomb;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -554,6 +591,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @TimeTravel.started -= instance.OnTimeTravel;
             @TimeTravel.performed -= instance.OnTimeTravel;
             @TimeTravel.canceled -= instance.OnTimeTravel;
+            @ChainBomb.started -= instance.OnChainBomb;
+            @ChainBomb.performed -= instance.OnChainBomb;
+            @ChainBomb.canceled -= instance.OnChainBomb;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -695,6 +735,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         void OnPassiveBomb(InputAction.CallbackContext context);
         void OnReady(InputAction.CallbackContext context);
         void OnTimeTravel(InputAction.CallbackContext context);
+        void OnChainBomb(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

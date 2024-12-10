@@ -13,8 +13,9 @@ public class Vector3EqualityComparer : IEqualityComparer<Vector3>
     public int GetHashCode(Vector3 obj)
     {
         // Hash code generation using rounded values to ensure consistent hashing
-        int x = Mathf.RoundToInt(obj.x / Tolerance);
-        int z = Mathf.RoundToInt(obj.z / Tolerance);
+        // Note: tile index starts from (-1, y, -1) now.
+        int x = Mathf.RoundToInt((obj.x + 2) / Tolerance);
+        int z = Mathf.RoundToInt((obj.z + 2) / Tolerance);
         return x ^ z;
     }
 }

@@ -147,7 +147,7 @@ public class MapManager : MonoBehaviour
                 // TODO(Yaxuan): destroy breakable wall animation
                 Destroy(child.gameObject);
             }
-        }    
+        }
     }
 
     public void ClearBombs()

@@ -50,8 +50,7 @@ public class Explosion : MonoBehaviour
                 if (hit.collider.CompareTag("Player"))
                 {
                     Player player = hit.collider.GetComponent<Player>();
-                    // Debug.Log("Player hit by bomb.");
-                    explosionDrawDistance = hit.distance;
+                    explosionDrawDistance = hit.distance + 0.25f; // add half of player collider width;
                     // Safe bombs don't hurt players
                     if (bomb_type != BombType.SafeBomb)
                     {
@@ -65,8 +64,6 @@ public class Explosion : MonoBehaviour
                     explosionDrawDistance = hit.distance;
                     if (bomb_type == BombType.ChainBomb)
                     {
-                        // TODO(Jialin): Chain bomb cannot increase explosion range of another bomb 
-                        // if it was triggered earlier?
                         bomb.explosion.explosion_range++;
                     }
                     bomb.set_triggered();
@@ -74,11 +71,14 @@ public class Explosion : MonoBehaviour
                 else if (hit.collider.CompareTag("BreakableWall"))
                 {
                     // TODO(Yaxuan): change the explosion effect on this tile.
-                    explosionDrawDistance = hit.distance;
+                    // add half of wall collider width, which is half of tile width;
+                    explosionDrawDistance = hit.distance + 0.5f;
+
                 }
                 else // hit a non-destructible object
                 {
-                    explosionDrawDistance = hit.distance - 1.0f;
+                    explosionDrawDistance = hit.distance + 0.5f;
+                    // add half of wall collider width, which is half of tile width;
                 }
             }
             else

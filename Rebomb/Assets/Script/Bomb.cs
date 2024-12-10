@@ -33,7 +33,6 @@ public class Bomb : MonoBehaviour
     public void BombCountdown()
     {
         if (bombType == BombType.Passive) return;
-        Debug.Log("Bomb countdown.");
         turnsToExplosion--;
         if (turnsToExplosion <= 0) {
             set_triggered();
@@ -42,6 +41,9 @@ public class Bomb : MonoBehaviour
 
     public void set_triggered()
     {
+        if (is_triggered) {
+            return;
+        }
         is_triggered = true;
         explosion.calculate();
     }

@@ -91,7 +91,6 @@ public class ResourceManager : MonoBehaviour
 
     private void RefreshInventory()
     {
-        
         Coins = GetTotalCoins();
         
         OnResourceUpdated?.Invoke("coin", Coins);
@@ -121,48 +120,19 @@ public class ResourceManager : MonoBehaviour
 
     }
 
-    public bool OnBombPlaced(BombLevel bombLevel)
+    public bool OnBombPlaced(BombType type)
     {
-        if (bombLevel == BombLevel.NormalBomb)
+        int price = BombConfigurator.Instance.GetPrice(type);
+        if (Coins >= price)
         {
-            if (Coins > 0)
-            {
-                Coins--;
-                OnResourceUpdated?.Invoke("coin", Coins);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            Coins -= price;
+            OnResourceUpdated?.Invoke("coin", Coins);
+            return true;
         }
-        else if (bombLevel == BombLevel.ChainBomb)
+        else
         {
-            if (Coins > 1)
-            {
-                Coins -= 2;
-                OnResourceUpdated?.Invoke("coin", Coins);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
-        else if (bombLevel == BombLevel.SafeBomb)
-        {
-            if (Coins > 1)
-            {
-                Coins -= 2;
-                OnResourceUpdated?.Invoke("coin", Coins);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return false;
     }
 
     public bool OnStepTaken(int step_num = 1)

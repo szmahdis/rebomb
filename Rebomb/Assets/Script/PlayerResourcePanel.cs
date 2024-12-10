@@ -73,7 +73,7 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         // find player object using index
         GameObject playerObject = GameObject.Find("Players").transform.Find(playerNameText.text).gameObject;
-        playerObject.GetComponent<Player>().PlaceBomb(BombType.Active, BombLevel.SafeBomb);
+        playerObject.GetComponent<Player>().PlaceBomb(BombType.SafeBomb);
     }
 
     private void OnEnable()

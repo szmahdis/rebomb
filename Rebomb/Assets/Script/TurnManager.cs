@@ -79,9 +79,6 @@ public class TurnManager : MonoBehaviour
 
     private void EndTurn()
     {
-        // test rewind
-        // if (CurrentTurn == 5) TimeTravelTriggered = true;
-
         if (TimeTravelTriggered && CurrentTurn > 1)
         {
             TimeTravelTriggered = false;
@@ -91,7 +88,7 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            CalculateExplosions();
+            MapManager.Instance.CalculateExplosions();
             CheckRoundEnd();
             UpdateSnapshots();
             // next turn here
@@ -99,23 +96,6 @@ public class TurnManager : MonoBehaviour
         }
         OnTurnChanged?.Invoke(CurrentTurn);
         StartTurn();
-    }
-
-    private void CalculateExplosions()
-    {
-        // TODO: for each bomb, update state of this turn.
-        List<Transform> activeBombs = MapManager.Instance.GetActiveBombs();
-        Debug.Log("Active Bombs succesully loaded.");
-        Debug.Log($"Active Bombs count: {activeBombs.Count}");
-        foreach (Transform activeBomb in activeBombs)
-        {
-            Debug.Log("Calling method of active bomb.");
-            activeBomb.GetComponent<Bomb>().BombCountdown();
-        }
-        // TODO: find the final explosion range.
-        // TODO: for each player, check if they are in explosion range and update Alive.
-        // TODO: for each player, check if they get new hourglass and update resources.
-        return;
     }
 
     private void CheckRoundEnd()

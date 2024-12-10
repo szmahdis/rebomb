@@ -12000,6 +12000,7 @@ GameObject:
   - component: {fileID: 1972150542}
   - component: {fileID: 1972150541}
   - component: {fileID: 1972150544}
+  - component: {fileID: 1972150545}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -12090,6 +12091,23 @@ MonoBehaviour:
   unbreakableWallsParent: {fileID: 2062266915}
   playersParent: {fileID: 444254895}
   bombsParent: {fileID: 155460226}
+--- !u!114 &1972150545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972150538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930db8aae6b5f8d4b83c2325b0e03ed9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActiveBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  PassiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
+  ChainBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  SafeBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  DefaultBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
 --- !u!1001 &1979605721
 PrefabInstance:
   m_ObjectHideFlags: 0

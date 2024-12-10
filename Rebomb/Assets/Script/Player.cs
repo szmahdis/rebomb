@@ -135,10 +135,10 @@ public class Player : MonoBehaviour
     }
     public void OnChainBomb(InputAction.CallbackContext context)
     {
-        if (context.performed) { PlaceBomb(BombType.Active, BombLevel.ChainBomb); }
+        if (context.performed) { PlaceBomb(BombType.ChainBomb); }
     }
 
-    public void PlaceBomb(BombType bombType, BombLevel bombLevel = BombLevel.NormalBomb)
+    public void PlaceBomb(BombType bombType)
     {
         if (Alive == false) return;
         if (Alive == true && Ready == true) return;
@@ -149,25 +149,17 @@ public class Player : MonoBehaviour
             Debug.Log($"A bomb is already at {currentPosition}!");
             return;
         }
-        if (ResourceManager.OnBombPlaced(bombLevel) == false)
+        if (ResourceManager.OnBombPlaced(bombType) == false)
         {
-            Debug.Log($"Not enough coin for {bombLevel} bomb.");
+            Debug.Log($"Not enough coin for {bombType} bomb.");
             return;
         }
-        GameObject bombPrefab = null;
-        if (bombType == BombType.Active)
-        {
-            bombPrefab = activeBombPrefab;
-        }
-        else
-        {
-            bombPrefab = passiveBombPrefab;
-        }
-        GameObject newBomb = Instantiate(bombPrefab, currentPosition, Quaternion.identity);
-        newBomb.transform.parent = bombsParent;
-        // set bomb level
-        newBomb.GetComponent<Bomb>().bombLevel = bombLevel;
-        LastBomb = newBomb.GetComponent<Bomb>();
+        GameObject bomb_prefab = BombConfigurator.Instance.GetPrefab(bombType);
+        GameObject bomb_object = Instantiate(bomb_prefab, currentPosition, Quaternion.identity);
+        bomb_object.transform.parent = bombsParent;
+        Bomb bomb = bomb_object.GetComponent<Bomb>();
+        bomb.configure_from_type(bombType);
+        LastBomb = bomb;
         Debug.Log("Bomb placed at: " + currentPosition);
     }
 

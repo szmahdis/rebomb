@@ -18,13 +18,17 @@ public class MapManager : MonoBehaviour
     public Transform playersParent;
     public Transform bombsParent;
 
-    void Awake() {
-    if (Instance == null) {
-        Instance = this;
-    } else {
-        Destroy(gameObject);
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
-   }
     public List<Vector2> GetBreakableWalls()
     {
         // Breakable is child of Map
@@ -67,7 +71,7 @@ public class MapManager : MonoBehaviour
         return bombs;
     }
 
-    public void SetBombs(List<BombData> bombs)
+    public void SetBombs(List<BombData> bomb_data_list)
     {
         // Add Lastbombs of each player to the list
         // foreach (Player player in GameManager.Instance.Players)
@@ -78,33 +82,13 @@ public class MapManager : MonoBehaviour
         //         bombs.Add(lastBomb);
         //     }
         // }
-        foreach (BombData bomb in bombs)
+        foreach (BombData bomb_data in bomb_data_list)
         {
-            switch (bomb.bombType)
-            {
-                case BombType.Active:
-                    GameObject activeBomb = Instantiate(ActiveBombPrefab, bomb.position, Quaternion.identity);
-                    activeBomb.transform.parent = Bombs.transform;
-                    activeBomb.GetComponent<Bomb>().turnsToExplosion = bomb.turnsToExplosion;
-                    activeBomb.GetComponent<Bomb>().bombType = bomb.bombType;
-                    activeBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
-                    activeBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
-                    activeBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
-                    activeBomb.GetComponent<Bomb>().bombLevel = bomb.bombLevel;
-
-
-                    break;
-                case BombType.Passive:
-                    GameObject passiveBomb = Instantiate(PassiveBombPrefab, bomb.position, Quaternion.identity);
-                    passiveBomb.transform.parent = Bombs.transform;
-                    passiveBomb.GetComponent<Bomb>().turnsToExplosion = bomb.turnsToExplosion;
-                    passiveBomb.GetComponent<Bomb>().bombType = bomb.bombType;
-                    passiveBomb.GetComponent<Bomb>().bombExploded = bomb.bombExploded;
-                    passiveBomb.GetComponent<Bomb>().explosionDirections = bomb.explosionDirections;
-                    passiveBomb.GetComponent<Bomb>().maxExplosionDistance = bomb.maxExplosionDistance;
-                    passiveBomb.GetComponent<Bomb>().bombLevel = bomb.bombLevel;
-                    break;
-            }
+            GameObject bomb_prefab = BombConfigurator.Instance.GetConfig(bomb_data.bombType).bomb_prefab;
+            GameObject bomb_object = Instantiate(bomb_prefab, bomb_data.position, Quaternion.identity);
+            bomb_object.transform.parent = Bombs.transform;
+            Bomb bomb = bomb_object.GetComponent<Bomb>();
+            bomb.configure_from_data(bomb_data);
         }
     }
 
@@ -135,39 +119,35 @@ public class MapManager : MonoBehaviour
             wall.transform.parent = Map.transform.Find("UnbreakableWall");
         }
     }
-
-    public List<Transform> GetActiveBombs()
+    public void CalculateExplosions()
     {
-        // Bombs are a child of Bombs
-        Transform ActiveBomb = Bombs.transform;
-        List<Transform> activeBombs = new List<Transform>();
-        foreach (Transform child in ActiveBomb.transform)
+        // for each bomb, update state of this turn.
+        foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
-            if (child.GetComponent<Bomb>().bombType == BombType.Active)
+            if (bomb.bombType != BombType.Passive)
             {
-            Vector2 position = new Vector2(child.position.x, child.position.z);
-            Debug.Log($"Active bomb at {position}.");
-            activeBombs.Add(child);
+                bomb.BombCountdown();
             }
         }
-        return activeBombs;
-    }
-    
-    public List<Bomb> GetPassiveBombs()
-    {
-        // Breakable is child of Map
-        Transform PassiveBombs = Bombs.transform;
-        List<Bomb> passiveBombs = new List<Bomb>();
-        foreach (Bomb child in PassiveBombs.transform)
+        // find the final explosion range of each bomb, play the explosion effect and destroy bombs.
+        HashSet<Vector3> exploded_tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
+        foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
-            if (child.GetComponent<Bomb>().bombType == BombType.Passive)
+            if (bomb.is_triggered)
             {
-            Vector2 position = new Vector2(child.transform.position.x, child.transform.position.z);
-            Debug.Log($"Passive bomb at {position}.");
-            passiveBombs.Add(child);
+                exploded_tiles.UnionWith(bomb.explosion.tiles);
+                bomb.explosion.play();
             }
         }
-        return passiveBombs;
+        // Destroy breakable walls
+        foreach (Transform child in breakableWallsParent.transform)
+        {
+            if (exploded_tiles.Contains(child.position))
+            {
+                // TODO(Yaxuan): destroy breakable wall animation
+                Destroy(child.gameObject);
+            }
+        }    
     }
 
     public void ClearBombs()
@@ -188,7 +168,7 @@ public class MapManager : MonoBehaviour
             {
                 Destroy(child.gameObject);
             }
-            
+
         }
     }
 
@@ -210,7 +190,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (GameObject item in items)
         {
-            
+
             // if have "HourGlass" in name
             if (item.name.Contains("HourGlass"))
             {
@@ -232,7 +212,7 @@ public class MapManager : MonoBehaviour
 
     public bool IsValidPosition(Vector3 position)
     {
-       
+
         // Check if the position is within the floor grid
         if (!IsObstacleAtPosition(position - Vector3.down, floorParent)) return false;
 
@@ -247,7 +227,7 @@ public class MapManager : MonoBehaviour
 
     public bool IsObstacleAtPosition(Vector3 position, Transform parent)
     {
-       
+
         foreach (Transform child in parent)
         {
             if (child != this && Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
@@ -260,6 +240,6 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

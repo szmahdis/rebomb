@@ -146,3 +146,4 @@ MonoBehaviour:
   explosion_time: 3.4028235e+38
   VFXExplosionPrefab: {fileID: 2508566036696959919, guid: 8931d8af9bee243ef90b6a56f6adc94f, type: 3}
   explosionClip: {fileID: 8300000, guid: a8e847c8e363148448550a07e1b9fa67, type: 3}
+  particleGreen: {fileID: 2100000, guid: 469c87e3e90f5ed4cb01373ccffee878, type: 2}

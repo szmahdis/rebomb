@@ -10,6 +10,7 @@ public class Explosion : MonoBehaviour
     private BombType bomb_type;
     public GameObject VFXExplosionPrefab;
     public static float TRIGGER_DELAY = 0.1f;
+    public Material particleGreen;
     private static List<Vector3> explosion_directions = new List<Vector3> {
         Vector3.forward,  // Up
         Vector3.back,     // Down
@@ -23,7 +24,6 @@ public class Explosion : MonoBehaviour
         bomb_type = type;
         BombConfig cfg = BombConfigurator.Instance.GetConfig(type);
         explosion_range = cfg.explosion_range;
-        // TODO(Yaxuan): configure explosion effect by bomb type
     }
 
     public void play()
@@ -32,7 +32,6 @@ public class Explosion : MonoBehaviour
         {
             PlayVFX(VFXExplosionPrefab, tile);
         }
-        // Destroy the bomb itself after exploding
         AudioManager.Instance.PlaySoundEffect(explosionClip);
         Destroy(gameObject);
     }
@@ -115,11 +114,24 @@ public class Explosion : MonoBehaviour
         return cascaded_triggered;
     }
 
-    private void PlayVFX(GameObject vfxPrefab, Vector3 position)
+    private void PlayVFX(GameObject vfxPrefab, Vector3 tile_position)
     {
-        GameObject instantiatedVFX = Instantiate(vfxPrefab, position, Quaternion.identity);
-        foreach (Transform particleEffect in instantiatedVFX.transform)
-            particleEffect.GetComponent<ParticleSystem>().Play();
+        GameObject instantiatedVFX = Instantiate(vfxPrefab, tile_position, Quaternion.identity);
+
+        foreach(ParticleSystem ps in instantiatedVFX.GetComponentsInChildren<ParticleSystem>())
+        {
+            // decay range based on distance from bomb
+            float range_factor = 1.0f - (tile_position - transform.position).magnitude / explosion_range;
+            range_factor = range_factor * 0.7f + 0.3f;
+            var main = ps.main;
+            main.startSize = new ParticleSystem.MinMaxCurve(main.startSize.constant * range_factor);
+
+            // adjust color of explosion effect based on bomb type
+            if (bomb_type == BombType.SafeBomb)
+                ps.GetComponent<Renderer>().material = particleGreen;
+            
+            ps.Play();
+        }
         Destroy(instantiatedVFX, 1.0f);
     }
 }

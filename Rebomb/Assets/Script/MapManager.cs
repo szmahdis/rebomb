@@ -129,22 +129,25 @@ public class MapManager : MonoBehaviour
                 bomb.BombCountdown();
             }
         }
-        // find the final explosion range of each bomb, play the explosion effect and destroy bombs.
+        // find the final explosion range of each bomb.
         HashSet<Vector3> exploded_tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
         foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
             if (bomb.is_triggered)
             {
                 exploded_tiles.UnionWith(bomb.explosion.tiles);
-                bomb.explosion.play();
+                ExplosionManager.Instance.RegisterExplosion(bomb.explosion);
             }
         }
-        // Destroy breakable walls
+        // Play explosion effects and destroy bombs.
+        ExplosionManager.Instance.Play();
+
+        // Destroy breakable walls.
         foreach (Transform child in breakableWallsParent.transform)
         {
             if (exploded_tiles.Contains(child.position))
             {
-                // TODO(Yaxuan): destroy breakable wall animation
+                // TODO(Yaxuan): merge destroy animation into explosion.play.
                 Destroy(child.gameObject);
             }
         }

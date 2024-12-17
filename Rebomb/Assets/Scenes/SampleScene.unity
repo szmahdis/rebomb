@@ -12001,6 +12001,7 @@ GameObject:
   - component: {fileID: 1972150541}
   - component: {fileID: 1972150544}
   - component: {fileID: 1972150545}
+  - component: {fileID: 1972150546}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -12108,6 +12109,18 @@ MonoBehaviour:
   ChainBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
   SafeBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
   DefaultBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+--- !u!114 &1972150546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972150538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32864cea52c03f045b219981eed246c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1979605721
 PrefabInstance:
   m_ObjectHideFlags: 0

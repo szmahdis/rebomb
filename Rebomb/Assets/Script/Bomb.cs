@@ -9,7 +9,7 @@ public class Bomb : MonoBehaviour
     public float maxExplosionDistance = 2f;
     public bool bombExploded = false;
     public bool is_triggered = false; // triggered in the current turn
-    
+
     public void configure_from_type(BombType type)
     {
         bombType = type;
@@ -21,7 +21,8 @@ public class Bomb : MonoBehaviour
         explosion.configure_from_type(type);
     }
 
-    public void configure_from_data(BombData bomb_data){
+    public void configure_from_data(BombData bomb_data)
+    {
         bombType = bomb_data.bombType;
         turnsToExplosion = bomb_data.turnsToExplosion;
         bombExploded = bomb_data.bombExploded;
@@ -34,18 +35,25 @@ public class Bomb : MonoBehaviour
     {
         if (bombType == BombType.Passive) return;
         turnsToExplosion--;
-        if (turnsToExplosion <= 0) {
-            set_triggered();
+        if (turnsToExplosion <= 0)
+        {
+            trigger(0.0f, false);
         }
     }
 
-    public void set_triggered()
+    public void trigger(float trigger_time = 0.0f, bool power_up = false)
     {
-        if (is_triggered) {
+        if (is_triggered && trigger_time > explosion.explosion_time)
+        {
+            Debug.Log($"trigger at {trigger_time}, later than {explosion.explosion_time}");
+            // ignore trigger later than the explosion
             return;
         }
         is_triggered = true;
+        explosion.explosion_time = trigger_time;
+        explosion.power_up = power_up; // Note: update power up at every calculation
         explosion.calculate();
+        Debug.Log($"trigger at {trigger_time}, explode at {explosion.explosion_time}");
     }
 }
 

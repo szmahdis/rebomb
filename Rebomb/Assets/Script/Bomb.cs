@@ -11,6 +11,7 @@ public class Bomb : MonoBehaviour
     public bool bombExploded = false;
     public bool is_triggered = false; // triggered in the current turn
 
+
     public void configure_from_type(BombType type)
     {
         bombType = type;

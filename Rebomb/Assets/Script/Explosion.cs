@@ -16,6 +16,7 @@ public class Explosion : MonoBehaviour
         Vector3.left,     // Left
         Vector3.right     // Right
     };
+    public AudioClip explosionClip;
 
     public void configure_from_type(BombType type)
     {
@@ -32,6 +33,7 @@ public class Explosion : MonoBehaviour
             PlayVFX(VFXExplosionPrefab, tile);
         }
         // Destroy the bomb itself after exploding
+        AudioManager.Instance.PlaySoundEffect(explosionClip);
         Destroy(gameObject);
     }
 
@@ -109,6 +111,7 @@ public class Explosion : MonoBehaviour
             foreach (Player player in GameManager.Instance.Players)
                 if (player.Alive) player.GetComponent<Collider>().enabled = true;
         }
+
         return cascaded_triggered;
     }
 

@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections;
 
 public class ItemWorld : MonoBehaviour
 {
 
+    public AudioClip pickupClip;
     public Item item;
+
     //TODO: function to spawn items to our world
     public static ItemWorld SpawnItemWorld(Vector3 position, Item item)
     {
@@ -32,8 +35,9 @@ public class ItemWorld : MonoBehaviour
 
     public void DisableSelf()
     {
+        AudioManager.Instance.PlaySoundEffect(pickupClip);
         gameObject.SetActive(false);
-    }
 
+    }
 
 }

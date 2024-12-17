@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428009481b17f0b4f99ad5f74ae819aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupClip: {fileID: 8300000, guid: 21e5c157accab1145967689f7c6d6aa2, type: 3}
   item:
     itemType: 1
     amount: 1

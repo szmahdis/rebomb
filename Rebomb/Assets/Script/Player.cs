@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
 
     public void SetInitialPosition(Vector3 initialPosition)
     {
-        currentPosition = new Vector3(Mathf.Round(initialPosition.x), 1.0f, Mathf.Round(initialPosition.z));
+        currentPosition = new Vector3(Mathf.Round(initialPosition.x), 0.5f, Mathf.Round(initialPosition.z));
         playerObject.transform.position = currentPosition;
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Bomb : MonoBehaviour
 {
@@ -33,27 +34,17 @@ public class Bomb : MonoBehaviour
 
     public void BombCountdown()
     {
-        if (bombType == BombType.Passive) return;
+        if (bombType == BombType.Passive)
+            return;
         turnsToExplosion--;
-        if (turnsToExplosion <= 0)
-        {
-            trigger(0.0f, false);
-        }
     }
 
-    public void trigger(float trigger_time = 0.0f, bool power_up = false)
+    public List<Bomb> trigger()
     {
-        if (is_triggered && trigger_time > explosion.explosion_time)
-        {
-            Debug.Log($"trigger at {trigger_time}, later than {explosion.explosion_time}");
-            // ignore trigger later than the explosion
-            return;
-        }
         is_triggered = true;
-        explosion.explosion_time = trigger_time;
-        explosion.power_up = power_up; // Note: update power up at every calculation
-        explosion.calculate();
-        Debug.Log($"trigger at {trigger_time}, explode at {explosion.explosion_time}");
+        List<Bomb> cascaded_triggered_bombs = explosion.calculate();
+        gameObject.GetComponent<Collider>().enabled = false;
+        return cascaded_triggered_bombs;
     }
 }
 

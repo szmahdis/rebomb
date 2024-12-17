@@ -121,25 +121,51 @@ public class MapManager : MonoBehaviour
     }
     public void CalculateExplosions()
     {
-        // for each bomb, update state of this turn.
-        foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
-        {
-            if (bomb.bombType != BombType.Passive)
-            {
-                bomb.BombCountdown();
-            }
-        }
-        // find the final explosion range of each bomb.
+        // Trigger bombs in a cascading manner.
+        Queue<Bomb> all_bombs_to_trigger = new Queue<Bomb>();
         HashSet<Vector3> exploded_tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
         foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
-            if (bomb.is_triggered)
+            bomb.BombCountdown();
+            if (bomb.turnsToExplosion == 0)
             {
-                exploded_tiles.UnionWith(bomb.explosion.tiles);
-                ExplosionManager.Instance.RegisterExplosion(bomb.explosion);
+                bomb.explosion.explosion_time = 0.0f;
+                all_bombs_to_trigger.Enqueue(bomb);
             }
         }
-        // Play explosion effects and destroy bombs.
+        while (all_bombs_to_trigger.Count > 0)
+        {
+            Bomb current_bomb = all_bombs_to_trigger.Dequeue();
+            List<Bomb> cascaded_triggered = current_bomb.trigger();
+            exploded_tiles.UnionWith(current_bomb.explosion.tiles);
+            ExplosionManager.Instance.RegisterExplosion(current_bomb.explosion);
+
+            // cascaded calculation
+            float trigger_time = current_bomb.explosion.explosion_time + Explosion.TRIGGER_DELAY;
+            bool power_up = current_bomb.bombType == BombType.ChainBomb;
+            foreach (Bomb bomb in cascaded_triggered)
+            {
+                if (bomb.is_triggered) continue;
+
+                if (all_bombs_to_trigger.Contains(bomb))
+                {
+                    if (bomb.explosion.explosion_time == trigger_time)
+                    {
+                        // for ChainBomb only
+                        // trigger from mulitple bombs at the same time will have their power_up overlapped.
+                        bomb.explosion.power_up = (bomb.explosion.power_up || power_up);
+                    }
+                }
+                else
+                {
+                    bomb.explosion.explosion_time = trigger_time;
+                    bomb.explosion.power_up = power_up;
+                    all_bombs_to_trigger.Enqueue(bomb);
+                }
+            }
+        }
+
+        // Play explosion effects in order
         ExplosionManager.Instance.Play();
 
         // Destroy breakable walls.

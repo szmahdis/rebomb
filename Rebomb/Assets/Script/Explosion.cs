@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 public class Explosion : MonoBehaviour
 {
-    static float TRIGGER_DELAY = 0.1f;
     public int explosion_range;
     public bool power_up = false;
     public float explosion_time = float.MaxValue;
     public HashSet<Vector3> tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
     private BombType bomb_type;
     public GameObject VFXExplosionPrefab;
+    public static float TRIGGER_DELAY = 0.1f;
     private static List<Vector3> explosion_directions = new List<Vector3> {
         Vector3.forward,  // Up
         Vector3.back,     // Down
@@ -35,42 +35,48 @@ public class Explosion : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void calculate()
+    public List<Bomb> calculate()
     {
+        List<Bomb> cascaded_triggered = new List<Bomb>();
+
         tiles.Clear();
         // current position.
         tiles.Add(transform.position);
 
         float rayDuration = 2f;   // Debug ray duration
-        float power_up_range = power_up ? 1.0f : 0.0f;
+
+        // effect of triggered by ChainBomb
+        if (power_up) explosion_range += 1;
+
+        // effect of SafeBomb
+        if (bomb_type == BombType.SafeBomb)
+        {
+            foreach (Player player in GameManager.Instance.Players)
+                if (player.Alive) player.GetComponent<Collider>().enabled = false;
+        }
+
         foreach (Vector3 direction in explosion_directions)
         {
             float explosionDrawDistance = 0f;
             // Cast a ray from the bomb's position in the specified direction
-            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, explosion_range + power_up_range))
+            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, explosion_range))
             {
                 Debug.DrawLine(transform.position, transform.position + direction * hit.distance, Color.red, rayDuration); // Debug ray (optional)
 
-                // Check if the object is a destructible one
                 if (hit.collider.CompareTag("Player"))
                 {
                     Player player = hit.collider.GetComponent<Player>();
                     explosionDrawDistance = hit.distance + 0.25f; // add half of player collider width;
-                    // Safe bombs don't hurt players
-                    if (bomb_type != BombType.SafeBomb)
-                    {
-                        player.OnKilled();
-                    }
+                    player.OnKilled();
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {
                     Bomb bomb = hit.collider.GetComponent<Bomb>();
                     explosionDrawDistance = hit.distance;
-                    bomb.trigger(explosion_time + TRIGGER_DELAY, power_up = (bomb_type == BombType.ChainBomb));
+                    cascaded_triggered.Add(bomb);
                 }
                 else if (hit.collider.CompareTag("BreakableWall"))
                 {
-                    // TODO(Yaxuan): change the explosion effect on this tile.
                     // add half of wall collider width, which is half of tile width;
                     explosionDrawDistance = hit.distance + 0.5f;
 
@@ -96,19 +102,21 @@ public class Explosion : MonoBehaviour
                 tiles.Add(tile);
             }
         }
+
+        // end of effect of SafeBomb
+        if (bomb_type == BombType.SafeBomb)
+        {
+            foreach (Player player in GameManager.Instance.Players)
+                if (player.Alive) player.GetComponent<Collider>().enabled = true;
+        }
+        return cascaded_triggered;
     }
 
     private void PlayVFX(GameObject vfxPrefab, Vector3 position)
     {
         GameObject instantiatedVFX = Instantiate(vfxPrefab, position, Quaternion.identity);
-        float timeToDestroy = 5f;
         foreach (Transform particleEffect in instantiatedVFX.transform)
-        {
-            // Debug.Log("Playing VFX.");
             particleEffect.GetComponent<ParticleSystem>().Play();
-            timeToDestroy = Mathf.Max(timeToDestroy, particleEffect.GetComponent<ParticleSystem>().main.duration);
-        }
-        // Delete the object after x time to keep Scene clean
-        Destroy(instantiatedVFX, timeToDestroy + 1f);
+        Destroy(instantiatedVFX, 1.0f);
     }
 }

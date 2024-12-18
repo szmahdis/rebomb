@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d0bdb3af2a3c3194699e22ab850c1cb1
+labels:
+- crate2
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 8836
+  packageName: Metal Crates Pack
+  packageVersion: 1.
+  assetPath: Assets/Metal Crates/Prefabs/Crate2.prefab
+  uploadId: 67962

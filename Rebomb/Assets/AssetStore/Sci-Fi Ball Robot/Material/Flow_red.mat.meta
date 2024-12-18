@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0f0e6a056e5f11943b534632d7ff5690
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Material/Flow_red.mat
+  uploadId: 593488

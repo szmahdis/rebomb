@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fa3a2b359144e804e99a9c2554ea5bad
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Anim/GoAhead.anim
+  uploadId: 593488

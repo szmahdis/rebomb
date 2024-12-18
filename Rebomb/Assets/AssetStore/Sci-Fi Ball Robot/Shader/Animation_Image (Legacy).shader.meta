@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ffd328bc1430c8345a7eee94b15beabd
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Shader/Animation_Image (Legacy).shader
+  uploadId: 593488

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ae16e0c41dacb0b4cb32f119790a1ba5
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Prefab/Background_bowl.prefab
+  uploadId: 593488

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2194ac16ca2f2e8458ae346679e46a15
+timeCreated: 1512441614
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Material/BallRobot_body_gold.mat
+  uploadId: 593488

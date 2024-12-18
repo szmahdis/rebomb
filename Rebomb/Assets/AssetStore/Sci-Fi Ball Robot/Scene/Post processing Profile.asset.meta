@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d085d67d67d6f1d4c835ff5cf5bc768d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Scene/Post processing Profile.asset
+  uploadId: 593488

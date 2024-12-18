@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ef4db2994c8da124480e682cd270a7ae
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Prefab/Ball Robot_Blue.prefab
+  uploadId: 593488

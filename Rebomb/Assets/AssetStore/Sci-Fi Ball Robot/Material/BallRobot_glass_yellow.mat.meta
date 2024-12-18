@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 67ace6568e1f9fe4ea02a4bc5dc3d848
+timeCreated: 1512441614
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 246500
+  packageName: Sci-Fi Ball Robot
+  packageVersion: 1.1.1
+  assetPath: Assets/Sci-Fi Ball Robot/Material/BallRobot_glass_yellow.mat
+  uploadId: 593488

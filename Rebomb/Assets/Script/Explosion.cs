@@ -9,7 +9,7 @@ public class Explosion : MonoBehaviour
     public HashSet<Vector3> tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
     private BombType bomb_type;
     public GameObject VFXExplosionPrefab;
-    public static float TRIGGER_DELAY = 0.1f;
+    public static float TRIGGER_DELAY = 0.2f;
     public Material particleGreen;
     private static List<Vector3> explosion_directions = new List<Vector3> {
         Vector3.forward,  // Up

@@ -14738,6 +14738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endgamePanel: {fileID: 1307287540870417844}
+  timeTravelPreviewPanel: {fileID: 1411441656}
   audioClip: {fileID: 8300000, guid: ef175ba51fb278447a7bc82c17b8cbf3, type: 3}
 --- !u!224 &5363309092474804867
 RectTransform:

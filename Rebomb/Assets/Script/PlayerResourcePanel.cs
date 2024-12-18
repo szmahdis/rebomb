@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerResourcePanel : MonoBehaviour
 {
@@ -38,7 +41,7 @@ public class PlayerResourcePanel : MonoBehaviour
         UpdateText(playerNameText, playerIndex+1, "Player ");
         readyButton.GetComponent<PlayerReadyButton>().playerIndex = playerIndex;
 
-        //Ensure hourglass button is disabled initially
+        // Ensure hourglass button is disabled initially
         if(hourglassButton != null)
         {
             hourglassButton.interactable = false;
@@ -46,9 +49,12 @@ public class PlayerResourcePanel : MonoBehaviour
             // Assign the OnHourglassButtonClicked method to the onClick event
             hourglassButton.onClick.RemoveAllListeners();
             hourglassButton.onClick.AddListener(OnHourglassButtonClicked);
+            // hourglassButton.gameObject.AddComponent<HoverHandler>();
         }
 
         safeBombButton.onClick.AddListener(OnSafeBombButtonClicked);
+
+        
 
     }
 
@@ -61,7 +67,6 @@ public class PlayerResourcePanel : MonoBehaviour
             Debug.Log("Time travel triggered through TurnManager!");
             HandleResourceUpdated("hourglass", 0);
             ResourceManager.GetInventoryItemList();
-
         }
         else
         {
@@ -135,9 +140,15 @@ public class PlayerResourcePanel : MonoBehaviour
     // Function to enable the hourglassButton
     private void ActivateHourglassButton()
     {
-        if (hourglassButton != null) // Ensure the button is assigned
+        if (hourglassButton != null)
         {
             hourglassButton.interactable = true;
+
+            // Check if HoverHandler is already added to avoid duplicates
+            if (hourglassButton.GetComponent<HoverHandler>() == null)
+            {
+                hourglassButton.gameObject.AddComponent<HoverHandler>();
+            }
         }
         else
         {
@@ -147,13 +158,103 @@ public class PlayerResourcePanel : MonoBehaviour
 
     private void DeactivateHourglassButton()
     {
-        if (hourglassButton != null) // Ensure the button is assigned
+        if (hourglassButton != null)
         {
             hourglassButton.interactable = false;
+
+            // Optionally, remove the HoverHandler when deactivating
+            var hoverHandler = hourglassButton.GetComponent<HoverHandler>();
+            if (hoverHandler != null)
+            {
+                hoverHandler.OnPointerExit(null);
+                Destroy(hoverHandler);
+            }
         }
         else
         {
             Debug.LogWarning("Hourglass button is not assigned!");
         }
+    }
+}
+
+public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+{
+    private RenderTexture previewTexture;       // RenderTexture for the small window
+    private GameObject previewPanel;            // UI Panel that contains the RawImage
+    private RawImage previewImage;              // RawImage component to display RenderTexture
+    private void Start()
+    {
+        // Find the preview panel and its RawImage
+        previewPanel = GameObject.Find("TimeTravelPreviewPanel");
+        if (previewPanel == null)
+        {
+            Debug.LogError("TimeTravelPreviewPanel not found in the scene!");
+            return;
+        }
+        previewImage = previewPanel.GetComponentInChildren<RawImage>();
+        if (previewImage == null)
+        {
+            Debug.LogError("RawImage for Time Travel Preview not found!");
+            return;
+        }
+
+        previewPanel.SetActive(false); // Hide initially
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // Debug.Log("Hovered!");
+        // Show a small window of preview of time travel using snapshots
+        ShowTimeTravelPreview();
+
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // Debug.Log("Exited!");
+        // Handle exit behavior here
+        HideTimeTravelPreview();
+    }
+    private void ShowTimeTravelPreview()
+    {
+        previewPanel.SetActive(true);
+
+        Texture2D Previewscreenshot = TurnManager.Instance.GetSnapshotImage();
+        
+        // make image rgba to be 255,255,255,255
+        RenderTexture LastBombTexture = new RenderTexture(1920, 1080, 32);
+        Camera LastBombCamera = GameObject.Find("LastBombCamera").GetComponent<Camera>();
+        Texture2D LastBombScreenshot = new Texture2D(1920, 1080, TextureFormat.ARGB32, false);
+        LastBombCamera.targetTexture = LastBombTexture;
+        LastBombCamera.Render();
+        RenderTexture.active = LastBombTexture;
+        LastBombScreenshot.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+        LastBombScreenshot.Apply();
+        LastBombCamera.targetTexture = null;
+        RenderTexture.active = null;
+        Texture2D CombinedScreenshot = new Texture2D(1920, 1080, TextureFormat.ARGB32, false);
+        // combine two textures
+        for (int i = 0; i < 1920; i++)
+        {
+            for (int j = 0; j < 1080; j++)
+            {
+                if (LastBombScreenshot.GetPixel(i, j) != Color.clear)
+                {
+                    CombinedScreenshot.SetPixel(i, j, LastBombScreenshot.GetPixel(i, j));
+                }
+                else
+                {
+                    CombinedScreenshot.SetPixel(i, j, Previewscreenshot.GetPixel(i, j));
+                }
+            }
+        }
+        CombinedScreenshot.Apply();
+        // previewImage.texture = TurnManager.Instance.GetSnapshotImage();
+        previewImage.texture = CombinedScreenshot;
+        previewImage.color = new Color(1, 1, 1, 0.8f);
+    }
+
+    private void HideTimeTravelPreview()
+    {
+        previewPanel.SetActive(false);
+        previewImage.texture = null;
     }
 }

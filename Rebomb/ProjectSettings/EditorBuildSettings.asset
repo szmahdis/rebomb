@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 32e1b723007c3884abc527843d51bad5
+  - enabled: 1
+    path: Assets/Scenes/TimeTravelPreviewScene.unity
+    guid: e67073c3a215d5146a48c2342bf421e7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 7c71ced62ef9ac14db3f7b3b618b097a, type: 3}
   m_UseUCBPForAssetBundles: 0

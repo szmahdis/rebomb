@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 
 public class TurnManager : MonoBehaviour
@@ -7,7 +8,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Instance { get; private set; }
     private static int REWIND_TURNS = 3;
     public int CurrentTurn { get; private set; }
-    private Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
+    public Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
     public bool TimeTravelTriggered { get; set; }
 
     List<int> PreviousSurvivalPlayers = new List<int>();
@@ -132,7 +133,7 @@ public class TurnManager : MonoBehaviour
         snapshots.Add(CurrentTurn, snapshot);
     }
 
-    private void Rewind(int turnIndex)
+    public void Rewind(int turnIndex)
     {
         int turn_num = CurrentTurn;
         if (snapshots.ContainsKey(turnIndex))
@@ -175,6 +176,21 @@ public class TurnManager : MonoBehaviour
         else
         {
             Debug.LogError($"No snapshot found for turn {turnIndex}, cannot rewind.");
+        }
+    }
+
+    public Texture2D GetSnapshotImage()
+    {
+        int rewind_turn_number = Mathf.Min(REWIND_TURNS, CurrentTurn);
+        if (snapshots.ContainsKey(CurrentTurn - rewind_turn_number))
+        {
+            // deep copy snapshot image
+            return snapshots[CurrentTurn - rewind_turn_number].snapshotImage;
+        }
+        else
+        {
+            Debug.LogError($"No snapshot found for turn {CurrentTurn}, cannot get snapshot image.");
+            return null;
         }
     }
 }

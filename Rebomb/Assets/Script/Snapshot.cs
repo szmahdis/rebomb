@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.Search;
+using UnityEngine.UI;
 
 public class Snapshot {
     // turn state
@@ -16,6 +17,7 @@ public class Snapshot {
     public List<Vector2> unbreakableWalls;
     public List<BombData> bombs;
     public List<GameObject> items;
+    public Texture2D snapshotImage;
 
     // TODO: map state
     public Snapshot(int turnIndex, List<int> previousSurvivalPlayers) {
@@ -39,6 +41,34 @@ public class Snapshot {
             if (bomb.bombExploded == false)
                 bombs.Add(new BombData(bomb)); // Using the copy constructor
         }
+        // Destroy(renderTexture);
+        snapshotImage = TakeScreenshot();
+    }
+
+    private Texture2D TakeScreenshot()
+    {
+        RenderTexture PreviewrenderTexture = new RenderTexture(1920, 1080, 32);
+        
+        // a camera called PreviewCamera is in the root
+        Camera PreviewCamera = GameObject.Find("PreviewCamera").GetComponent<Camera>();
+        
+        PreviewCamera.targetTexture = PreviewrenderTexture;
+        
+        Texture2D Previewscreenshot = new Texture2D(1920, 1080, TextureFormat.ARGB32, false);
+        
+        PreviewCamera.Render();
+        
+
+        RenderTexture.active = PreviewrenderTexture;
+        Previewscreenshot.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+        Previewscreenshot.Apply();
+        PreviewCamera.targetTexture = null;
+        RenderTexture.active = null;
+
+        
+
+        
+        return Previewscreenshot;
     }
 
 }

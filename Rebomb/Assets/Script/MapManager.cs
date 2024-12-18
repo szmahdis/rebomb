@@ -110,12 +110,12 @@ public class MapManager : MonoBehaviour
     {
         foreach (Vector2 position in breakableWalls)
         {
-            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 1.0f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("BreakableWall");
         }
         foreach (Vector2 position in unbreakableWalls)
         {
-            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 1.0f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("UnbreakableWall");
         }
     }
@@ -259,6 +259,7 @@ public class MapManager : MonoBehaviour
 
         foreach (Transform child in parent)
         {
+            // TODO: Deal with minebombs
             if (child != this && Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
             {
                 return true;

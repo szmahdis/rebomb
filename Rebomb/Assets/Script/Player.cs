@@ -159,7 +159,16 @@ public class Player : MonoBehaviour
         bomb_object.transform.parent = bombsParent;
         Bomb bomb = bomb_object.GetComponent<Bomb>();
         bomb.configure_from_type(bombType);
+        if (LastBomb != null)
+            LastBomb.gameObject.layer = LayerMask.NameToLayer("Default");
         LastBomb = bomb;
+        int LastBombLayer = LayerMask.NameToLayer("Last Bombs");
+        if (LastBombLayer == -1)
+        {
+            Debug.LogError("Layer 'Last Bombs' not found!");
+            return;
+        }
+        LastBomb.gameObject.layer = LastBombLayer;
         Debug.Log("Bomb placed at: " + currentPosition);
     }
 

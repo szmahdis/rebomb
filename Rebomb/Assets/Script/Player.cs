@@ -177,7 +177,7 @@ public class Player : MonoBehaviour
         
         // TODO: Play death animation
 
-        playerObject.GetComponent<MeshRenderer>().enabled = false;
+        //playerObject.GetComponent<MeshRenderer>().enabled = false;
         playerObject.GetComponent<Collider>().enabled = false;
         playerObject.SetActive(false);
         Alive = false;

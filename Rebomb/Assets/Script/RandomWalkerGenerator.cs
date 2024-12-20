@@ -8,22 +8,37 @@ public class RandomWalkerGenerator : MonoBehaviour
 {
     [SerializeField] private int dimension = 8;
     [SerializeField] private int[,] map;
-    [SerializeField] private int maxTunnel = 1; // number of times we will run the algorithm
-    [SerializeField] private int maxLength = 3; // max length the walker takes
+    [SerializeField] private int maxTunnel = 100; // number of times we will run the algorithm
+    [SerializeField] private int maxLength = 5; // max length the walker takes
     [SerializeField] private float startingProbability = 0.1f; // the probability of a position being breakablewall
     private bool mapAccepted = false;
 
-    [SerializeField] private GameObject FloorPrefab;
+    [SerializeField] private GameObject FloorPrefab1;
+    [SerializeField] private GameObject FloorPrefab2;
     [SerializeField] private GameObject BreakableWallPrefab;
     [SerializeField] private GameObject UnbreakableWallPrefab;
     [SerializeField] private GameObject HourglassPrefab;
+    [SerializeField] private GameObject BorderPrefab;
     [SerializeField] Transform MapParent;
+
+    // Constants for map generation
+    private int Floor = 0; 
+    private int UnbreakableWall = 1;
+    private int BreakableWall = 2;
+    private int Border = 3;
+    private int BorderCorner = 4; // To clean border corners
+    private int AttemptCount = 0; // to avoid infinite loop
+        
 
     public void GenerateMap()
     {
         Debug.Log("Max tunnel: " + maxTunnel); 
         Debug.Log("Max length: " + maxLength);
-
+        if (AttemptCount > 50)
+        {
+            Debug.Log("Change TunnelMax Parameters");
+            // TODO: exit game in case of infinite loop
+        }
         while (mapAccepted == false)
         {
             map = new int[dimension, dimension];
@@ -33,7 +48,7 @@ public class RandomWalkerGenerator : MonoBehaviour
             {
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
-                    map[i, j] = 1;
+                    map[i, j] = UnbreakableWall; // Generate the map initially with UnbreakableWall and "dig" tunnels
 
                 }
             }
@@ -41,9 +56,8 @@ public class RandomWalkerGenerator : MonoBehaviour
 
             walkerposition = GenerateStartingWalkerPosition();
 
-            map[walkerposition[0], walkerposition[1]] = 0;
+            map[walkerposition[0], walkerposition[1]] = Floor; // Initial Walker position
             //Debug.Log("Walker starting position is " + walkerposition[0] + ", " + walkerposition[1]);
-            //PrintMap(map);
 
 
             for (int turn = 0; turn < maxTunnel; turn++)
@@ -60,15 +74,22 @@ public class RandomWalkerGenerator : MonoBehaviour
 
             }
 
-            // placing player in the corners
-            if (map[0, 0] + map[0, dimension - 1] + map[dimension - 1, 0] + map[dimension - 1, dimension - 1] == 0)
+            // We only accept the maps that has corners free
+            // so we can place players in the corners
+            if (map[0, 0] + map[0, dimension - 1] + map[dimension - 1, 0] + map[dimension - 1, dimension - 1] == Floor) // Floor has to be 0
             {
                 mapAccepted = true;
+            }
+            else
+            {
+                AttemptCount++; // infinite generation of maps if TunnelMax is too low;
+                //TODO: fix it
             }
         }
 
         map = PlaceBreakableWalls(map, startingProbability);
         map = ClearCorners(map);
+        map = AddBorders(map);
 
         InstantiateMap(map);
 
@@ -77,28 +98,28 @@ public class RandomWalkerGenerator : MonoBehaviour
     public int[,] ClearCorners(int[,] map)
     {
         // top left
-        map[0, 0] = 0;
-        map[0, 1] = 0;
-        map[1, 0] = 0;
-        map[1, 1] = 0;
+        map[0, 0] = Floor;
+        map[0, 1] = Floor;
+        map[1, 0] = Floor;
+        map[1, 1] = Floor;
 
         // bottom left
-        map[0, dimension - 1] = 0;
-        map[0, dimension - 2] = 0;
-        map[1, dimension - 1] = 0;
-        map[1, dimension - 2] = 0;
+        map[0, dimension - 1] = Floor;
+        map[0, dimension - 2] = Floor;
+        map[1, dimension - 1] = Floor;
+        map[1, dimension - 2] = Floor;
 
         // top right
-        map[dimension - 1, 0] = 0;
-        map[dimension - 1, 1] = 0;
-        map[dimension - 2, 0] = 0;
-        map[dimension - 2, 1] = 0;
+        map[dimension - 1, 0] = Floor;
+        map[dimension - 1, 1] = Floor;
+        map[dimension - 2, 0] = Floor;
+        map[dimension - 2, 1] = Floor;
 
         // bottom right
-        map[dimension - 1, dimension - 1] = 0;
-        map[dimension - 1, dimension - 2] = 0;
-        map[dimension - 2, dimension - 1] = 0;
-        map[dimension - 2, dimension - 2] = 0;
+        map[dimension - 1, dimension - 1] = Floor;
+        map[dimension - 1, dimension - 2] = Floor;
+        map[dimension - 2, dimension - 1] = Floor;
+        map[dimension - 2, dimension - 2] = Floor;
 
         return map;
 
@@ -109,21 +130,31 @@ public class RandomWalkerGenerator : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                // Floors are defined as 0 
-                GameObject floor = Instantiate(FloorPrefab, new Vector3(i, 0.0f, j), Quaternion.identity);
-                floor.transform.parent = MapParent.Find("Floor");
+                // Create alternating floor tiles for better visualization
+                if ((i + j) % 2 == 0 && i != 0 && j != 0 && i != dimension + 1 && j != dimension + 1) // even and not borders
+                {
+                    GameObject floor = Instantiate(FloorPrefab1, new Vector3(i, 0.0f, j), Quaternion.identity);
+                    floor.transform.parent = MapParent.Find("Floor");
+                }
+                else if((i + j) % 2 != 0 && i != 0 && j != 0 && i != dimension + 1 && j != dimension + 1) // odd and not borders
+                {
+                    GameObject floor = Instantiate(FloorPrefab2, new Vector3(i, 0.0f, j), Quaternion.identity);
+                    floor.transform.parent = MapParent.Find("Floor");
+                }
 
-                // Unbreakable walls are defined as 1
-                // Breakable walls are defined as 2
-                if (map[i, j] == 1)
+                if (map[i, j] == UnbreakableWall)
                 {
                     GameObject unbreakableWall = Instantiate(UnbreakableWallPrefab, new Vector3(i, 1.0f, j), Quaternion.identity);
                     unbreakableWall.transform.parent = MapParent.Find("UnbreakableWall");
                 }
-                else if (map[i, j] == 2)
+                else if (map[i, j] == BreakableWall)
                 {
                     GameObject breakableWall = Instantiate(BreakableWallPrefab, new Vector3(i, 1.0f, j), Quaternion.identity);
                     breakableWall.transform.parent = MapParent.Find("BreakableWall");
+                } else if(map[i, j] == Border)
+                {
+                    GameObject borderWall = Instantiate(BorderPrefab, new Vector3(i, 1.0f, j), Quaternion.identity);
+                    borderWall.transform.parent = MapParent.Find("Border");
                 }
             }
         }
@@ -132,6 +163,8 @@ public class RandomWalkerGenerator : MonoBehaviour
         GameObject hourglass = Instantiate(HourglassPrefab, new Vector3(hourglassPos[0],0.0f, hourglassPos[1]), Quaternion.identity);
         hourglass.transform.parent = MapParent.Find("ItemWorld");
     }
+    
+    // Help function to print the map for debugging purposes
     public void PrintMap(int[,] map)
     {
         StringBuilder sb = new StringBuilder();
@@ -197,7 +230,7 @@ public class RandomWalkerGenerator : MonoBehaviour
     {
 
         // update the map by setting the position of the walker to 0
-        map[currentPosition[0], currentPosition[1]] = 0;
+        map[currentPosition[0], currentPosition[1]] = Floor;
         return map;
     }
 
@@ -208,12 +241,12 @@ public class RandomWalkerGenerator : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                if (map[i, j] == 0)
+                if (map[i, j] == Floor)
                 {
                     float rnd = Random.Range(0.0f, 1.0f);
                     if (rnd < probability)
                     {
-                        map[i, j] = 2; // 2 is breakable wall
+                        map[i, j] = BreakableWall;
                         probability = startingProbability;
 
                     }
@@ -235,7 +268,7 @@ public class RandomWalkerGenerator : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                if (map[i, j] == 2)
+                if (map[i, j] == BreakableWall)
                 {
                      // Make a list of breakable wall to place hourglass under it
                      breakableWallList.Add(new int[2] { i, j });
@@ -305,6 +338,39 @@ public class RandomWalkerGenerator : MonoBehaviour
         //Generate New Map
         GenerateMap();
 
+    }
+
+    public int[,] AddBorders(int[,] map)
+    {
+
+        int[,] mapWithBorders = new int[dimension + 2, dimension + 2];
+
+        for (int i = 0; i < mapWithBorders.GetLength(0); i++)
+        {
+            for (int j = 0; j < mapWithBorders.GetLength(1); j++)
+            {
+                mapWithBorders[i, j] = Border; //Map full of borders
+
+            }
+        }
+
+
+        // Copy map to mapWithBorders
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                mapWithBorders[i+1,j+1] = map[i,j];
+            }
+        }
+
+        // Leave border corners empty
+        mapWithBorders[0, 0] = BorderCorner;
+        mapWithBorders[0, dimension + 1] = BorderCorner;
+        mapWithBorders[dimension + 1, 0] = BorderCorner;
+        mapWithBorders[dimension + 1, dimension + 1] = BorderCorner;
+
+        return mapWithBorders;
     }
 
     public void Start()

@@ -1065,6 +1065,7 @@ GameObject:
   - component: {fileID: 8186889917626875527}
   - component: {fileID: 4240941017844679134}
   - component: {fileID: -1571766204538941471}
+  - component: {fileID: 4162648935624143505}
   m_Layer: 0
   m_Name: Ball Robot_Blue
   m_TagString: Player
@@ -1159,6 +1160,68 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4162648935624143505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196354498917049071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 7c71ced62ef9ac14db3f7b3b618b097a, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 44d196b9-edf4-48bf-84a8-c7be7f9aa4bd
+    m_ActionName: 'Player/Move[/Keyboard/i,/Keyboard/k,/Keyboard/j,/Keyboard/l,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fc39e46a-7c06-4a5f-99a0-3bcf423f060e
+    m_ActionName: 'Player/ActiveBomb[/Keyboard/n,/Keyboard/c]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c471a4b9-0300-4739-82e1-2fa848dd6cf4
+    m_ActionName: 'Player/PassiveBomb[/Keyboard/m,/Keyboard/v]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ca3cefd7-6021-4c4c-bc45-a9f951d07a6f
+    m_ActionName: 'Player/Ready[/Keyboard/h,/Keyboard/f]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 36593108-a15d-4e5d-9abf-3899e0fa7dde
+    m_ActionName: 'Player/TimeTravel[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cb0b34e9-fb18-404b-8288-d0a6624948e1
+    m_ActionName: 'Player/ChainBomb[/Keyboard/x,/Keyboard/comma]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 56672657-1e55-44d6-8e8d-ad3f49b341b0
+    m_ActionName: 'UI/Point[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 74926ae5-92d9-4ad9-8991-53f53a910c86
+    m_ActionName: 'UI/Click[/Mouse/leftButton]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: KeyboardRight
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &5170307573706442821
 GameObject:
   m_ObjectHideFlags: 0

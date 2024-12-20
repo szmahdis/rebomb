@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public List<Player> Players;
 
     [Header("Prefabs and References")]
-    [SerializeField] private GameObject PlayerPrefab;
+    [SerializeField] private List<GameObject> PlayerPrefab;
     [SerializeField] private GameObject PlayerParent;
     [SerializeField] private GameObject PlayerPanelPrefab;
     [SerializeField] private Transform PlayerPanelParent;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < playerCount; i++)
         {
             PlayerInput playerInput = PlayerInput.Instantiate(
-                PlayerPrefab,
+                PlayerPrefab[i],
                 playerIndex: i,
                 controlScheme: controlSchemes[i],
                 pairWithDevice: InputSystem.GetDevice<Keyboard>()

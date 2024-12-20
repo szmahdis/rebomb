@@ -13586,7 +13586,10 @@ MonoBehaviour:
   Map: {fileID: 754954598}
   playerCount: 2
   Players: []
-  PlayerPrefab: {fileID: 3417319834247760033, guid: 49b92d4963ea1be4981947392bd0fa0e, type: 3}
+  PlayerPrefab:
+  - {fileID: 3417319834247760033, guid: 49b92d4963ea1be4981947392bd0fa0e, type: 3}
+  - {fileID: 4196354498917049071, guid: 5f910ccbe9e022449ad4224f8acc7324, type: 3}
+  - {fileID: 6899321059274727273, guid: f061881f1e7756a4aa540b5b0ea126cc, type: 3}
   PlayerParent: {fileID: 444254894}
   PlayerPanelPrefab: {fileID: 488234538768622541, guid: e797c2e9bd3e57e45905309a361b4bfb, type: 3}
   PlayerPanelParent: {fileID: 1523336952}

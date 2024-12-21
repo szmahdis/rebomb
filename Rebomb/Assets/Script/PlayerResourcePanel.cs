@@ -101,8 +101,9 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         var resourceMappings = new Dictionary<string, (TextMeshProUGUI uiText, string prefix)>
     {
-        { "coin", (coinText, "Coins: ") },
-        { "step", (stepText, "Steps: ") },
+        // { "coin", (coinText, "Coins: ") },
+        { "coin", (coinText, "     x ") },
+        { "step", (stepText, "     x ") },
         { "hourglass", (hourglassText, "Hourglass: ") }
     };
 
@@ -143,7 +144,11 @@ public class PlayerResourcePanel : MonoBehaviour
         if (hourglassButton != null)
         {
             hourglassButton.interactable = true;
-
+            // Enable child objects
+            foreach (Transform child in hourglassButton.transform)
+            {
+                child.gameObject.SetActive(true);
+            }
             // Check if HoverHandler is already added to avoid duplicates
             if (hourglassButton.GetComponent<HoverHandler>() == null)
             {
@@ -161,7 +166,11 @@ public class PlayerResourcePanel : MonoBehaviour
         if (hourglassButton != null)
         {
             hourglassButton.interactable = false;
-
+            // Disable child objects
+            foreach (Transform child in hourglassButton.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
             // Optionally, remove the HoverHandler when deactivating
             var hoverHandler = hourglassButton.GetComponent<HoverHandler>();
             if (hoverHandler != null)

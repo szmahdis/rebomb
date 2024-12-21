@@ -40,4 +40,7 @@ public class ItemWorld : MonoBehaviour
 
     }
 
+    public void Update()
+    {
+    }
 }

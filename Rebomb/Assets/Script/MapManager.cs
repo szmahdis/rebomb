@@ -225,7 +225,15 @@ public class MapManager : MonoBehaviour
             {
                 continue;
             }
-            else item.SetActive(true);
+            else 
+            {
+                item.SetActive(true);
+                // children
+                foreach (Transform child in item.transform)
+                {
+                    child.gameObject.SetActive(true);
+                }
+            }
         }
     }
 

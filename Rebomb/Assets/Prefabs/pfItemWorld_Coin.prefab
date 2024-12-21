@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -428370883289969581}
   - component: {fileID: -388689492161603023}
   - component: {fileID: 8376956134274482303}
+  - component: {fileID: 4693116369497100869}
   m_Layer: 0
   m_Name: pfItemWorld_Coin
   m_TagString: Untagged
@@ -251,3 +252,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4693116369497100869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2596978550305456111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 428009481b17f0b4f99ad5f74ae819aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupClip: {fileID: 8300000, guid: 031214db221f2274997a017633f0e504, type: 3}
+  item:
+    itemType: 1
+    amount: 1

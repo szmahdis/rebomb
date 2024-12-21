@@ -209,9 +209,7 @@ public class Player : MonoBehaviour
         ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
         if (itemWorld != null)
         {
-            //Touching item
             ResourceManager.AddInventoryItem(itemWorld.GetItem());
-            // itemWorld.DestroySelf();
             itemWorld.DisableSelf();
 
         }

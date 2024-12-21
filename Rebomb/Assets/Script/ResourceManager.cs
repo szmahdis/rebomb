@@ -9,53 +9,34 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private int Steps;
     [SerializeField] private int Hourglass;
 
-    private List<Item> itemList;
-
     public event Action<string, int> OnResourceUpdated;
-    // string: "coin"/"step";
+    // string: "coin"/"step"/"hourglass";
     // int: updated resource value
-
-
-    public ResourceManager()
-    {
-        // Initialize the list in the constructor
-        itemList = new List<Item>();
-        AddInventoryItem(new Item { itemType = Item.ItemType.Coin, amount = 5 });
-        // Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
-    }
 
     public void AddInventoryItem(Item item)
     {
-        if (item.IsStackable()) {
-            bool itemAlreadyInInventory = false;
-            foreach (Item inventoryItem in itemList) {
-                Debug.Log("Item type in inventory is: " + inventoryItem.itemType);
-                Debug.Log("Pickup up in item type is: " + item.itemType);
-                if (inventoryItem.itemType == item.itemType) {
-                    inventoryItem.amount += item.amount;
-                    itemAlreadyInInventory = true;
+        Debug.Log("Pickup up item type is: " + item.itemType + " and amount is: " + item.amount);
+        switch (item.itemType)
+        {
+            case Item.ItemType.Coin:
+                {
+                    Coins += item.amount;
+                    OnResourceUpdated?.Invoke("coin", Coins);
+                    break;
                 }
-            }
-            if (!itemAlreadyInInventory) {
-                itemList.Add(item);
-            }
-        } else {
-            itemList.Add(item);
+            case Item.ItemType.Boot:
+                {
+                    Steps += item.amount;
+                    OnResourceUpdated?.Invoke("step", Steps);
+                    break;
+                }
+            case Item.ItemType.Hourglass:
+                {
+                    Hourglass += item.amount;
+                    OnResourceUpdated?.Invoke("hourglass", Hourglass);
+                    break;
+                }
         }
-
-        RefreshInventory();
-        // Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
-    }
-
-    public List<Item> GetInventoryItemList()
-    {
-        return itemList;
-    }
-
-    public List<Item> SetInventoryItemList(List<Item> items)
-    {
-        itemList = items;
-        return itemList;
     }
 
     public void SetCoins(int coins)
@@ -63,61 +44,37 @@ public class ResourceManager : MonoBehaviour
         Coins = coins;
     }
 
+    public void SetSteps(int steps)
+    {
+        Steps = steps;
+    }
+
     public int GetCoins()
     {
         return Coins;
     }
 
-    private int GetTotalCoins()
+    public int GetSteps()
     {
-        // Calculate the total number of coins in the inventory
-        return itemList
-            .Where(item => item.itemType == Item.ItemType.Coin)
-            .Sum(item => item.amount);
+        return Steps;
     }
-
-    public int GetTotalBoots()
-    {
-        // Calculate the total number of coins in the inventory
-        return itemList
-            .Where(item => item.itemType == Item.ItemType.Boot)
-            .Sum(item => item.amount);
-    }
-
-    private bool ContainsHourGlass(List<Item> itemList)
-    {
-        return itemList.Any(item => item.itemType == Item.ItemType.Hourglass);
-    }
-
-    private void RefreshInventory()
-    {
-        Coins = GetTotalCoins();
-        
-        OnResourceUpdated?.Invoke("coin", Coins);
-        OnResourceUpdated?.Invoke("step", Steps);
-
-        Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
-        // Debug.Log("Has hourglass? " + ContainsHourGlass(itemList));
-        OnResourceUpdated?.Invoke("hourglass", Hourglass);
-
-    }
-
 
     public void OnRoundStart()
     {
-        // Steps = 0;
-        // Coins = 0;
-        // OnResourceUpdated?.Invoke("step", Steps);
-        // OnResourceUpdated?.Invoke("coin", Coins);
+        Steps = 0;
+        Coins = 0;
+        Hourglass = 0;
+        OnResourceUpdated?.Invoke("step", Steps);
+        OnResourceUpdated?.Invoke("coin", Coins);
+        OnResourceUpdated?.Invoke("hourglass", Hourglass);
     }
 
     public void OnTurnStart()
     {
-        Steps = 20;
-        Steps += GetTotalBoots();
+        Coins = 5;
+        Steps = 5;
         OnResourceUpdated?.Invoke("step", Steps);
-        RefreshInventory();
-
+        OnResourceUpdated?.Invoke("coin", Coins);
     }
 
     public bool OnBombPlaced(BombType type)
@@ -148,15 +105,24 @@ public class ResourceManager : MonoBehaviour
             return false;
         }
     }
+
+    public void consumeHourglass()
+    {
+        if (Hourglass > 0)
+        {
+            Hourglass--;
+            OnResourceUpdated?.Invoke("hourglass", Hourglass);
+        }
+    }
 }
 
 public class ResourceInfo
 {
-    public List<Item> Inventory;
+    public int coins;
+    public int steps;
     public ResourceInfo(ResourceManager resourceManager)
     {
-        Inventory = new List<Item>();
-        Inventory.Add(new Item { itemType = Item.ItemType.Coin, amount = resourceManager.GetCoins() });
-        Inventory.Add(new Item { itemType = Item.ItemType.Boot, amount = resourceManager.GetTotalBoots() });
+        coins = resourceManager.GetCoins();
+        steps = resourceManager.GetSteps();
     }
 }

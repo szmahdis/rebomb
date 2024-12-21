@@ -24,11 +24,10 @@ public class PlayerResourcePanel : MonoBehaviour
         // Assuming child objects have the TextMeshPro components for coins and steps
         coinText = transform.Find("CoinText").GetComponent<TextMeshProUGUI>();
         stepText = transform.Find("StepText").GetComponent<TextMeshProUGUI>();
-        hourglassText = transform.Find("HourglassText").GetComponent<TextMeshProUGUI>();
         playerNameText = transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         readyButton = transform.Find("ReadyButton").GetComponent<Button>();
         hourglassButton = transform.Find("HourglassButton").GetComponent<Button>();
-        if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassText == null || hourglassButton == null)
+        if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassButton == null)
         {
             Debug.LogError("CoinText or StepText or PlayerNameText or ReadyButton or HourglassText not found in PlayerResourcePanel!");
         }
@@ -36,11 +35,11 @@ public class PlayerResourcePanel : MonoBehaviour
 
     private void Start()
     {
-        UpdateText(playerNameText, playerIndex+1, "Player ");
+        UpdateText(playerNameText, playerIndex + 1, "Player ");
         readyButton.GetComponent<PlayerReadyButton>().playerIndex = playerIndex;
 
         // Ensure hourglass button is disabled initially
-        if(hourglassButton != null)
+        if (hourglassButton != null)
         {
             hourglassButton.interactable = false;
 
@@ -58,8 +57,7 @@ public class PlayerResourcePanel : MonoBehaviour
         {
             TurnManager.Instance.TimeTravelTriggered = true;
             Debug.Log("Time travel triggered through TurnManager!");
-            HandleResourceUpdated("hourglass", 0);
-            ResourceManager.GetInventoryItemList();
+            GameManager.Instance.Players[playerIndex].ResourceManager.consumeHourglass();
         }
         else
         {
@@ -85,30 +83,20 @@ public class PlayerResourcePanel : MonoBehaviour
 
     private void HandleResourceUpdated(string resourceType, int newValue)
     {
-        var resourceMappings = new Dictionary<string, (TextMeshProUGUI uiText, string prefix)>
-    {
-        // { "coin", (coinText, "Coins: ") },
-        { "coin", (coinText, "     x ") },
-        { "step", (stepText, "     x ") },
-        { "hourglass", (hourglassText, "Hourglass: ") }
-    };
+        var resourceMappings = new Dictionary<string, (TextMeshProUGUI uiText, string prefix)>{
+            { "coin", (coinText, "     x ") },
+            { "step", (stepText, "     x ") },
+        };
 
-        if (resourceMappings.TryGetValue(resourceType, out var mapping))
+        if (resourceType == "hourglass") {
+            if (newValue == 0) {
+                DeactivateHourglassButton();
+            } else {
+                ActivateHourglassButton();
+            }
+        } else if (resourceMappings.TryGetValue(resourceType, out var mapping))
         {
             UpdateText(mapping.uiText, newValue, mapping.prefix);
-
-            // Check for hourglass and activate the button if condition is met
-            if (resourceType == "hourglass" && newValue > 0)
-            {
-                ActivateHourglassButton();
-                // Debug.Log("Hourglass button activated.");
-            }
-            if (resourceType == "hourglass" && newValue == 0)
-            {
-                DeactivateHourglassButton();
-                // Debug.Log("Hourglass button deactivated.");
-            }
-
         }
         else
         {
@@ -213,7 +201,7 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         previewPanel.SetActive(true);
 
         Texture2D Previewscreenshot = TurnManager.Instance.GetSnapshotImage();
-        
+
         // make image rgba to be 255,255,255,255
         RenderTexture LastBombTexture = new RenderTexture(1920, 1080, 32);
         Camera LastBombCamera = GameObject.Find("LastBombCamera").GetComponent<Camera>();

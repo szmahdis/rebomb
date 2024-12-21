@@ -159,9 +159,8 @@ public class TurnManager : MonoBehaviour
                     {
                         player.currentPosition = snapshotPlayer.currentPosition;
                         player.Alive = snapshotPlayer.Alive;
-                        // player.ResourceManager = snapshotPlayer.ResourceManager;
-                        player.ResourceManager.SetInventoryItemList(snapshotPlayer.ResourceInfo.Inventory);
-                        // player.ResourceManager.SetCoins(snapshotPlayer.ResourceManager.GetCoins());
+                        player.ResourceManager.SetCoins(snapshotPlayer.ResourceInfo.coins);
+                        player.ResourceManager.SetSteps(snapshotPlayer.ResourceInfo.steps);
                         player.gameObject.transform.position = player.currentPosition;
                         player.LastBomb = snapshotPlayer.LastBomb;
                     }

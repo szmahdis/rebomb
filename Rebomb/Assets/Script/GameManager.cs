@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -25,7 +26,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject PlayerParent;
     [SerializeField] private GameObject PlayerPanelPrefab;
     [SerializeField] private Transform PlayerPanelParent;
+
     private Vector3[] playerPositions;
+    private bool helpMessageVisible = false;
+    private GameObject helpMessage;
+    private TextMeshProUGUI helpButtonText;
+    public bool configPanelVisible = false;
+    public ConfigPanel configPanel;
 
     private void Awake()
     {
@@ -65,6 +72,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        helpMessage = GameObject.Find("HelpMessage");
+        helpButtonText = GameObject.Find("HelpButton").GetComponentInChildren<TextMeshProUGUI>();
+        helpMessage.SetActive(helpMessageVisible);
+        // ConfigPanel configPanel = GameObject.Find("ConfigPanel").GetComponent<ConfigPanel>();
+        configPanel.CloseConfigPanel();
+
         Debug.Log("After all players joined, start game.");
         InitializePlayerPanels(playerCount);
         RoundManager.Instance.StartRound();
@@ -109,7 +122,10 @@ public class GameManager : MonoBehaviour
         playerInput.actions["ActiveBomb"].performed += context => player.OnActiveBomb(context);
         playerInput.actions["PassiveBomb"].performed += context => player.OnPassiveBomb(context);
         playerInput.actions["ChainBomb"].performed += context => player.OnChainBomb(context);
+        playerInput.actions["SafeBomb"].performed += context => player.OnSafeBomb(context);
         playerInput.actions["Ready"].performed += context => player.OnReady(context);
+        playerInput.actions["Help"].performed += context => OnHelp(context);
+        playerInput.actions["Config"].performed += context => OnConfig(context);
 
         // other components
         MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
@@ -163,7 +179,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Quit()
+    public void OnHelp(InputAction.CallbackContext context){
+        if (context.performed) OnHelpButton();
+    }
+
+    public void OnHelpButton() {
+            if (helpMessageVisible) {
+                helpMessage.SetActive(false);
+                helpMessageVisible = false;
+                helpButtonText.text = "Help";
+            } else {
+                helpMessage.SetActive(true);
+                helpMessageVisible = true;
+                helpButtonText.text = "Hide";
+            }
+
+    }
+
+    public void OnConfig(InputAction.CallbackContext context) {
+        if (context.performed) {
+            Debug.Log("On Config Button");
+            OnConfigButton();
+        }
+    }
+
+    public void OnConfigButton() {
+        if (configPanelVisible) {
+            configPanelVisible = false;
+            configPanel.CloseConfigPanel();
+        } else {
+            configPanelVisible = true;
+            configPanel.OpenConfigPanel();
+        }
+
+    }
+    public void Quit()
     {
         // Cleanup Input System
         UnityEngine.InputSystem.InputSystem.ResetHaptics(); // Optional

@@ -18,7 +18,6 @@ public class PlayerResourcePanel : MonoBehaviour
     private TextMeshProUGUI hourglassText;
     private Button hourglassButton;
     private Button readyButton;
-    private Button safeBombButton;
 
     private void Awake()
     {
@@ -29,7 +28,6 @@ public class PlayerResourcePanel : MonoBehaviour
         playerNameText = transform.Find("PlayerNameText").GetComponent<TextMeshProUGUI>();
         readyButton = transform.Find("ReadyButton").GetComponent<Button>();
         hourglassButton = transform.Find("HourglassButton").GetComponent<Button>();
-        safeBombButton = transform.Find("SafeBombButton").GetComponent<Button>();
         if (coinText == null || stepText == null || playerNameText == null || readyButton == null || hourglassText == null || hourglassButton == null)
         {
             Debug.LogError("CoinText or StepText or PlayerNameText or ReadyButton or HourglassText not found in PlayerResourcePanel!");
@@ -51,11 +49,6 @@ public class PlayerResourcePanel : MonoBehaviour
             hourglassButton.onClick.AddListener(OnHourglassButtonClicked);
             // hourglassButton.gameObject.AddComponent<HoverHandler>();
         }
-
-        safeBombButton.onClick.AddListener(OnSafeBombButtonClicked);
-
-        
-
     }
 
     // Function called when hourglassButton is clicked
@@ -72,13 +65,6 @@ public class PlayerResourcePanel : MonoBehaviour
         {
             Debug.LogWarning("TurnManager reference is not assigned!");
         }
-    }
-
-    public void OnSafeBombButtonClicked()
-    {
-        // find player object using index
-        GameObject playerObject = GameObject.Find("Players").transform.Find(playerNameText.text).gameObject;
-        playerObject.GetComponent<Player>().PlaceBomb(BombType.SafeBomb);
     }
 
     private void OnEnable()

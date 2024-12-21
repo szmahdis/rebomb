@@ -137,7 +137,10 @@ public class Player : MonoBehaviour
     {
         if (context.performed) { PlaceBomb(BombType.ChainBomb); }
     }
-
+    public void OnSafeBomb(InputAction.CallbackContext context)
+    {
+        if (context.performed) { PlaceBomb(BombType.SafeBomb); }
+    }
     public void PlaceBomb(BombType bombType)
     {
         if (Alive == false) return;

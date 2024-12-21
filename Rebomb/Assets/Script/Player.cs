@@ -176,8 +176,9 @@ public class Player : MonoBehaviour
         if (Alive == false) return;
         
         // TODO: Play death animation
-
-        //playerObject.GetComponent<MeshRenderer>().enabled = false;
+        foreach (MeshRenderer r in playerObject.GetComponentsInChildren<MeshRenderer>()) {
+            r.enabled = false;
+        }
         playerObject.GetComponent<Collider>().enabled = false;
         playerObject.SetActive(false);
         Alive = false;

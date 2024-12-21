@@ -21,7 +21,7 @@ public class ResourceManager : MonoBehaviour
         // Initialize the list in the constructor
         itemList = new List<Item>();
         AddInventoryItem(new Item { itemType = Item.ItemType.Coin, amount = 5 });
-        Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
+        // Debug.Log("Inventory initialized with " + itemList.Count + " item(s)");
     }
 
     public void AddInventoryItem(Item item)
@@ -44,7 +44,7 @@ public class ResourceManager : MonoBehaviour
         }
 
         RefreshInventory();
-        Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
+        // Debug.Log("Inventory updated with " + itemList.Count + " item(s)");
     }
 
     public List<Item> GetInventoryItemList()
@@ -97,7 +97,7 @@ public class ResourceManager : MonoBehaviour
         OnResourceUpdated?.Invoke("step", Steps);
 
         Hourglass = ContainsHourGlass(itemList) ? 1 : 0;
-        Debug.Log("Has hourglass? " + ContainsHourGlass(itemList));
+        // Debug.Log("Has hourglass? " + ContainsHourGlass(itemList));
         OnResourceUpdated?.Invoke("hourglass", Hourglass);
 
     }

@@ -55,38 +55,28 @@ public class Explosion : MonoBehaviour
             foreach (Player player in GameManager.Instance.Players)
                 if (player.Alive) player.GetComponent<Collider>().enabled = false;
         }
-
         foreach (Vector3 direction in explosion_directions)
         {
             float explosionDrawDistance = 0f;
             // Cast a ray from the bomb's position in the specified direction
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, explosion_range))
             {
-                Debug.DrawLine(transform.position, transform.position + direction * hit.distance, Color.red, rayDuration); // Debug ray (optional)
-
                 if (hit.collider.CompareTag("Player"))
                 {
                     Player player = hit.collider.GetComponent<Player>();
-                    explosionDrawDistance = hit.distance + 0.25f; // add half of player collider width;
                     player.OnKilled();
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {
                     Bomb bomb = hit.collider.GetComponent<Bomb>();
-                    explosionDrawDistance = hit.distance;
                     cascaded_triggered.Add(bomb);
                 }
-                else if (hit.collider.CompareTag("BreakableWall"))
-                {
-                    // add half of wall collider width, which is half of tile width;
-                    explosionDrawDistance = hit.distance + 0.5f;
+                // else if (hit.collider.CompareTag("BreakableWall"))
+                // {}
+                // else // hit a non-destructible object, unbreakable wall or boarder
+                // {}
 
-                }
-                else // hit a non-destructible object
-                {
-                    // add half of wall collider width, which is half of tile width;
-                    explosionDrawDistance = hit.distance + 0.5f;
-                }
+                explosionDrawDistance = hit.distance + 0.5f; // 0.5 is half of tile size.
             }
             else
             {
@@ -96,7 +86,6 @@ public class Explosion : MonoBehaviour
             }
 
             // add tiles on this direction.
-            // Debug.Log($"Explosion distance: {hit.distance}");
             for (int i = 1; i <= explosionDrawDistance; i++)
             {
                 Vector3 tile = transform.position + direction * i;

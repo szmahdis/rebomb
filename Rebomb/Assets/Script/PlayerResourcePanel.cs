@@ -115,12 +115,12 @@ public class PlayerResourcePanel : MonoBehaviour
             if (resourceType == "hourglass" && newValue > 0)
             {
                 ActivateHourglassButton();
-                Debug.Log("Hourglass button activated.");
+                // Debug.Log("Hourglass button activated.");
             }
             if (resourceType == "hourglass" && newValue == 0)
             {
                 DeactivateHourglassButton();
-                Debug.Log("Hourglass button deactivated.");
+                // Debug.Log("Hourglass button deactivated.");
             }
 
         }

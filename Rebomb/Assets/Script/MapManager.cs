@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in ActiveBomb.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
-            Debug.Log($"Active bomb at {position}.");
+            // Debug.Log($"Active bomb at {position}.");
             bombs.Add(child.GetComponent<Bomb>());
         }
         return bombs;
@@ -208,7 +208,7 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in Items.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
-            Debug.Log($"Item at {position}.");
+            // Debug.Log($"Item at {position}.");
             if (child.gameObject.activeSelf)
                 items.Add(child.gameObject);
         }

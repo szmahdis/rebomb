@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class RandomWalkerGenerator : MonoBehaviour
 {
-    [SerializeField] private int dimension = 8;
+    [SerializeField] public static int dimension = 8;
     [SerializeField] private int[,] map;
     [SerializeField] private int maxTunnel = 100; // number of times we will run the algorithm
     [SerializeField] private int maxLength = 5; // max length the walker takes
@@ -31,6 +31,12 @@ public class RandomWalkerGenerator : MonoBehaviour
     private int BorderCorner = 4; // To clean border corners
     private int AttemptCount = 0; // to avoid infinite loop
         
+    public static Vector3[] initial_positions = new Vector3[] {
+        new Vector3(1, 0.5f, 1),
+        new Vector3(dimension, 0.5f, dimension),
+        new Vector3(1, 0.5f, dimension),
+        new Vector3(dimension, 0.5f, 1)
+    };
 
     public void GenerateMap()
     {
@@ -376,10 +382,4 @@ public class RandomWalkerGenerator : MonoBehaviour
 
         return mapWithBorders;
     }
-
-    public void Start()
-    {
-        GenerateMap();
-    }
-
 }

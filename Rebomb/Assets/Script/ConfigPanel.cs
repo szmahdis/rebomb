@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ConfigPanel : MonoBehaviour
 {
-    public GameObject[] otherGameObjects;
+    public GameObject[] otherPanels;
 
     public void OpenConfigPanel()
     {
         gameObject.SetActive(true);
-        foreach (GameObject element in otherGameObjects) {
+        foreach (GameObject element in otherPanels) {
             element.SetActive(false);
         }
     }
@@ -15,7 +15,7 @@ public class ConfigPanel : MonoBehaviour
     public void CloseConfigPanel()
     {
         gameObject.SetActive(false);
-        foreach (GameObject element in otherGameObjects) {
+        foreach (GameObject element in otherPanels) {
             element.SetActive(true);
         }
     }

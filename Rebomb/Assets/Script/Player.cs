@@ -4,7 +4,7 @@ using static System.Math;
 
 public class Player : MonoBehaviour
 {
-    private GameObject playerObject;
+    public GameObject playerObject;
 
     [Header("Game Objects")]
     public ResourceManager ResourceManager { get; set; }
@@ -37,7 +37,6 @@ public class Player : MonoBehaviour
     public GameObject passiveBombPrefab; // Prefab for the passive bomb
     public Transform bombsParent; // Parent object to hold all placed bombs
     public Bomb LastBomb { get; set; }
-
 
     void Start()
     {
@@ -179,12 +178,24 @@ public class Player : MonoBehaviour
         if (Alive == false) return;
         
         // TODO: Play death animation
-        foreach (MeshRenderer r in playerObject.GetComponentsInChildren<MeshRenderer>()) {
+        foreach (MeshRenderer r in playerObject.GetComponentsInChildren<MeshRenderer>(true)) {
             r.enabled = false;
         }
         playerObject.GetComponent<Collider>().enabled = false;
-        playerObject.SetActive(false);
         Alive = false;
+        Ready = true;
+    }
+
+    public void OnRoundStart() {
+        Alive = true;
+        Ready = false;
+        ResourceManager.OnRoundStart();
+        SetInitialPosition(RandomWalkerGenerator.initial_positions[Index]);
+        
+        foreach (MeshRenderer r in playerObject.GetComponentsInChildren<MeshRenderer>(true)) {
+            r.enabled = true;
+        }
+        playerObject.GetComponent<Collider>().enabled = true;
     }
 
     void Update()

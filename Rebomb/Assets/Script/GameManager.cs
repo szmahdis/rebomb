@@ -48,12 +48,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Players = new List<Player>();
-        // Hardcoded player positions
-        playerPositions = new Vector3[4] {
-            new Vector3(1.0f, 0.0f, 1.0f), new Vector3(8.0f, 0.0f, 8.0f),
-            new Vector3(1.0f, 0.0f, 8.0f), new Vector3(8.0f, 0.0f, 0.0f)
-        };
-
         // for local multiplayer
         string[] controlSchemes = new string[2] { "KeyboardLeft", "KeyboardRight" };
         for (int i = 0; i < playerCount; i++)
@@ -75,7 +69,6 @@ public class GameManager : MonoBehaviour
         helpMessage = GameObject.Find("HelpMessage");
         helpButtonText = GameObject.Find("HelpButton").GetComponentInChildren<TextMeshProUGUI>();
         helpMessage.SetActive(helpMessageVisible);
-        // ConfigPanel configPanel = GameObject.Find("ConfigPanel").GetComponent<ConfigPanel>();
         configPanel.CloseConfigPanel();
 
         Debug.Log("After all players joined, start game.");
@@ -88,9 +81,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Over!");
         foreach (int winner in winners)
         {
-            EndgamePanel.ShowEndGameResult(Players[winner].Name);
             Debug.Log($"Winner: {Players[winner].Name}");
         }
+        EndgamePanel.ShowResult(winners);
     }
 
     public List<Player> GetPlayers()
@@ -114,7 +107,7 @@ public class GameManager : MonoBehaviour
         // player script
         Player player = playerObject.GetComponent<Player>();
         player.Initialize(i, playerObject);
-        player.SetInitialPosition(playerPositions[i]);
+        player.SetInitialPosition(RandomWalkerGenerator.initial_positions[i]);
         Players.Add(player);
 
         // callbacks

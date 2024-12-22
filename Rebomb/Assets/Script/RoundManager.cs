@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance { get; private set; }
-
-    private int CurrentRound = 1;
-    static int MAX_ROUNDS = 1;
+    public EndgamePanel endRoundPanel;
+    public int CurrentRound = 1;
+    public static int MAX_ROUNDS = 2;
 
     private void Awake()
     {
@@ -22,6 +22,15 @@ public class RoundManager : MonoBehaviour
     public void StartRound()
     {
         Debug.Log($"Round {CurrentRound} started.");
+        if (CurrentRound > 1) {
+            // Use the default map from SampleScene in the first round.
+            GameObject map = GameObject.Find("Map");
+            map.GetComponent<RandomWalkerGenerator>().GenerateMapButton();
+        }
+        for (int i = 0; i < GameManager.Instance.Players.Count; i++)
+        {
+            GameManager.Instance.Players[i].OnRoundStart();
+        }
         TurnManager.Instance.Initialize();
         TurnManager.Instance.StartTurn();
     }
@@ -29,15 +38,14 @@ public class RoundManager : MonoBehaviour
     public void EndRound(List<int> winners)
     {
         Debug.Log($"Round {CurrentRound} ended.");
-        if (CheckAllRoundsEnd() == true)
+        if (CheckAllRoundsEnd())
         {
-            // TODO: decide winners if there are multiple rounds.
             GameManager.Instance.EndGame(winners);
         }
         else
         {
+            endRoundPanel.ShowResult(winners);
             CurrentRound++;
-            StartRound();
         }
     }
 

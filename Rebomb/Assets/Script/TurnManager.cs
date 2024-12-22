@@ -28,20 +28,6 @@ public class TurnManager : MonoBehaviour
 
     public void Initialize()
     {
-    
-        // TODO: Initialize map and player's start positions.
-
-        // Initialize player states(alive/ready), resources, positions.
-        for (int i = 0; i < GameManager.Instance.Players.Count; i++)
-        {
-            GameManager.Instance.Players[i].Alive = true;
-            GameManager.Instance.Players[i].Ready = false;
-            GameManager.Instance.Players[i].ResourceManager.OnRoundStart();
-
-            // TODO: load candidate initial position from map.
-            // Vector3 position = new Vector3(0, 0, 0);
-            // GameManager.Instance.Players[i].SetInitialPosition(position);
-        }
         snapshots.Clear();
         CurrentTurn = 0;
         UpdateSnapshots();

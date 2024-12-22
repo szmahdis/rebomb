@@ -71,6 +71,15 @@ public class PlayerReadyButton : MonoBehaviour
         {
             readyButton.interactable = !ready;
         }
+
+        if (ready)
+        {
+            readyButton.GetComponent<Image>().color = Color.yellow;
+        }
+        else
+        {
+            readyButton.GetComponent<Image>().color = Color.green;
+        }
     }
 
     public void ResetButton(int CurrentTurn)

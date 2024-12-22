@@ -268,7 +268,7 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in parent)
         {
             // TODO: Deal with minebombs
-            if (child != this && Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z))
+            if (child != this && Mathf.Approximately(child.position.x, position.x) && Mathf.Approximately(child.position.z, position.z) && child.tag != "Player")
             {
                 return true;
             }

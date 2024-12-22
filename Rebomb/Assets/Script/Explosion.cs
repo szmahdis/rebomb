@@ -76,6 +76,34 @@ public class Explosion : MonoBehaviour
                 // else // hit a non-destructible object, unbreakable wall or boarder
                 // {}
 
+                bool visual_debug = false;
+                if (visual_debug)
+                {
+                    // debug ray
+                    Debug.Log("Hit object: " + hit.collider.transform.position);
+                    Debug.Log("Raycast from " + transform.position + " to " + direction + " hit " + hit.collider.tag + " in " + hit.distance + " units.");
+                    // highlight the collided object
+                    bool highlighted = false;
+                    foreach (Renderer renderer in hit.collider.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.material.color = Color.red;
+                        highlighted = true;
+                    }
+                    if (hit.collider.GetComponent<Renderer>() != null)
+                    {
+                        hit.collider.GetComponent<Renderer>().material.color = Color.red;
+                        highlighted = true;
+                    }
+                    if (!highlighted)
+                    {
+                        // if there is no mesh renderer, add a mesh and highlight it.
+                        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        cube.transform.position = hit.collider.transform.position;
+                        cube.transform.localScale = hit.collider.bounds.size;
+                        cube.GetComponent<Renderer>().material.color = Color.red;
+                    }
+                }
+
                 explosionDrawDistance = hit.distance + 0.5f; // 0.5 is half of tile size.
             }
             else
@@ -107,7 +135,7 @@ public class Explosion : MonoBehaviour
     {
         GameObject instantiatedVFX = Instantiate(vfxPrefab, tile_position, Quaternion.identity);
 
-        foreach(ParticleSystem ps in instantiatedVFX.GetComponentsInChildren<ParticleSystem>())
+        foreach (ParticleSystem ps in instantiatedVFX.GetComponentsInChildren<ParticleSystem>())
         {
             // decay range based on distance from bomb
             float range_factor = 1.0f - (tile_position - transform.position).magnitude / explosion_range;
@@ -118,7 +146,7 @@ public class Explosion : MonoBehaviour
             // adjust color of explosion effect based on bomb type
             if (bomb_type == BombType.SafeBomb)
                 ps.GetComponent<Renderer>().material = particleGreen;
-            
+
             ps.Play();
         }
         Destroy(instantiatedVFX, 1.0f);

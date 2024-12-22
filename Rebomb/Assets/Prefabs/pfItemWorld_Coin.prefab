@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -388689492161603023}
   - component: {fileID: 8376956134274482303}
   - component: {fileID: 4693116369497100869}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: pfItemWorld_Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

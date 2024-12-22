@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 340249090515169894}
   - component: {fileID: 8776475024301040181}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 6131099350485092120}
   - component: {fileID: 1926148346231965335}
   - component: {fileID: 7361523186823010497}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ItemBoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -307,9 +307,37 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7029948723529949830, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
       propertyPath: m_Name
       value: Cartoon Shoe
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148817236446094103, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507901977716847365, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513859187771203891, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700725330082129686, guid: 50c61df9c0b84bb4db7f2c5c3dc9bbb4, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

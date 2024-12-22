@@ -17,8 +17,10 @@ public class RandomWalkerGenerator : MonoBehaviour
     [SerializeField] private GameObject FloorPrefab2;
     [SerializeField] private GameObject BreakableWallPrefab;
     [SerializeField] private GameObject UnbreakableWallPrefab;
-    [SerializeField] private GameObject HourglassPrefab;
     [SerializeField] private GameObject BorderPrefab;
+    [SerializeField] private GameObject HourglassPrefab;
+    [SerializeField] private GameObject CoinPrefab;
+    [SerializeField] private GameObject BootPrefab;
     [SerializeField] Transform MapParent;
 
     // Constants for map generation
@@ -58,7 +60,6 @@ public class RandomWalkerGenerator : MonoBehaviour
 
             map[walkerposition[0], walkerposition[1]] = Floor; // Initial Walker position
             //Debug.Log("Walker starting position is " + walkerposition[0] + ", " + walkerposition[1]);
-
 
             for (int turn = 0; turn < maxTunnel; turn++)
             {
@@ -135,11 +136,13 @@ public class RandomWalkerGenerator : MonoBehaviour
                 {
                     GameObject floor = Instantiate(FloorPrefab1, new Vector3(i, 0.0f, j), Quaternion.identity);
                     floor.transform.parent = MapParent.Find("Floor");
+                    floor.layer = 2;  // Ignore Raycast
                 }
                 else if((i + j) % 2 != 0 && i != 0 && j != 0 && i != dimension + 1 && j != dimension + 1) // odd and not borders
                 {
                     GameObject floor = Instantiate(FloorPrefab2, new Vector3(i, 0.0f, j), Quaternion.identity);
                     floor.transform.parent = MapParent.Find("Floor");
+                    floor.layer = 2;  // Ignore Raycast
                 }
 
                 if (map[i, j] == UnbreakableWall)
@@ -283,6 +286,7 @@ public class RandomWalkerGenerator : MonoBehaviour
         return hourGlassLocation;
 
     }
+
     public void GenerateMapButton()
     {
         mapAccepted = false;
@@ -365,10 +369,10 @@ public class RandomWalkerGenerator : MonoBehaviour
         }
 
         // Leave border corners empty
-        mapWithBorders[0, 0] = BorderCorner;
-        mapWithBorders[0, dimension + 1] = BorderCorner;
-        mapWithBorders[dimension + 1, 0] = BorderCorner;
-        mapWithBorders[dimension + 1, dimension + 1] = BorderCorner;
+        // mapWithBorders[0, 0] = BorderCorner;
+        // mapWithBorders[0, dimension + 1] = BorderCorner;
+        // mapWithBorders[dimension + 1, 0] = BorderCorner;
+        // mapWithBorders[dimension + 1, dimension + 1] = BorderCorner;
 
         return mapWithBorders;
     }

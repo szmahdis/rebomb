@@ -175,7 +175,7 @@ public class RandomWalkerGenerator : MonoBehaviour
         }
 
         int[] hourglassPos = HourglassPosition(map);
-        GameObject hourglass = Instantiate(HourglassPrefab, new Vector3(hourglassPos[0],0.0f, hourglassPos[1]), Quaternion.identity);
+        GameObject hourglass = Instantiate(HourglassPrefab, new Vector3(hourglassPos[0],0.5f, hourglassPos[1]), Quaternion.identity);
         hourglass.transform.parent = MapParent.Find("ItemWorld");
 
 

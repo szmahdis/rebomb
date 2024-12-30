@@ -3,14 +3,16 @@ using System.Text;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class RandomWalkerGenerator : MonoBehaviour
 {
-    [SerializeField] public static int dimension = 8;
-    [SerializeField] private int[,] map;
-    [SerializeField] private int maxTunnel = 100; // number of times we will run the algorithm
-    [SerializeField] private int maxLength = 5; // max length the walker takes
-    [SerializeField] private float startingProbability = 0.1f; // the probability of a position being breakablewall
+    public static int dimension = 8;
+    private int[,] map;
+    private int maxTunnel = 100; // number of times we will run the algorithm
+    private int maxLength = 5; // max length the walker takes
+    private float startingBreakableWallProbability = 0.1f; // the probability of a position being breakablewall
+    private float startingItemProbability = 0.04f; // the probability of position having an item
     private bool mapAccepted = false;
 
     [SerializeField] private GameObject FloorPrefab1;
@@ -28,8 +30,11 @@ public class RandomWalkerGenerator : MonoBehaviour
     private int UnbreakableWall = 1;
     private int BreakableWall = 2;
     private int Border = 3;
-    private int BorderCorner = 4; // To clean border corners
+    //private int BorderCorner = 4; // To clean border corners
+    private int ItemOnMap = 5; 
     private int AttemptCount = 0; // to avoid infinite loop
+    private int ItemTypeCount;
+    
         
     public static Vector3[] initial_positions = new Vector3[] {
         new Vector3(1, 0.5f, 1),
@@ -94,7 +99,8 @@ public class RandomWalkerGenerator : MonoBehaviour
             }
         }
 
-        map = PlaceBreakableWalls(map, startingProbability);
+        map = PlaceBreakableWalls(map, startingBreakableWallProbability);
+        map = PlaceItems(map, startingItemProbability);
         map = ClearCorners(map);
         map = AddBorders(map);
 
@@ -171,6 +177,32 @@ public class RandomWalkerGenerator : MonoBehaviour
         int[] hourglassPos = HourglassPosition(map);
         GameObject hourglass = Instantiate(HourglassPrefab, new Vector3(hourglassPos[0],0.0f, hourglassPos[1]), Quaternion.identity);
         hourglass.transform.parent = MapParent.Find("ItemWorld");
+
+
+        ItemTypeCount = Item.ItemType.GetNames(typeof(Item.ItemType)).Length;
+
+
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                if (map[i, j] == ItemOnMap)
+                {
+                    int rnd = Random.Range(1, ItemTypeCount);
+
+                    if (rnd == (int)Item.ItemType.Coin)
+                    {
+                        GameObject coin = Instantiate(CoinPrefab, new Vector3(i, 1.0f, j), Quaternion.identity);
+                        coin.transform.parent = MapParent.Find("ItemWorld");
+                    } else if (rnd == (int)Item.ItemType.Boot)
+                    {
+                        GameObject boot = Instantiate(BootPrefab, new Vector3(i, 1.0f, j), Quaternion.identity);
+                        boot.transform.parent = MapParent.Find("ItemWorld");
+                    }
+
+                }
+            }
+        }
     }
     
     // Help function to print the map for debugging purposes
@@ -253,19 +285,48 @@ public class RandomWalkerGenerator : MonoBehaviour
                 if (map[i, j] == Floor)
                 {
                     float rnd = Random.Range(0.0f, 1.0f);
-                    if (rnd < probability)
+                    if (rnd <= probability)
                     {
                         map[i, j] = BreakableWall;
-                        probability = startingProbability;
+                        probability = startingBreakableWallProbability;
 
                     }
                     else if (rnd > probability)
                     {
-                        probability = probability + startingProbability;
+                        probability = probability + startingBreakableWallProbability;
                     }
                 }
             }
         }
+        return map;
+    }
+
+
+    public int[,] PlaceItems(int[,] map, float probability)
+    {
+
+        for(int i = 0; i < map.GetLength(0);i++)
+        {
+            for(int j=0; j < map.GetLength(1);j++)
+            {
+                if(map[i, j] == Floor)
+                {
+                    
+                    float rnd = Random.Range(0.0f, 1.0f);
+                    //Debug.Log("Probability is " + rnd + "/" + probability + " for " + i + " , " + j);
+                    if (rnd <= probability)
+                    {
+                        map[i, j] = ItemOnMap;
+                        probability = startingItemProbability;
+                    } 
+                    else if(rnd > probability)
+                    {
+                        probability = probability + startingItemProbability;
+                    }
+                }
+            }
+        }
+
         return map;
     }
 
@@ -301,6 +362,7 @@ public class RandomWalkerGenerator : MonoBehaviour
         Transform breakableWall = MapParent.Find("BreakableWall");
         Transform floor = MapParent.Find("Floor");
         Transform items = MapParent.Find("ItemWorld");
+        Transform borders = MapParent.Find("Border");
 
         if (floor != null)
         {
@@ -342,6 +404,17 @@ public class RandomWalkerGenerator : MonoBehaviour
             }
 
             Debug.Log("All contents inside 'ItemWorld' have been deleted.");
+        }
+
+        if (borders != null)
+        {
+            foreach (Transform child in borders)
+            {
+                // Destroy each child object
+                Destroy(child.gameObject);
+            }
+
+            Debug.Log("All contents inside 'Borders' have been deleted.");
         }
 
 

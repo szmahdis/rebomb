@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        helpMessage = GameObject.Find("HelpMessage");
+        helpMessage = GameObject.Find("HelpPanel");
         helpButtonText = GameObject.Find("HelpButton").GetComponentInChildren<TextMeshProUGUI>();
         helpMessage.SetActive(helpMessageVisible);
         configPanel.CloseConfigPanel();

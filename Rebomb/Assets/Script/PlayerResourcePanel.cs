@@ -168,7 +168,8 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void Start()
     {
         // Find the preview panel and its RawImage
-        previewPanel = GameObject.Find("TimeTravelPreviewPanel");
+        GameObject canvas = GameObject.Find("Canvas");
+        previewPanel = canvas.transform.Find("TimeTravelPreviewPanel").gameObject;
         if (previewPanel == null)
         {
             Debug.LogError("TimeTravelPreviewPanel not found in the scene!");

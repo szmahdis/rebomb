@@ -18,6 +18,8 @@ public class MapManager : MonoBehaviour
     public Transform playersParent;
     public Transform bombsParent;
 
+    private float wall_y;
+
     void Awake()
     {
         if (Instance == null)
@@ -40,6 +42,7 @@ public class MapManager : MonoBehaviour
             // Debug.Log($"Breakable wall at {position}.");
             breakableWalls.Add(position);
         }
+        wall_y = BreakableWall.position.y;
         return breakableWalls;
     }
 
@@ -51,9 +54,11 @@ public class MapManager : MonoBehaviour
         foreach (Transform child in UnbreakableWall.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
+            wall_y = child.position.y;
             // Debug.Log($"Unbreakable wall at {position}.");
             unbreakableWalls.Add(position);
         }
+        
         return unbreakableWalls;
     }
 
@@ -110,12 +115,12 @@ public class MapManager : MonoBehaviour
     {
         foreach (Vector2 position in breakableWalls)
         {
-            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(BreakableWallPrefab, new Vector3(position.x, wall_y, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("BreakableWall");
         }
         foreach (Vector2 position in unbreakableWalls)
         {
-            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+            GameObject wall = Instantiate(UnbreakableWallPrefab, new Vector3(position.x, wall_y, position.y), Quaternion.identity);
             wall.transform.parent = Map.transform.Find("UnbreakableWall");
         }
     }
@@ -127,7 +132,7 @@ public class MapManager : MonoBehaviour
         foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
             bomb.BombCountdown();
-            if (bomb.turnsToExplosion == 0)
+            if (bomb.turnsToExplosion <= 0)
             {
                 bomb.explosion.explosion_time = 0.0f;
                 all_bombs_to_trigger.Enqueue(bomb);
@@ -221,7 +226,7 @@ public class MapManager : MonoBehaviour
         {
 
             // if have "HourGlass" in name
-            if (item.name.Contains("HourGlass"))
+            if (item.name.Contains("Hourglass") || item.name.Contains("hourglass") || item.name.Contains("HourGlass") || item.name.Contains("hourGlass"))
             {
                 continue;
             }

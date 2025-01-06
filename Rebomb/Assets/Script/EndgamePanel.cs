@@ -10,6 +10,7 @@ public class EndgamePanel : MonoBehaviour
     public TextMeshProUGUI winnerText;
     public AudioClip endPanelClip;
     public AudioClip audioClip;
+    private GameObject previewPanel;
 
     public void ShowResult(List<int> winners)
     {
@@ -27,6 +28,8 @@ public class EndgamePanel : MonoBehaviour
 
     private void show_this_panel()
     {
+        GameObject canvas = GameObject.Find("Canvas");
+        previewPanel = canvas.transform.Find("TimeTravelPreviewPanel").gameObject;
         gameObject.SetActive(true);
         foreach (GameObject element in otherPanels) {
             element.SetActive(false);
@@ -44,6 +47,7 @@ public class EndgamePanel : MonoBehaviour
     public void OnNextRoundButton()
     {
         Debug.Log("Load the next round!");
+        previewPanel.SetActive(true);
         RoundManager.Instance.StartRound();
         gameObject.SetActive(false);
     }

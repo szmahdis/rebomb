@@ -31,8 +31,11 @@ public class TurnManager : MonoBehaviour
         snapshots.Clear();
         CurrentTurn = 0;
         UpdateSnapshots();
+        OnTurnChanged?.Invoke(CurrentTurn);
+
         CurrentTurn = 1;
         TimeTravelTriggered = false;
+        OnTurnChanged?.Invoke(CurrentTurn);
     }
 
     public void StartTurn()

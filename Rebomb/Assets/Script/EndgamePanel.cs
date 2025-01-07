@@ -9,7 +9,8 @@ public class EndgamePanel : MonoBehaviour
     public GameObject nextRoundBtn;
     public TextMeshProUGUI winnerText;
     public AudioClip endPanelClip;
-    public AudioClip audioClip;
+    public AudioClip audioClipLevel1;
+    public AudioClip audioClipLevel2;
     private GameObject previewPanel;
 
     public void ShowResult(List<int> winners)
@@ -41,7 +42,7 @@ public class EndgamePanel : MonoBehaviour
     private void hide_this_panel()
     {
         gameObject.SetActive(false);
-        AudioManager.Instance.PlayBackgroundMusic(audioClip);
+        AudioManager.Instance.PlayBackgroundMusic(audioClipLevel1);
     }
 
     public void OnNextRoundButton()
@@ -50,6 +51,7 @@ public class EndgamePanel : MonoBehaviour
         previewPanel.SetActive(true);
         RoundManager.Instance.StartRound();
         gameObject.SetActive(false);
+        AudioManager.Instance.PlayBackgroundMusic(audioClipLevel2);
     }
 
     public void OnExitButton()

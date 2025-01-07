@@ -58,4 +58,12 @@ public class AudioManager : MonoBehaviour
     {
         audioMixer.SetFloat(parameterName, Mathf.Log10(volume) * 20); // Convert linear to decibel
     }
+
+    public void StopMusic()
+    {
+        if (backgroundMusicSource.isPlaying)
+        {
+            backgroundMusicSource.Stop();
+        }
+    }
 }

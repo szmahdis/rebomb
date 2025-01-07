@@ -6316,8 +6316,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2632601346402593455, guid: b912ad1f25e2dff4299b0dc0e4afa233, type: 2}
-  m_audioClip: {fileID: 8300000, guid: f9aa0101c97109c4097d7cf334641fda, type: 3}
-  m_Resource: {fileID: 8300000, guid: f9aa0101c97109c4097d7cf334641fda, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 48805f5442555ad4e8ddfe7e0b37d3d5, type: 3}
+  m_Resource: {fileID: 8300000, guid: 48805f5442555ad4e8ddfe7e0b37d3d5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -18677,7 +18677,8 @@ MonoBehaviour:
   nextRoundBtn: {fileID: 945273857}
   winnerText: {fileID: 1527916430337887581}
   endPanelClip: {fileID: 8300000, guid: ef175ba51fb278447a7bc82c17b8cbf3, type: 3}
-  audioClip: {fileID: 8300000, guid: 8aa75dbbf15dec140973203626fd7732, type: 3}
+  audioClipLevel1: {fileID: 8300000, guid: 033d66f8ddfe8834f852a04c7620334e, type: 3}
+  audioClipLevel2: {fileID: 8300000, guid: ac3b3f2a3a06ba34ca5e5cf1027c3d59, type: 3}
 --- !u!224 &5363309092474804867
 RectTransform:
   m_ObjectHideFlags: 0

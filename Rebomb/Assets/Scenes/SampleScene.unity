@@ -16873,8 +16873,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActiveBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
   PassiveBombPrefab: {fileID: 2802641519651476425, guid: 6f6aabffcdb0b42c281c7cb8cd091309, type: 3}
-  ChainBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
-  SafeBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
+  ChainBombPrefab: {fileID: 2802641519651476425, guid: 5e0fbb9d38f9faf42a3ec1bdefed352e, type: 3}
+  SafeBombPrefab: {fileID: 2802641519651476425, guid: 87aae2bf22798ed4aaea808077674b4b, type: 3}
   DefaultBombPrefab: {fileID: 2802641519651476425, guid: 517237fba9db04c5c93f63bed59e343d, type: 3}
 --- !u!114 &1972150546
 MonoBehaviour:

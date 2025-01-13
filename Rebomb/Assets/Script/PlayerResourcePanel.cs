@@ -165,7 +165,7 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private RenderTexture previewTexture;       // RenderTexture for the small window
     private GameObject previewPanel;            // UI Panel that contains the RawImage
     private RawImage previewImage;              // RawImage component to display RenderTexture
-    private void Start()
+    private void Awake()
     {
         // Find the preview panel and its RawImage
         GameObject canvas = GameObject.Find("Canvas");
@@ -240,5 +240,6 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         previewPanel.SetActive(false);
         previewImage.texture = null;
+        previewImage.color = new Color(1, 1, 1, 0);
     }
 }

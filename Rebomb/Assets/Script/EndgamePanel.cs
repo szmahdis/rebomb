@@ -36,7 +36,6 @@ public class EndgamePanel : MonoBehaviour
             element.SetActive(false);
         }
         AudioManager.Instance.PlayBackgroundMusic(endPanelClip);
-
     }
 
     private void hide_this_panel()

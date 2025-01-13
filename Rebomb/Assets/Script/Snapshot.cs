@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.Search;
 using UnityEngine.UI;
 
 public class Snapshot {

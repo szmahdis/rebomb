@@ -64,7 +64,7 @@ public class PlayerReadyButton : MonoBehaviour
     {
         if (buttonText != null)
         {
-            buttonText.text = ready ? "Wait" : "Ready";
+            buttonText.text = ready ? "Wait" : "Finish\nTurn";
         }
 
         if (readyButton != null)

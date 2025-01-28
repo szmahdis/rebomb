@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform PlayerPanelParent;
 
     private Vector3[] playerPositions;
-    private bool helpMessageVisible = false;
+    private bool helpMessageVisible = true;
     private GameObject helpMessage;
     private TextMeshProUGUI helpButtonText;
     public bool configPanelVisible = false;

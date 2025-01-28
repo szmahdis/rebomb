@@ -35,7 +35,10 @@ public class PlayerResourcePanel : MonoBehaviour
 
     private void Start()
     {
-        UpdateText(playerNameText, playerIndex + 1, "Player ");
+        string playerName = "";
+        if (playerIndex == 0) playerName = "Gold";
+        else if (playerIndex == 1) playerName = "Blue";
+        UpdateText(playerNameText, playerName, "Player ");
         readyButton.GetComponent<PlayerReadyButton>().playerIndex = playerIndex;
 
         // Ensure hourglass button is disabled initially
@@ -96,7 +99,7 @@ public class PlayerResourcePanel : MonoBehaviour
             }
         } else if (resourceMappings.TryGetValue(resourceType, out var mapping))
         {
-            UpdateText(mapping.uiText, newValue, mapping.prefix);
+            UpdateText(mapping.uiText, newValue.ToString(), mapping.prefix);
         }
         else
         {
@@ -104,7 +107,7 @@ public class PlayerResourcePanel : MonoBehaviour
         }
     }
 
-    private void UpdateText(TextMeshProUGUI textElement, int newValue, string prefix)
+    private void UpdateText(TextMeshProUGUI textElement, string newValue, string prefix)
     {
         if (textElement != null)
         {

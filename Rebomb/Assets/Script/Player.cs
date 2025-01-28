@@ -63,7 +63,9 @@ public class Player : MonoBehaviour
     public void Initialize(int i, GameObject thisPlayerObject)
     {
         Index = i;
-        Name = $"Player {i + 1}";
+        if (i == 0) Name = "Player Gold";
+        else if (i == 1) Name = "Player Blue";
+        // Name = $"Player {i + 1}";
         playerObject = thisPlayerObject;
         ResourceManager = gameObject.AddComponent<ResourceManager>();
         Debug.Log($"{Name} initialized with resource manager.");

@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro; // Required for TextMeshPro
 
 public class Bomb : MonoBehaviour
 {
     [SerializeField] GameObject VFXExplosionPrefab;
+    public TextMeshPro counterText;
     public BombType bombType;
     public Explosion explosion;
     public int turnsToExplosion = 3;
@@ -21,6 +23,19 @@ public class Bomb : MonoBehaviour
         maxExplosionDistance = config.explosion_range;
         explosion = gameObject.GetComponent<Explosion>();
         explosion.configure_from_type(type);
+        counterText = gameObject.GetComponentInChildren<TextMeshPro>();
+        if (bombType == BombType.Passive)
+        {
+            counterText.text = "";
+        }
+        else
+        {
+            counterText.text = turnsToExplosion.ToString();
+            if (turnsToExplosion == 1)
+            {
+                counterText.color = Color.yellow;
+            }
+        }
     }
 
     public void configure_from_data(BombData bomb_data)
@@ -31,6 +46,19 @@ public class Bomb : MonoBehaviour
         maxExplosionDistance = bomb_data.maxExplosionDistance;
         explosion = gameObject.GetComponent<Explosion>();
         explosion.configure_from_type(bombType);
+        counterText = gameObject.GetComponentInChildren<TextMeshPro>();
+        if (bombType == BombType.Passive)
+        {
+            counterText.text = "";
+        }
+        else
+        {
+            counterText.text = turnsToExplosion.ToString();
+            if (turnsToExplosion == 1)
+            {
+                counterText.color = Color.yellow;
+            }
+        }
     }
 
     public void BombCountdown()
@@ -38,6 +66,15 @@ public class Bomb : MonoBehaviour
         if (bombType == BombType.Passive)
             return;
         turnsToExplosion--;
+        counterText.text = turnsToExplosion.ToString();
+        if (turnsToExplosion == 1)
+        {
+            counterText.color = Color.yellow;
+        }
+        if (turnsToExplosion == 0)
+        {
+            counterText.text = "";
+        }
     }
 
     public List<Bomb> trigger()

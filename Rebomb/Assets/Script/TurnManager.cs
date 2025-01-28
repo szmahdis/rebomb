@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using TMPro;
+using Unity.VisualScripting;
 
 
 public class TurnManager : MonoBehaviour
@@ -11,11 +13,15 @@ public class TurnManager : MonoBehaviour
     public Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
     public bool TimeTravelTriggered { get; set; }
 
+    public GameObject turnPanel; // Assign the TurnPanel in the Inspector
+    public TextMeshProUGUI turnText; // Assign the TurnText in the Inspector
+
     List<int> PreviousSurvivalPlayers = new List<int>();
 
     // event
     public event System.Action<int> OnTurnChanged;
 
+    bool RoundEnd = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,7 +38,7 @@ public class TurnManager : MonoBehaviour
         CurrentTurn = 0;
         UpdateSnapshots();
         OnTurnChanged?.Invoke(CurrentTurn);
-
+        RoundEnd = false;
         CurrentTurn = 1;
         TimeTravelTriggered = false;
         OnTurnChanged?.Invoke(CurrentTurn);
@@ -45,6 +51,7 @@ public class TurnManager : MonoBehaviour
             player.OnTurnStart();
         }
         Debug.Log($"Turn {CurrentTurn} Started.");
+        StartCoroutine(ShowTurnPanel());
     }
 
     public void MarkPlayerReady(int playerIndex)
@@ -104,10 +111,12 @@ public class TurnManager : MonoBehaviour
         if (survivalPlayerNum == 0)
         {
             RoundManager.Instance.EndRound(PreviousSurvivalPlayers);
+            RoundEnd = true;
         }
         else if (survivalPlayerNum == 1)
         {
             RoundManager.Instance.EndRound(CurrentSurvivalPlayers);
+            RoundEnd = true;
         }
         else
         {
@@ -180,5 +189,23 @@ public class TurnManager : MonoBehaviour
             Debug.LogError($"No snapshot found for turn {CurrentTurn}, cannot get snapshot image.");
             return null;
         }
+    }
+
+    private System.Collections.IEnumerator ShowTurnPanel()
+    {
+        if (RoundEnd) yield break;
+        turnText.text = $"Turn {CurrentTurn}..."; // Update the text
+        // change text color
+        turnText.color = Color.yellow;
+        turnPanel.SetActive(true); // Show the panel
+        yield return new WaitForSeconds(1.5f); // Wait for 1.5 seconds
+        turnText.text = $"Go!";
+        turnText.color = Color.red;
+        Invoke(nameof(HideTurnPanel), 0.5f); // Hide the panel after 1.5 seconds
+    }
+
+    private void HideTurnPanel()
+    {
+        turnPanel.SetActive(false); // Hide the panel
     }
 }

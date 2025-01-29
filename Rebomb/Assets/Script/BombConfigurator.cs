@@ -74,7 +74,7 @@ public class BombConfigurator : MonoBehaviour
     private void Initialize()
     {
         BombConfig active_bomb = new BombConfig(
-            BombType.Active, 1, 3, 2, ActiveBombPrefab
+            BombType.Active, 2, 3, 2, ActiveBombPrefab
         );
 
         // only triggered by other bombs
@@ -89,7 +89,7 @@ public class BombConfigurator : MonoBehaviour
 
         // a safe bomb that doesn't hurt players but can trigger other bombs or destroy walls
         BombConfig safe_bomb = new BombConfig(
-            BombType.SafeBomb, 2, 3, 2, SafeBombPrefab
+            BombType.SafeBomb, 1, 3, 2, SafeBombPrefab
         );
 
         bomb_configs = new Dictionary<BombType, BombConfig>

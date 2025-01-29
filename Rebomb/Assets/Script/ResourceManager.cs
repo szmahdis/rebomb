@@ -8,6 +8,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private int Coins;
     [SerializeField] private int Steps;
     [SerializeField] private int Hourglass;
+    [SerializeField] private int CoinLimit = 5;
+    [SerializeField] private int StepLimit = 5;
 
     public event Action<string, int> OnResourceUpdated;
     // string: "coin"/"step"/"hourglass";
@@ -26,7 +28,8 @@ public class ResourceManager : MonoBehaviour
                 }
             case Item.ItemType.Boot:
                 {
-                    Steps += item.amount;
+                    StepLimit += 1;
+                    Steps = StepLimit;
                     OnResourceUpdated?.Invoke("step", Steps);
                     break;
                 }
@@ -42,11 +45,13 @@ public class ResourceManager : MonoBehaviour
     public void SetCoins(int coins)
     {
         Coins = coins;
+        OnResourceUpdated?.Invoke("coin", Coins);
     }
 
     public void SetSteps(int steps)
     {
         Steps = steps;
+        OnResourceUpdated?.Invoke("step", Steps);
     }
 
     public int GetCoins()
@@ -71,8 +76,8 @@ public class ResourceManager : MonoBehaviour
 
     public void OnTurnStart()
     {
-        Coins = 5;
-        Steps = 5;
+        Coins = CoinLimit;
+        Steps = StepLimit;
         OnResourceUpdated?.Invoke("step", Steps);
         OnResourceUpdated?.Invoke("coin", Coins);
     }

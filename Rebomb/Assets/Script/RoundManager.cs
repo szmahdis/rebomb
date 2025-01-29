@@ -44,7 +44,7 @@ public class RoundManager : MonoBehaviour
         }
         else
         {
-            endRoundPanel.ShowResult(winners);
+            endRoundPanel.ShowResult(winners, CurrentRound);
             CurrentRound++;
         }
     }

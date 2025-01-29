@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"Winner: {Players[winner].Name}");
         }
-        EndgamePanel.ShowResult(winners);
+        EndgamePanel.ShowResult(winners, RoundManager.MAX_ROUNDS);
     }
 
     public List<Player> GetPlayers()

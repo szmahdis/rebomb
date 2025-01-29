@@ -64,13 +64,11 @@ public class MapManager : MonoBehaviour
 
     public List<Bomb> GetBombs()
     {
-        // Bombs are a child of Bombs
-        Transform ActiveBomb = Bombs.transform;
         List<Bomb> bombs = new List<Bomb>();
-        foreach (Transform child in ActiveBomb.transform)
+        foreach (Transform child in Bombs.transform)
         {
             Vector2 position = new Vector2(child.position.x, child.position.z);
-            // Debug.Log($"Active bomb at {position}.");
+            // Debug.Log($"Bomb at {position}.");
             bombs.Add(child.GetComponent<Bomb>());
         }
         return bombs;
@@ -78,15 +76,6 @@ public class MapManager : MonoBehaviour
 
     public void SetBombs(List<BombData> bomb_data_list)
     {
-        // Add Lastbombs of each player to the list
-        // foreach (Player player in GameManager.Instance.Players)
-        // {
-        //     if (player.LastBomb != null)
-        //     {
-        //         BombData lastBomb = new BombData(player.LastBomb);
-        //         bombs.Add(lastBomb);
-        //     }
-        // }
         foreach (BombData bomb_data in bomb_data_list)
         {
             GameObject bomb_prefab = BombConfigurator.Instance.GetConfig(bomb_data.bombType).bomb_prefab;

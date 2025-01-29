@@ -13,7 +13,7 @@ public class EndgamePanel : MonoBehaviour
     public AudioClip audioClipLevel2;
     private GameObject previewPanel;
 
-    public void ShowResult(List<int> winners)
+    public void ShowResult(List<int> winners, int round_number)
     {
         string winner_text = "Winner:";
         foreach (int i in winners)
@@ -22,7 +22,7 @@ public class EndgamePanel : MonoBehaviour
         }
         winnerText.text = winner_text;
         nextRoundBtn.SetActive(
-            RoundManager.Instance.CurrentRound < RoundManager.MAX_ROUNDS
+            round_number < RoundManager.MAX_ROUNDS
         );
         show_this_panel();
     }
@@ -32,7 +32,8 @@ public class EndgamePanel : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         previewPanel = canvas.transform.Find("TimeTravelPreviewPanel").gameObject;
         gameObject.SetActive(true);
-        foreach (GameObject element in otherPanels) {
+        foreach (GameObject element in otherPanels)
+        {
             element.SetActive(false);
         }
         AudioManager.Instance.PlayBackgroundMusic(endPanelClip);

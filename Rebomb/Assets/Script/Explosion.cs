@@ -65,6 +65,14 @@ public class Explosion : MonoBehaviour
                 {
                     Player player = hit.collider.GetComponent<Player>();
                     player.OnKilled();
+                    // check if other players in the same tile
+                    foreach (Player another_player in GameManager.Instance.Players)
+                    {
+                        if (another_player != player && another_player.transform.position == player.transform.position)
+                        {
+                            another_player.OnKilled();
+                        }
+                    }
                 }
                 else if (hit.collider.CompareTag("Bomb"))
                 {

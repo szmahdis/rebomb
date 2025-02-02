@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: cb1850e9f0746f24eb69354127f61c23
+NativeFormatImporter:
+  userData: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25468
+  packageName: 'Unity Samples: UI'
+  packageVersion: 1.2.2
+  assetPath: Assets/Unity UI Samples/Materials/Slider Knob.mat
+  uploadId: 424775

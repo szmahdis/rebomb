@@ -7,7 +7,6 @@ public class ItemWorld : MonoBehaviour
     public AudioClip pickupClip;
     public Item item;
 
-    //TODO: function to spawn items to our world
     public static ItemWorld SpawnItemWorld(Vector3 position, Item item)
     {
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);

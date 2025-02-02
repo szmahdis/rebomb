@@ -94,7 +94,7 @@ public class TutorialManager : MonoBehaviour
                 if (CheckKeys(KeyCode.Alpha4, KeyCode.Alpha0)) NextPopup();
                 break;
             case 8: // Destroy Wall Popup
-                if (!hourglass.activeSelf) NextPopup();
+                if (hourglass != null && hourglass.activeSelf == false) NextPopup();
                 break;
             case 9: // Use Hourglass Popup
                 StartCoroutine(WaitAndShowNextPopup(10));

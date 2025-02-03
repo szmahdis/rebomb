@@ -125,6 +125,7 @@ public class MapManager : MonoBehaviour
             {
                 bomb.explosion.explosion_time = 0.0f;
                 all_bombs_to_trigger.Enqueue(bomb);
+                TurnManager.Instance.HaveExplosion = true;
             }
         }
         while (all_bombs_to_trigger.Count > 0)

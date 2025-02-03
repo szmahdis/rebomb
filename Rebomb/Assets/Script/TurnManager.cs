@@ -21,6 +21,7 @@ public class TurnManager : MonoBehaviour
     public event System.Action<int> OnTurnChanged;
 
     bool RoundEnd = false;
+    public bool HaveExplosion = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -50,6 +51,13 @@ public class TurnManager : MonoBehaviour
 
     private System.Collections.IEnumerator StartTurnRoutine()
     {
+        if (HaveExplosion)
+        {
+            HaveExplosion = false;
+            yield return new WaitForSeconds(1f);
+        }
+        
+
         StartCoroutine(ShowTurnPanel());
         
         yield return new WaitForSeconds(2f);

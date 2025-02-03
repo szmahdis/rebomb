@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
@@ -28,7 +29,15 @@ public class TutorialManager : MonoBehaviour
             KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S,
             KeyCode.Alpha1, KeyCode.Alpha7, KeyCode.Alpha2, KeyCode.Alpha8,
             KeyCode.Alpha3, KeyCode.Alpha9, KeyCode.Alpha4, KeyCode.Alpha0,
-            KeyCode.F, KeyCode.J, KeyCode.H
+            KeyCode.F, KeyCode.J, KeyCode.H, 
+            KeyCode.Joystick1Button0, KeyCode.Joystick2Button0, // A button on Xbox controller
+            KeyCode.Joystick1Button1, KeyCode.Joystick2Button1, // B button on Xbox controller
+            KeyCode.Joystick1Button2, KeyCode.Joystick2Button2,// X button on Xbox controller
+            KeyCode.Joystick1Button3, KeyCode.Joystick2Button3,// Y button on Xbox controller
+            KeyCode.Joystick1Button4, KeyCode.Joystick2Button4,// LB button on Xbox controller
+            KeyCode.Joystick1Button5, KeyCode.Joystick2Button5,// RB button on Xbox controller
+            KeyCode.Joystick1Button6, KeyCode.Joystick2Button6, // View button on Xbox controller
+            KeyCode.Joystick1Button7, KeyCode.Joystick2Button7,// Menu button on Xbox controller
         };
 
         foreach (var key in keys)
@@ -58,6 +67,12 @@ public class TutorialManager : MonoBehaviour
 
     private void HandleKeyPresses()
     {
+        // Debug.Log(Input.GetAxisRaw("XboxDPadHorizontal"));
+        bool Moved = false;
+        if (Gamepad.current.dpad.ReadValue() != Vector2.zero)
+        {
+            Moved = true;
+        }
         foreach (var key in keyStates.Keys.ToList())
         {
             if (Input.GetKeyDown(key))
@@ -65,43 +80,89 @@ public class TutorialManager : MonoBehaviour
                 keyStates[key] = true;
             }
         }
-
-        switch (popUpIndex)
+        // Xbox controller
+        if (GameManager.Instance.xBoxUI)
         {
-            case 1: // Movement Popup
-                if (CheckKeys(KeyCode.LeftArrow, KeyCode.RightArrow) && CheckKeys(KeyCode.UpArrow, KeyCode.DownArrow) &&
-                    CheckKeys(KeyCode.A, KeyCode.D) && CheckKeys(KeyCode.W, KeyCode.S))
-                {
-                    NextPopup("Good job! Player learned movement keys.");
-                }
-                break;
-            case 2: // Active Bomb Popup
-                if (CheckKeys(KeyCode.Alpha1, KeyCode.Alpha7)) NextPopup();
-                break;
-            case 3: // Press Ready Popup
-                if (CheckKeys(KeyCode.F, KeyCode.J)) NextPopup();
-                break;
-            case 4:
-                StartCoroutine(WaitAndShowNextPopup(5));
-                break;
-            case 5: // Passive Bomb Popup
-                if (CheckKeys(KeyCode.Alpha2, KeyCode.Alpha8)) NextPopup();
-                break;
-            case 6: // Chain Bomb Popup
-                if (CheckKeys(KeyCode.Alpha3, KeyCode.Alpha9)) NextPopup();
-                break;
-            case 7: // Safe Bomb Popup
-                if (CheckKeys(KeyCode.Alpha4, KeyCode.Alpha0)) NextPopup();
-                break;
-            case 8: // Destroy Wall Popup
-                if (hourglass != null && hourglass.activeSelf == false) NextPopup();
-                break;
-            case 9: // Use Hourglass Popup
-                StartCoroutine(WaitAndShowNextPopup(10));
-                break;
-            case 10: // Help Panel Popup
-                if (keyStates[KeyCode.H]) DisableAllPopups();
-                break;
+            switch (popUpIndex)
+            {
+                case 1: // Movement Popup
+                    if (Moved)
+                    {
+                        NextPopup("Good job! Player learned movement keys.");
+                    }
+                    break;
+                case 2: // Active Bomb Popup
+                    if (CheckKeys(KeyCode.Joystick1Button0, KeyCode.Joystick2Button0)) NextPopup();
+                    // if (CheckKeys(KeyCode.Joystick1Button0)) NextPopup();
+                    break;
+                case 3: // Press Ready Popup
+                    if (CheckKeys(KeyCode.Joystick1Button7, KeyCode.Joystick2Button7)) NextPopup();
+                    // if (CheckKeys(KeyCode.Joystick1Button7)) NextPopup();
+                    break;
+                case 4:
+                    StartCoroutine(WaitAndShowNextPopup(5));
+                    break;
+                case 5: // Passive Bomb Popup
+                    if (CheckKeys(KeyCode.Joystick1Button1, KeyCode.Joystick2Button1)) NextPopup();
+                    // if (CheckKeys(KeyCode.Joystick1Button1)) NextPopup();
+                    break;
+                case 6: // Chain Bomb Popup
+                    if (CheckKeys(KeyCode.Joystick1Button2, KeyCode.Joystick2Button2)) NextPopup();
+                    break;
+                case 7: // Safe Bomb Popup
+                    if (CheckKeys(KeyCode.Joystick1Button3, KeyCode.Joystick2Button3)) NextPopup();
+                    break;
+                case 8: // Destroy Wall Popup
+                    if (hourglass != null && hourglass.activeSelf == false) NextPopup();
+                    break;
+                case 9: // Use Hourglass Popup
+                    StartCoroutine(WaitAndShowNextPopup(10));
+                    break;
+                case 10: // Help Panel Popup
+                    if (keyStates[KeyCode.Joystick1Button4] || keyStates[KeyCode.Joystick2Button4]) DisableAllPopups();
+                    break;
+            }
+        }
+        // Keyboard
+        else 
+        {
+            switch (popUpIndex)
+            {
+                case 1: // Movement Popup
+                    if (CheckKeys(KeyCode.LeftArrow, KeyCode.RightArrow) && CheckKeys(KeyCode.UpArrow, KeyCode.DownArrow) &&
+                        CheckKeys(KeyCode.A, KeyCode.D) && CheckKeys(KeyCode.W, KeyCode.S))
+                    {
+                        NextPopup("Good job! Player learned movement keys.");
+                    }
+                    break;
+                case 2: // Active Bomb Popup
+                    if (CheckKeys(KeyCode.Alpha1, KeyCode.Alpha7)) NextPopup();
+                    break;
+                case 3: // Press Ready Popup
+                    if (CheckKeys(KeyCode.F, KeyCode.J)) NextPopup();
+                    break;
+                case 4:
+                    StartCoroutine(WaitAndShowNextPopup(5));
+                    break;
+                case 5: // Passive Bomb Popup
+                    if (CheckKeys(KeyCode.Alpha2, KeyCode.Alpha8)) NextPopup();
+                    break;
+                case 6: // Chain Bomb Popup
+                    if (CheckKeys(KeyCode.Alpha3, KeyCode.Alpha9)) NextPopup();
+                    break;
+                case 7: // Safe Bomb Popup
+                    if (CheckKeys(KeyCode.Alpha4, KeyCode.Alpha0)) NextPopup();
+                    break;
+                case 8: // Destroy Wall Popup
+                    if (hourglass != null && hourglass.activeSelf == false) NextPopup();
+                    break;
+                case 9: // Use Hourglass Popup
+                    StartCoroutine(WaitAndShowNextPopup(10));
+                    break;
+                case 10: // Help Panel Popup
+                    if (keyStates[KeyCode.H]) DisableAllPopups();
+                    break;
+            }
         }
     }
 

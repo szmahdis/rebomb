@@ -42,6 +42,7 @@ public class TurnManager : MonoBehaviour
         CurrentTurn = 1;
         TimeTravelTriggered = false;
         OnTurnChanged?.Invoke(CurrentTurn);
+        HaveExplosion = false;
     }
 
     public void StartTurn()
@@ -57,7 +58,6 @@ public class TurnManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         
-
         StartCoroutine(ShowTurnPanel());
         
         yield return new WaitForSeconds(2f);

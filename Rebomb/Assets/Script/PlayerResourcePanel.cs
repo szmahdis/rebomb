@@ -10,7 +10,6 @@ public class PlayerResourcePanel : MonoBehaviour
 {
     public ResourceManager ResourceManager;
 
-
     public int playerIndex;
     private TextMeshProUGUI playerNameText;
     private TextMeshProUGUI coinText;
@@ -45,11 +44,8 @@ public class PlayerResourcePanel : MonoBehaviour
         if (hourglassButton != null)
         {
             hourglassButton.interactable = false;
-
-            // Assign the OnHourglassButtonClicked method to the onClick event
             hourglassButton.onClick.RemoveAllListeners();
             hourglassButton.onClick.AddListener(OnHourglassButtonClicked);
-            // hourglassButton.gameObject.AddComponent<HoverHandler>();
         }
     }
 
@@ -166,7 +162,7 @@ public class PlayerResourcePanel : MonoBehaviour
 public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private RenderTexture previewTexture;       // RenderTexture for the small window
-    private GameObject previewPanel;            // UI Panel that contains the RawImage
+    public GameObject previewPanel;            // UI Panel that contains the RawImage
     private RawImage previewImage;              // RawImage component to display RenderTexture
     private void Awake()
     {
@@ -200,7 +196,7 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // Handle exit behavior here
         HideTimeTravelPreview();
     }
-    private void ShowTimeTravelPreview()
+    public void ShowTimeTravelPreview()
     {
         previewPanel.SetActive(true);
 
@@ -239,10 +235,15 @@ public class HoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         previewImage.color = new Color(1, 1, 1, 0.8f);
     }
 
-    private void HideTimeTravelPreview()
+    public void HideTimeTravelPreview()
     {
         previewPanel.SetActive(false);
         previewImage.texture = null;
         previewImage.color = new Color(1, 1, 1, 0);
+    }
+
+    public bool IsTimeTravelPreviewVisible()
+    {
+        return previewPanel.activeSelf;
     }
 }

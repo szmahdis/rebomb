@@ -47,19 +47,6 @@ public class Player : MonoBehaviour
         bombsParent = GameObject.Find("Bombs").transform;
     }
 
-    // Copy Constructor
-    // public Player(Player player)
-    // {
-    //     Index = player.Index;
-    //     Name = player.Name;
-    //     Alive = player.Alive;
-    //     Ready = player.Ready;
-    //     currentPosition = player.currentPosition;
-    //     ResourceManager = new ResourceManager(player.ResourceManager);
-    //     LastBomb = player.LastBomb;
-    //     readyButton = player.readyButton;
-    // }
-
     public void Initialize(int i, GameObject thisPlayerObject)
     {
         Index = i;

@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject PlayerPanelPrefab;
     [SerializeField] private Transform PlayerPanelParent;
     [SerializeField] public GameObject[] helpPanels;
+    [SerializeField] private GameObject[] playerPanels;
     private Vector3[] playerPositions;
     private bool helpMessageVisible = false;
     private GameObject helpMessage;
@@ -140,6 +141,8 @@ public class GameManager : MonoBehaviour
         playerInput.actions["Ready"].performed += context => player.OnReady(context);
         playerInput.actions["Help"].performed += context => OnHelp(context);
         playerInput.actions["Config"].performed += context => OnConfig(context);
+        playerInput.actions["TimeTravel"].performed += context => OnTimeTravel(context, i);
+        playerInput.actions["TimeTravelPreview"].performed += context => OnTimeTravelPreview(context, i);
 
         // other components
         MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();
@@ -171,6 +174,7 @@ public class GameManager : MonoBehaviour
         Vector2[] panelPivots = new Vector2[4] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1) };
 
         // instantiate panels
+        playerPanels = new GameObject[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
             GameObject panel = Instantiate(PlayerPanelPrefab, PlayerPanelParent);
@@ -189,7 +193,29 @@ public class GameManager : MonoBehaviour
             }
             Players[i].readyButton = panel.GetComponentInChildren<PlayerReadyButton>();
             // Note: set active explicitly here, to call OnEnable() to subscribe event. 
+            playerPanels[i] = panel;
             panel.SetActive(true);
+        }
+    }
+
+    public void OnTimeTravel(InputAction.CallbackContext context, int playerIndex)
+    {
+        if (context.performed)
+        {
+            PlayerResourcePanel panel = playerPanels[playerIndex].GetComponent<PlayerResourcePanel>();
+            panel.OnHourglassButtonClicked();
+        }
+    }
+
+    public void OnTimeTravelPreview(InputAction.CallbackContext context, int playerIndex)
+    {
+        if (context.performed) {
+            // HoverHandler hover_handler = playerPanels[playerIndex].GetComponent<HoverHandler>();
+            // if (hover_handler.IsTimeTravelPreviewVisible()) {
+            //     hover_handler.HideTimeTravelPreview();
+            // } else {
+            //     hover_handler.ShowTimeTravelPreview();
+            // }
         }
     }
 
@@ -238,6 +264,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
     public void Quit()
     {
         // Cleanup Input System

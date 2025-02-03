@@ -98,6 +98,15 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HideGuidance"",
+                    ""type"": ""Button"",
+                    ""id"": ""95c79051-98ce-4cb4-9be6-4f52288e34a1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -430,6 +439,28 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""TimeTravelPreview"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ae78d07-d1d3-44e1-9be4-2445afab1efb"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""HideGuidance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c95d308e-41a7-4971-83f5-09c98d00c694"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardRight;KeyboardLeft"",
+                    ""action"": ""HideGuidance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -522,10 +553,21 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ecfbfdb2-be56-4379-8914-ff1df9c772e8"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""Help"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f2d3368-d634-448d-8374-6798ab742ebf"",
                     ""path"": ""<Keyboard>/h"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";KeyboardRight;KeyboardLeft"",
+                    ""groups"": "";KeyboardLeft;KeyboardRight"",
                     ""action"": ""Help"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -533,10 +575,21 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""23fb5d1f-f340-4a54-ba23-2587e2d0db51"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";KeyboardRight;KeyboardLeft"",
+                    ""action"": ""Config"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e77c6606-e0e2-4f7d-8f03-b774a7421a72"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Config"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -650,6 +703,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         m_Player_TimeTravel = m_Player.FindAction("TimeTravel", throwIfNotFound: true);
         m_Player_Ready = m_Player.FindAction("Ready", throwIfNotFound: true);
         m_Player_TimeTravelPreview = m_Player.FindAction("TimeTravelPreview", throwIfNotFound: true);
+        m_Player_HideGuidance = m_Player.FindAction("HideGuidance", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -731,6 +785,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_TimeTravel;
     private readonly InputAction m_Player_Ready;
     private readonly InputAction m_Player_TimeTravelPreview;
+    private readonly InputAction m_Player_HideGuidance;
     public struct PlayerActions
     {
         private @LocalPlayerInputs m_Wrapper;
@@ -743,6 +798,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @TimeTravel => m_Wrapper.m_Player_TimeTravel;
         public InputAction @Ready => m_Wrapper.m_Player_Ready;
         public InputAction @TimeTravelPreview => m_Wrapper.m_Player_TimeTravelPreview;
+        public InputAction @HideGuidance => m_Wrapper.m_Player_HideGuidance;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -776,6 +832,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @TimeTravelPreview.started += instance.OnTimeTravelPreview;
             @TimeTravelPreview.performed += instance.OnTimeTravelPreview;
             @TimeTravelPreview.canceled += instance.OnTimeTravelPreview;
+            @HideGuidance.started += instance.OnHideGuidance;
+            @HideGuidance.performed += instance.OnHideGuidance;
+            @HideGuidance.canceled += instance.OnHideGuidance;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -804,6 +863,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @TimeTravelPreview.started -= instance.OnTimeTravelPreview;
             @TimeTravelPreview.performed -= instance.OnTimeTravelPreview;
             @TimeTravelPreview.canceled -= instance.OnTimeTravelPreview;
+            @HideGuidance.started -= instance.OnHideGuidance;
+            @HideGuidance.performed -= instance.OnHideGuidance;
+            @HideGuidance.canceled -= instance.OnHideGuidance;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -973,6 +1035,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         void OnTimeTravel(InputAction.CallbackContext context);
         void OnReady(InputAction.CallbackContext context);
         void OnTimeTravelPreview(InputAction.CallbackContext context);
+        void OnHideGuidance(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

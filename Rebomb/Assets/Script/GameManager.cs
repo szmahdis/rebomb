@@ -210,12 +210,8 @@ public class GameManager : MonoBehaviour
     public void OnTimeTravelPreview(InputAction.CallbackContext context, int playerIndex)
     {
         if (context.performed) {
-            // HoverHandler hover_handler = playerPanels[playerIndex].GetComponent<HoverHandler>();
-            // if (hover_handler.IsTimeTravelPreviewVisible()) {
-            //     hover_handler.HideTimeTravelPreview();
-            // } else {
-            //     hover_handler.ShowTimeTravelPreview();
-            // }
+            PlayerResourcePanel panel = playerPanels[playerIndex].GetComponent<PlayerResourcePanel>();
+            panel.OnHourglassPreviewButtonClicked();
         }
     }
 

@@ -15,7 +15,7 @@ public class PlayerResourcePanel : MonoBehaviour
     private TextMeshProUGUI coinText;
     private TextMeshProUGUI stepText;
     private TextMeshProUGUI hourglassText;
-    private Button hourglassButton;
+    public Button hourglassButton;
     private Button readyButton;
 
     private void Awake()
@@ -64,6 +64,21 @@ public class PlayerResourcePanel : MonoBehaviour
         }
     }
 
+    public void OnHourglassPreviewButtonClicked()
+    {
+        if (hourglassButton != null)
+        {
+            HoverHandler hoverHandler = hourglassButton.GetComponent<HoverHandler>();
+            if (hoverHandler != null)
+            {
+                if (hoverHandler.IsTimeTravelPreviewVisible())
+                    hoverHandler.HideTimeTravelPreview();
+                else
+                    hoverHandler.ShowTimeTravelPreview();
+            }
+        }
+    }
+
     private void OnEnable()
     {
         if (ResourceManager != null)
@@ -87,13 +102,18 @@ public class PlayerResourcePanel : MonoBehaviour
             { "step", (stepText, "     x ") },
         };
 
-        if (resourceType == "hourglass") {
-            if (newValue == 0) {
+        if (resourceType == "hourglass")
+        {
+            if (newValue == 0)
+            {
                 DeactivateHourglassButton();
-            } else {
+            }
+            else
+            {
                 ActivateHourglassButton();
             }
-        } else if (resourceMappings.TryGetValue(resourceType, out var mapping))
+        }
+        else if (resourceMappings.TryGetValue(resourceType, out var mapping))
         {
             UpdateText(mapping.uiText, newValue.ToString(), mapping.prefix);
         }

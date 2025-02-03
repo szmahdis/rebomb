@@ -45,12 +45,21 @@ public class TurnManager : MonoBehaviour
 
     public void StartTurn()
     {
+        StartCoroutine(StartTurnRoutine());
+    }
+
+    private System.Collections.IEnumerator StartTurnRoutine()
+    {
+        StartCoroutine(ShowTurnPanel());
+        
+        yield return new WaitForSeconds(2f);
+        
         foreach (Player player in GameManager.Instance.Players)
         {
             player.OnTurnStart();
         }
         Debug.Log($"Turn {CurrentTurn} Started.");
-        StartCoroutine(ShowTurnPanel());
+        OnTurnChanged?.Invoke(CurrentTurn);
     }
 
     public void MarkPlayerReady(int playerIndex)
@@ -90,7 +99,6 @@ public class TurnManager : MonoBehaviour
             // next turn here
             CurrentTurn++;
         }
-        OnTurnChanged?.Invoke(CurrentTurn);
         StartTurn();
     }
 

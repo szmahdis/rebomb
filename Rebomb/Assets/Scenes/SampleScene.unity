@@ -21322,6 +21322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EndgamePanel: {fileID: 5189915163311346313}
   Map: {fileID: 754954598}
+  xBoxMode: 0
   playerCount: 2
   Players: []
   PlayerPrefab:
@@ -21330,6 +21331,11 @@ MonoBehaviour:
   PlayerParent: {fileID: 444254894}
   PlayerPanelPrefab: {fileID: 488234538768622541, guid: e797c2e9bd3e57e45905309a361b4bfb, type: 3}
   PlayerPanelParent: {fileID: 1523336952}
+  helpPanels:
+  - {fileID: 2071412436}
+  - {fileID: 1196674708}
+  - {fileID: 235284120}
+  - {fileID: 962361213}
   configPanelVisible: 0
   configPanel: {fileID: 685741654}
 --- !u!4 &1972150540
@@ -21361,7 +21367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnPanel: {fileID: 132664581}
   turnText: {fileID: 2051945811}
-  rewindClip: {fileID: 8300000, guid: 0246f64a198e3504086fc4cc56c98e27, type: 3}
+  rewindClip: {fileID: 0}
 --- !u!114 &1972150542
 MonoBehaviour:
   m_ObjectHideFlags: 0

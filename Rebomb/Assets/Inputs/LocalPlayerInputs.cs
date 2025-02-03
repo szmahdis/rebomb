@@ -89,6 +89,15 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TimeTravelPreview"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7b1caac-e585-489e-bd4c-ceaad54238a1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -204,6 +213,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""afc8853f-ce83-4b24-af6e-609c03ba5fdd"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fc7c5114-53a2-4f26-ad81-5d4de244432e"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
@@ -220,6 +240,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";KeyboardRight"",
+                    ""action"": ""PassiveBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ca2786a-ec93-45cd-b51d-12d1f2e4f2a3"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
                     ""action"": ""PassiveBomb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -248,6 +279,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""da7e5f3c-3bae-4e47-8ffa-545d8a4411b8"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""ActiveBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""4a005e8a-4569-4fc6-a1a2-8a267a9417ac"",
                     ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
@@ -270,11 +312,33 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""4cbbc04b-6c7e-4e45-824b-389779dd68c5"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f47dda87-7e50-4132-abbb-263dd1dc2935"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";KeyboardLeft;KeyboardRight"",
+                    ""action"": ""TimeTravel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c965b9a-6fcb-484a-83f3-10a7e75816fc"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
                     ""action"": ""TimeTravel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -303,6 +367,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""72d4660a-4817-40bc-9ea2-557605179e09"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""ChainBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""356d33f7-cfd3-4480-b979-20d7f5174c8f"",
                     ""path"": ""<Keyboard>/4"",
                     ""interactions"": """",
@@ -320,6 +395,39 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";KeyboardRight"",
                     ""action"": ""SafeBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54000103-6bb0-4b84-82fe-3802d3c6f8c1"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""SafeBomb"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f83248c3-2977-4488-a61e-2785b252d68e"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyboardLeft;KeyboardRight"",
+                    ""action"": ""TimeTravelPreview"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b03a3cbf-0b05-48b2-a5d9-2f961878da6f"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";xBox"",
+                    ""action"": ""TimeTravelPreview"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -518,6 +626,17 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""xBox"",
+            ""bindingGroup"": ""xBox"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -530,6 +649,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         m_Player_SafeBomb = m_Player.FindAction("SafeBomb", throwIfNotFound: true);
         m_Player_TimeTravel = m_Player.FindAction("TimeTravel", throwIfNotFound: true);
         m_Player_Ready = m_Player.FindAction("Ready", throwIfNotFound: true);
+        m_Player_TimeTravelPreview = m_Player.FindAction("TimeTravelPreview", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
@@ -610,6 +730,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SafeBomb;
     private readonly InputAction m_Player_TimeTravel;
     private readonly InputAction m_Player_Ready;
+    private readonly InputAction m_Player_TimeTravelPreview;
     public struct PlayerActions
     {
         private @LocalPlayerInputs m_Wrapper;
@@ -621,6 +742,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @SafeBomb => m_Wrapper.m_Player_SafeBomb;
         public InputAction @TimeTravel => m_Wrapper.m_Player_TimeTravel;
         public InputAction @Ready => m_Wrapper.m_Player_Ready;
+        public InputAction @TimeTravelPreview => m_Wrapper.m_Player_TimeTravelPreview;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -651,6 +773,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @Ready.started += instance.OnReady;
             @Ready.performed += instance.OnReady;
             @Ready.canceled += instance.OnReady;
+            @TimeTravelPreview.started += instance.OnTimeTravelPreview;
+            @TimeTravelPreview.performed += instance.OnTimeTravelPreview;
+            @TimeTravelPreview.canceled += instance.OnTimeTravelPreview;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -676,6 +801,9 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             @Ready.started -= instance.OnReady;
             @Ready.performed -= instance.OnReady;
             @Ready.canceled -= instance.OnReady;
+            @TimeTravelPreview.started -= instance.OnTimeTravelPreview;
+            @TimeTravelPreview.performed -= instance.OnTimeTravelPreview;
+            @TimeTravelPreview.canceled -= instance.OnTimeTravelPreview;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -826,6 +954,15 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardRightSchemeIndex];
         }
     }
+    private int m_xBoxSchemeIndex = -1;
+    public InputControlScheme xBoxScheme
+    {
+        get
+        {
+            if (m_xBoxSchemeIndex == -1) m_xBoxSchemeIndex = asset.FindControlSchemeIndex("xBox");
+            return asset.controlSchemes[m_xBoxSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -835,6 +972,7 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
         void OnSafeBomb(InputAction.CallbackContext context);
         void OnTimeTravel(InputAction.CallbackContext context);
         void OnReady(InputAction.CallbackContext context);
+        void OnTimeTravelPreview(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

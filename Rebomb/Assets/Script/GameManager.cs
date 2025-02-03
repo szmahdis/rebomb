@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,11 +14,9 @@ public class GameManager : MonoBehaviour
     public EndgamePanel EndgamePanel;
     public static GameManager Instance { get; private set; }
     [SerializeField] private GameObject Map;
-
     [Header("Game Config")]
-    // TODO: decide playerCount in MainMenu.
+    [SerializeField] public bool xBoxUI = false;
     [SerializeField] public int playerCount = 2;
-
     [Header("Players")]
     [SerializeField] public List<Player> Players;
 
@@ -26,7 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject PlayerParent;
     [SerializeField] private GameObject PlayerPanelPrefab;
     [SerializeField] private Transform PlayerPanelParent;
-
+    [SerializeField] public GameObject[] helpPanels;
     private Vector3[] playerPositions;
     private bool helpMessageVisible = false;
     private GameObject helpMessage;
@@ -48,15 +47,37 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Players = new List<Player>();
+
         // for local multiplayer
+        var gamepads = InputSystem.devices.Where(device => device is Gamepad).Cast<Gamepad>().ToList();
+        Debug.Log("Number of xBox controller: " + gamepads.Count);
+        bool mockXBoxController = false; // debug the UI w/o xBox controller
+        bool useXBoxController = gamepads.Count >= 2;
+        xBoxUI = useXBoxController || mockXBoxController;
+        if (helpPanels.Length == 4)
+        {
+            helpPanels[0].SetActive(!xBoxUI);
+            helpPanels[1].SetActive(!xBoxUI);
+            helpPanels[2].SetActive(xBoxUI);
+            helpPanels[3].SetActive(xBoxUI);
+        }
+
+        // device setup
+        InputDevice[] selectedDevices = new InputDevice[] { Keyboard.current, Keyboard.current };
         string[] controlSchemes = new string[2] { "KeyboardLeft", "KeyboardRight" };
+        if (useXBoxController)
+        {
+            selectedDevices = gamepads.Cast<InputDevice>().ToArray();
+            controlSchemes = new string[2] { "xBox", "xBox" };
+        }
+
         for (int i = 0; i < playerCount; i++)
         {
             PlayerInput playerInput = PlayerInput.Instantiate(
                 PlayerPrefab[i],
                 playerIndex: i,
                 controlScheme: controlSchemes[i],
-                pairWithDevice: InputSystem.GetDevice<Keyboard>()
+                pairWithDevice: selectedDevices[i]
             );
             InitializePlayer(playerInput, playerInput.gameObject);
         }
@@ -172,35 +193,46 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnHelp(InputAction.CallbackContext context){
+    public void OnHelp(InputAction.CallbackContext context)
+    {
         if (context.performed) OnHelpButton();
     }
 
-    public void OnHelpButton() {
-            if (helpMessageVisible) {
-                helpMessage.SetActive(false);
-                helpMessageVisible = false;
-                helpButtonText.text = "Help";
-            } else {
-                helpMessage.SetActive(true);
-                helpMessageVisible = true;
-                helpButtonText.text = "Hide";
-            }
+    public void OnHelpButton()
+    {
+        if (helpMessageVisible)
+        {
+            helpMessage.SetActive(false);
+            helpMessageVisible = false;
+            helpButtonText.text = "Help";
+        }
+        else
+        {
+            helpMessage.SetActive(true);
+            helpMessageVisible = true;
+            helpButtonText.text = "Hide";
+        }
 
     }
 
-    public void OnConfig(InputAction.CallbackContext context) {
-        if (context.performed) {
+    public void OnConfig(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
             Debug.Log("On Config Button");
             OnConfigButton();
         }
     }
 
-    public void OnConfigButton() {
-        if (configPanelVisible) {
+    public void OnConfigButton()
+    {
+        if (configPanelVisible)
+        {
             configPanelVisible = false;
             configPanel.CloseConfigPanel();
-        } else {
+        }
+        else
+        {
             configPanelVisible = true;
             configPanel.OpenConfigPanel();
         }

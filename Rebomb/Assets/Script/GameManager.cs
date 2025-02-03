@@ -132,15 +132,22 @@ public class GameManager : MonoBehaviour
         player.Initialize(i, playerObject);
         player.SetInitialPosition(RandomWalkerGenerator.initial_positions[i]);
         Players.Add(player);
-
+        TutorialManager tm = tutorialManager.GetComponent<TutorialManager>();
         // callbacks
         playerInput.actions["Move"].performed += context => player.OnMove(context);
+        playerInput.actions["Move"].performed += context => tm.HandleKeyPresses("Move", i);
         playerInput.actions["ActiveBomb"].performed += context => player.OnActiveBomb(context);
+        playerInput.actions["ActiveBomb"].performed += context => tm.HandleKeyPresses("ActiveBomb", i);
         playerInput.actions["PassiveBomb"].performed += context => player.OnPassiveBomb(context);
+        playerInput.actions["PassiveBomb"].performed += context => tm.HandleKeyPresses("PassiveBomb", i);
         playerInput.actions["ChainBomb"].performed += context => player.OnChainBomb(context);
+        playerInput.actions["ChainBomb"].performed += context => tm.HandleKeyPresses("ChainBomb", i);
         playerInput.actions["SafeBomb"].performed += context => player.OnSafeBomb(context);
+        playerInput.actions["SafeBomb"].performed += context => tm.HandleKeyPresses("SafeBomb", i);
         playerInput.actions["Ready"].performed += context => player.OnReady(context);
+        playerInput.actions["Ready"].performed += context => tm.HandleKeyPresses("Ready", i);
         playerInput.actions["Help"].performed += context => OnHelp(context);
+        playerInput.actions["Help"].performed += context => tm.HandleKeyPresses("Help", i);
         playerInput.actions["Config"].performed += context => OnConfig(context);
         playerInput.actions["TimeTravel"].performed += context => OnTimeTravel(context, i);
         playerInput.actions["TimeTravelPreview"].performed += context => OnTimeTravelPreview(context, i);

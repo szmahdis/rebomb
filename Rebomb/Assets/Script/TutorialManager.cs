@@ -5,10 +5,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System;
 
 public class TutorialManager : MonoBehaviour
 
 {
+    public static TutorialManager Instance { get; private set; }
     public GameObject[] popUps;
     public GameObject turnPanel;
     public GameObject hourglass;
@@ -62,7 +64,7 @@ public class TutorialManager : MonoBehaviour
     private void Update()
     {
         HandlePopups();
-        HandleKeyPresses();
+        // HandleKeyPresses();
     }
 
     private void HandlePopups()
@@ -73,111 +75,127 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private void HandleKeyPresses()
+    // Track completion status for both players across phases
+    private Dictionary<int, bool[]> playerCompletion = new Dictionary<int, bool[]>();
+    private int currentPhase = -1;
+
+    public void HandleKeyPresses(string action, int playerIndex)
     {
-        foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode)))
+        // Initialize phase tracking when entering new phase
+        if (currentPhase != popUpIndex)
         {
-            if (Input.GetKeyDown(keyCode))
-            {
-                Debug.Log(keyCode);
-            }
+            currentPhase = popUpIndex;
+            playerCompletion[popUpIndex] = new bool[2] { false, false };
         }
-        // Debug.Log(Input.GetAxisRaw("XboxDPadHorizontal"));
-        bool Moved = false;
-        if (GameManager.Instance.xBoxUI && Gamepad.current.dpad.ReadValue() != Vector2.zero)
+
+        // Validate player index range
+        if (playerIndex < 0 || playerIndex > 1) return;
+
+        switch (popUpIndex)
         {
-            Moved = true;
-        }
-        foreach (var key in keyStates.Keys.ToList())
-        {
-            if (Input.GetKeyDown(key))
-            {
-                keyStates[key] = true;
-            }
-        }
-        // Xbox controller
-        if (GameManager.Instance.xBoxUI)
-        {
-            switch (popUpIndex)
-            {
-                case 1: // Movement Popup
-                    if (Moved)
+            case 1: // Movement tutorial phase
+                if (action == "Move")
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete())
                     {
-                        NextPopup("Good job! Player learned movement keys.");
+                        NextPopup("Good job! Both players learned movement keys.");
                     }
-                    break;
-                case 2: // Active Bomb Popup
-                    if (CheckKeys(KeyCode.Joystick1Button0, KeyCode.Joystick2Button0)) NextPopup();
-                    // if (CheckKeys(KeyCode.Joystick1Button0)) NextPopup();
-                    break;
-                case 3: // Press Ready Popup
-                    if (CheckKeys(KeyCode.Joystick1Button7, KeyCode.Joystick2Button7)) NextPopup();
-                    // if (CheckKeys(KeyCode.Joystick1Button7)) NextPopup();
-                    break;
-                case 4:
-                    StartCoroutine(WaitAndShowNextPopup(5));
-                    break;
-                case 5: // Passive Bomb Popup
-                    if (CheckKeys(KeyCode.Joystick1Button1, KeyCode.Joystick2Button1)) NextPopup();
-                    // if (CheckKeys(KeyCode.Joystick1Button1)) NextPopup();
-                    break;
-                case 6: // Chain Bomb Popup
-                    if (CheckKeys(KeyCode.Joystick1Button2, KeyCode.Joystick2Button2)) NextPopup();
-                    break;
-                case 7: // Safe Bomb Popup
-                    if (CheckKeys(KeyCode.Joystick1Button3, KeyCode.Joystick2Button3)) NextPopup();
-                    break;
-                case 8: // Destroy Wall Popup
-                    if (hourglass != null && hourglass.activeSelf == false) NextPopup();
-                    break;
-                case 9: // Use Hourglass Popup
-                    StartCoroutine(WaitAndShowNextPopup(10));
-                    break;
-                case 10: // Help Panel Popup
-                    if (keyStates[KeyCode.Joystick1Button4] || keyStates[KeyCode.Joystick2Button4]) DisableAllPopups();
-                    break;
-            }
+                }
+                break;
+            
+            case 2: // Active Bomb tutorial
+                if (action == "ActiveBomb") 
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete()) NextPopup();
+                }
+                break;
+            
+            case 3: // Ready confirmation
+                if (action == "Ready")
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete()) NextPopup();
+                }
+                break;
+            
+            case 5: // Passive Bomb
+                if (action == "PassiveBomb")
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete()) NextPopup();
+                }
+                break;
+            
+            case 6: // Chain Bomb
+                if (action == "ChainBomb")
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete()) NextPopup();
+                }
+                break;
+            
+            case 7: // Safe Bomb
+                if (action == "SafeBomb")
+                {
+                    MarkPlayerComplete(playerIndex);
+                    if (AllPlayersComplete()) NextPopup();
+                }
+                break;
+            
+            // Single-player phases (no coordination needed)
+            case 4:  // Timed delay
+            case 8:  // Environmental interaction
+            case 9:  // Timed progression
+            case 10: // Help system
+                HandleSinglePlayerPhase(action);
+
+                break;
         }
-        // Keyboard
-        else 
+    }
+
+    /// <summary>
+    /// Marks a player as having completed the current phase requirement
+    /// </summary>
+    /// <param name="playerIndex">0 for Player 1, 1 for Player 2</param>
+    private void MarkPlayerComplete(int playerIndex)
+    {
+        if (playerCompletion.ContainsKey(popUpIndex))
         {
-            switch (popUpIndex)
-            {
-                case 1: // Movement Popup
-                    if (CheckKeys(KeyCode.LeftArrow, KeyCode.RightArrow) && CheckKeys(KeyCode.UpArrow, KeyCode.DownArrow) &&
-                        CheckKeys(KeyCode.A, KeyCode.D) && CheckKeys(KeyCode.W, KeyCode.S))
-                    {
-                        NextPopup("Good job! Player learned movement keys.");
-                    }
-                    break;
-                case 2: // Active Bomb Popup
-                    if (CheckKeys(KeyCode.Alpha1, KeyCode.Alpha7)) NextPopup();
-                    break;
-                case 3: // Press Ready Popup
-                    if (CheckKeys(KeyCode.F, KeyCode.J)) NextPopup();
-                    break;
-                case 4:
-                    StartCoroutine(WaitAndShowNextPopup(5));
-                    break;
-                case 5: // Passive Bomb Popup
-                    if (CheckKeys(KeyCode.Alpha2, KeyCode.Alpha8)) NextPopup();
-                    break;
-                case 6: // Chain Bomb Popup
-                    if (CheckKeys(KeyCode.Alpha3, KeyCode.Alpha9)) NextPopup();
-                    break;
-                case 7: // Safe Bomb Popup
-                    if (CheckKeys(KeyCode.Alpha4, KeyCode.Alpha0)) NextPopup();
-                    break;
-                case 8: // Destroy Wall Popup
-                    if (hourglass != null && hourglass.activeSelf == false) NextPopup();
-                    break;
-                case 9: // Use Hourglass Popup
-                    StartCoroutine(WaitAndShowNextPopup(10));
-                    break;
-                case 10: // Help Panel Popup
-                    if (keyStates[KeyCode.H]) DisableAllPopups();
-                    break;
-            }
+            playerCompletion[popUpIndex][playerIndex] = true;
+        }
+    }
+
+    /// <summary>
+    /// Checks if both players have completed the current phase requirement
+    /// </summary>
+    private bool AllPlayersComplete()
+    {
+        return playerCompletion.TryGetValue(popUpIndex, out var completion) 
+            && completion[0] 
+            && completion[1];
+    }
+
+    /// <summary>
+    /// Handles phases that don't require dual-player coordination
+    /// </summary>
+    private void HandleSinglePlayerPhase(string action)
+    {
+        switch (popUpIndex)
+        {
+            case 4: // Automatic progression after delay
+                StartCoroutine(WaitAndShowNextPopup(5));
+                break;
+            case 8: // Environmental condition check
+                if (hourglass != null && !hourglass.activeSelf) NextPopup();
+                break;
+            case 9: // Timed progression
+                StartCoroutine(WaitAndShowNextPopup(10));
+                break;
+            case 10: // Help system toggle
+                if (action == "Help") DisableAllPopups();
+                break;
         }
     }
 
@@ -194,13 +212,14 @@ public class TutorialManager : MonoBehaviour
 
     private IEnumerator WaitAndShowNextPopup(int nextPopUp)
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(2f);
         NextPopup();
         popUpIndex = nextPopUp;
     }
 
     public void DisableAllPopups()
     {
+        NextPopup();
         foreach (var popup in popUps)
         {
             popup.SetActive(false);

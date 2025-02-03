@@ -12,11 +12,10 @@ public class TurnManager : MonoBehaviour
     public int CurrentTurn { get; private set; }
     public Dictionary<int, Snapshot> snapshots = new Dictionary<int, Snapshot>();
     public bool TimeTravelTriggered { get; set; }
-
     public GameObject turnPanel; // Assign the TurnPanel in the Inspector
     public TextMeshProUGUI turnText; // Assign the TurnText in the Inspector
-
     List<int> PreviousSurvivalPlayers = new List<int>();
+    public AudioClip rewindClip;
 
     // event
     public event System.Action<int> OnTurnChanged;
@@ -147,7 +146,7 @@ public class TurnManager : MonoBehaviour
             MapManager.Instance.SetBombs(snapshot.bombs);
             MapManager.Instance.ClearItems();
             MapManager.Instance.SetItems(snapshot.items);
-
+            AudioManager.Instance.PlaySoundEffect(rewindClip);
             Debug.Log($"Rewind to turn {turnIndex}.");
             foreach (Player player in GameManager.Instance.Players)
             {

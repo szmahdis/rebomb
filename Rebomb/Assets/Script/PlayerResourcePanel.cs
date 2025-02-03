@@ -15,7 +15,7 @@ public class PlayerResourcePanel : MonoBehaviour
     private TextMeshProUGUI coinText;
     private TextMeshProUGUI stepText;
     private TextMeshProUGUI hourglassText;
-    public Button hourglassButton;
+    private Button hourglassButton;
     private Button readyButton;
 
     private void Awake()

@@ -21789,6 +21789,7 @@ MonoBehaviour:
   - {fileID: 235284120}
   - {fileID: 962361213}
   playerPanels: []
+  tutorialManager: {fileID: 1480688337}
   configPanelVisible: 0
   configPanel: {fileID: 685741654}
 --- !u!4 &1972150540

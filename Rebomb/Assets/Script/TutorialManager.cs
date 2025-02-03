@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class TutorialManager : MonoBehaviour
 
@@ -34,6 +35,13 @@ public class TutorialManager : MonoBehaviour
         foreach (var key in keys)
         {
             keyStates[key] = false;
+        }
+    }
+
+    public void OnHideCurrentGuidance(InputAction.CallbackContext context){
+        if (context.performed)
+        {
+            OnOkButton();
         }
     }
 

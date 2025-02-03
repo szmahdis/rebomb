@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform PlayerPanelParent;
     [SerializeField] public GameObject[] helpPanels;
     [SerializeField] private GameObject[] playerPanels;
+    [SerializeField] private GameObject tutorialManager;
     private Vector3[] playerPositions;
     private bool helpMessageVisible = false;
     private GameObject helpMessage;
@@ -143,6 +144,7 @@ public class GameManager : MonoBehaviour
         playerInput.actions["Config"].performed += context => OnConfig(context);
         playerInput.actions["TimeTravel"].performed += context => OnTimeTravel(context, i);
         playerInput.actions["TimeTravelPreview"].performed += context => OnTimeTravelPreview(context, i);
+        playerInput.actions["HideGuidance"].performed += context => tutorialManager.GetComponent<TutorialManager>().OnHideCurrentGuidance(context);
 
         // other components
         MeshRenderer renderer = playerObject.GetComponent<MeshRenderer>();

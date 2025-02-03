@@ -75,9 +75,16 @@ public class TutorialManager : MonoBehaviour
 
     private void HandleKeyPresses()
     {
+        foreach (KeyCode keyCode in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(keyCode))
+            {
+                Debug.Log(keyCode);
+            }
+        }
         // Debug.Log(Input.GetAxisRaw("XboxDPadHorizontal"));
         bool Moved = false;
-        if (Gamepad.current.dpad.ReadValue() != Vector2.zero)
+        if (GameManager.Instance.xBoxUI && Gamepad.current.dpad.ReadValue() != Vector2.zero)
         {
             Moved = true;
         }

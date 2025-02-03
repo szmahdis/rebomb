@@ -21821,7 +21821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnPanel: {fileID: 132664581}
   turnText: {fileID: 2051945811}
-  rewindClip: {fileID: 0}
+  rewindClip: {fileID: 8300000, guid: 0246f64a198e3504086fc4cc56c98e27, type: 3}
   HaveExplosion: 0
 --- !u!114 &1972150542
 MonoBehaviour:

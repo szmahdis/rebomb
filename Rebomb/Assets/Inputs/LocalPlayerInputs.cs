@@ -552,17 +552,6 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ecfbfdb2-be56-4379-8914-ff1df9c772e8"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";xBox"",
-                    ""action"": ""Help"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""0f2d3368-d634-448d-8374-6798ab742ebf"",
                     ""path"": ""<Keyboard>/h"",
                     ""interactions"": """",
@@ -579,17 +568,6 @@ public partial class @LocalPlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";KeyboardRight;KeyboardLeft"",
-                    ""action"": ""Config"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e77c6606-e0e2-4f7d-8f03-b774a7421a72"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
                     ""action"": ""Config"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

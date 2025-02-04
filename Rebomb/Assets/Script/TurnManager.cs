@@ -16,6 +16,7 @@ public class TurnManager : MonoBehaviour
     public TextMeshProUGUI turnText; // Assign the TurnText in the Inspector
     List<int> PreviousSurvivalPlayers = new List<int>();
     public AudioClip rewindClip;
+    public GameObject PendingTimeTravelIcon;
 
     // event
     public event System.Action<int> OnTurnChanged;
@@ -30,6 +31,18 @@ public class TurnManager : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    private void Update()
+    {
+        if (TimeTravelTriggered)
+        {
+            PendingTimeTravelIcon.SetActive(true);
+        }
+        else
+        {
+            PendingTimeTravelIcon.SetActive(false);
+        }
     }
 
     public void Initialize()

@@ -12,6 +12,7 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance { get; private set; }
     public GameObject[] popUps;
+    public GameObject[] xboxPopUps;
     public GameObject turnPanel;
     public GameObject hourglass;
     public Button okBtn;
@@ -69,9 +70,19 @@ public class TutorialManager : MonoBehaviour
 
     private void HandlePopups()
     {
-        for (int i = 0; i < popUps.Length; i++)
+        if (GameManager.Instance.xBoxUI == true)
         {
-            popUps[i].SetActive(i == popUpIndex && turnPanel != null && !turnPanel.activeSelf);
+            for (int i = 0; i < xboxPopUps.Length; i++)
+            {
+                xboxPopUps[i].SetActive(i == popUpIndex && turnPanel != null && !turnPanel.activeSelf);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < popUps.Length; i++)
+            {
+                popUps[i].SetActive(i == popUpIndex && turnPanel != null && !turnPanel.activeSelf);
+            }
         }
     }
 
@@ -220,9 +231,19 @@ public class TutorialManager : MonoBehaviour
     public void DisableAllPopups()
     {
         NextPopup();
-        foreach (var popup in popUps)
+        if (GameManager.Instance.xBoxUI == true)
         {
-            popup.SetActive(false);
+            foreach (var popup in xboxPopUps)
+            {
+                popup.SetActive(false);
+            }
+        }
+        else
+        {
+            foreach (var popup in popUps)
+            {
+                popup.SetActive(false);
+            }
         }
     }
 }

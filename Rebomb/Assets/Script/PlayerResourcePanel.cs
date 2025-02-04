@@ -54,8 +54,6 @@ public class PlayerResourcePanel : MonoBehaviour
     {
         if (TurnManager.Instance != null)
         {
-            TurnManager.Instance.TimeTravelTriggered = true;
-            Debug.Log("Time travel triggered through TurnManager!");
             GameManager.Instance.Players[playerIndex].ResourceManager.consumeHourglass();
         }
         else

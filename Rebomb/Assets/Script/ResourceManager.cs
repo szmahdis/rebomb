@@ -115,6 +115,8 @@ public class ResourceManager : MonoBehaviour
     {
         if (Hourglass > 0)
         {
+            Debug.Log("Time travel triggered through TurnManager!");
+            TurnManager.Instance.TimeTravelTriggered = true;
             Hourglass--;
             OnResourceUpdated?.Invoke("hourglass", Hourglass);
         }

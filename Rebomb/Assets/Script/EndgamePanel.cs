@@ -51,7 +51,16 @@ public class EndgamePanel : MonoBehaviour
         previewPanel.SetActive(true);
         RoundManager.Instance.StartRound();
         gameObject.SetActive(false);
-        AudioManager.Instance.PlayBackgroundMusic(audioClipLevel2);
+
+        if (RoundManager.Instance.CurrentRound % 2 == 0)
+        {
+            AudioManager.Instance.PlayBackgroundMusic(audioClipLevel2);
+        }
+        else
+        {
+            AudioManager.Instance.PlayBackgroundMusic(audioClipLevel1);
+        }
+
     }
 
     public void OnExitButton()

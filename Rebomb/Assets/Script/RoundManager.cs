@@ -7,7 +7,7 @@ public class RoundManager : MonoBehaviour
     public static RoundManager Instance { get; private set; }
     public EndgamePanel endRoundPanel;
     public int CurrentRound = 1;
-    public static int MAX_ROUNDS = 2;
+    public static int MAX_ROUNDS = 5;
 
     private void Awake()
     {

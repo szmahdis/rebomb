@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    public static int INIT_COIN_LIMIT = 5;
+    public static int INIT_STEP_LIMIT = 5;
     [SerializeField] private int Coins;
     [SerializeField] private int Steps;
     [SerializeField] private int Hourglass;
-    [SerializeField] private int CoinLimit = 5;
-    [SerializeField] private int StepLimit = 5;
-
+    [SerializeField] private int CoinLimit = INIT_COIN_LIMIT;
+    [SerializeField] private int StepLimit = INIT_STEP_LIMIT;
     public event Action<string, int> OnResourceUpdated;
     // string: "coin"/"step"/"hourglass";
     // int: updated resource value
@@ -66,6 +67,8 @@ public class ResourceManager : MonoBehaviour
 
     public void OnRoundStart()
     {
+        CoinLimit = INIT_COIN_LIMIT;
+        StepLimit = INIT_STEP_LIMIT;
         Steps = 0;
         Coins = 0;
         Hourglass = 0;

@@ -17,6 +17,7 @@ public class MapManager : MonoBehaviour
     public Transform unbreakableWallsParent;
     public Transform playersParent;
     public Transform bombsParent;
+    public Queue<Bomb> all_bombs_to_trigger = new Queue<Bomb>();
 
     private float wall_y;
 
@@ -116,7 +117,7 @@ public class MapManager : MonoBehaviour
     public void CalculateExplosions()
     {
         // Trigger bombs in a cascading manner.
-        Queue<Bomb> all_bombs_to_trigger = new Queue<Bomb>();
+        all_bombs_to_trigger = new Queue<Bomb>();
         HashSet<Vector3> exploded_tiles = new HashSet<Vector3>(new Vector3EqualityComparer());
         foreach (Bomb bomb in Bombs.GetComponentsInChildren<Bomb>())
         {
@@ -275,4 +276,5 @@ public class MapManager : MonoBehaviour
     {
 
     }
+
 }

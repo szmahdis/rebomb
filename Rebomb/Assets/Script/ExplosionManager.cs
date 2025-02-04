@@ -41,6 +41,7 @@ public class ExplosionManager : MonoBehaviour
             current_delay = explosion.explosion_time;
         }
         explosionList.Clear();
+        TurnManager.Instance.HaveExplosion = false;
     }
 
 }

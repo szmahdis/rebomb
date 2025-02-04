@@ -98,18 +98,29 @@ public class TurnManager : MonoBehaviour
             int rewind_turn_number = Mathf.Min(REWIND_TURNS, CurrentTurn);
             // Time travel here.
             Rewind(CurrentTurn - rewind_turn_number);
+            StartTurn();
         }
         else
         {
             MapManager.Instance.CalculateExplosions();
-            CheckRoundEnd();
-            UpdateSnapshots();
-            // next turn here
-            CurrentTurn++;
+            StartCoroutine(FinishRound());
+            
         }
-        StartTurn();
+        
     }
 
+    private System.Collections.IEnumerator FinishRound()
+    {
+        while (HaveExplosion)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        CheckRoundEnd();
+        UpdateSnapshots();
+        // next turn here
+        CurrentTurn++;
+        StartTurn();
+    }
     private void CheckRoundEnd()
     {
         int survivalPlayerNum = 0;
@@ -142,6 +153,8 @@ public class TurnManager : MonoBehaviour
 
     private void UpdateSnapshots()
     {
+        // wait until no gameobject "vfx_Explosion(Clone)"
+        
         Snapshot snapshot = new Snapshot(CurrentTurn, PreviousSurvivalPlayers);
         snapshots.Add(CurrentTurn, snapshot);
     }
